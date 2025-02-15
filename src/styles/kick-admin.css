@@ -1,0 +1,62 @@
+.btnhover-232321:hover {
+    background-color: #232321 !important;
+    color: #FAFAFA;
+}
+.accordion-button {
+    background-color: #FAFAFA;
+}
+
+.accordion-body {
+    background-color: #FAFAFA;
+}
+
+/* bỏ focus ring của accordion */
+.accordion-button:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* bỏ active color của accordion */
+.accordion-button:not(.collapsed) {
+    background-color: #FAFAFA;
+    color: inherit !important;
+    box-shadow: none !important;
+}
+
+/* hover cho nút trong slide */
+.btnhover-4A69E2:hover {
+    background-color: #4A69E2;
+    color: aliceblue;
+}
+
+.bg-kicks-light {
+    background-color: #FAFAFA;
+}
+
+.bg-kicks {
+    background-color: #E7E7E3;
+}
+
+/* bỏ focus ring của accordion */
+.page-link:focus {
+    background-color: #232321;
+    color: #FAFAFA;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.page-link:hover {
+    background-color: #232321;
+    color: #FAFAFA;
+}
+
+.page-link {
+    color: #232321;
+    border-radius: .375rem;
+    border-color: #232321;
+    border-width: 1px;
+}
+:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
