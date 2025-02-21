@@ -1,3 +1,4 @@
+import {Link} from "react-router-dom";
 
 function CardDetail(props) {
     return (
@@ -13,7 +14,10 @@ function CardDetail(props) {
                                 <p>{props.name}</p>
                             </div>
                             <div className="ms-auto">
-                                <p></p>
+                                {/*<p><Link to={`/productdetail/${props.id}`}*/}
+                                {/*         className="nav-link mb-3 px-1 rounded rounded-1 btnhover-232321 bg-body-secondary">*/}
+                                {/*    <i className="bi bi-three-dots"></i>*/}
+                                {/*</Link></p>*/}
                             </div>
                         </div>
                         <div className="hstack">

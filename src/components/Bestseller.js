@@ -6,11 +6,7 @@ function Bestseller() {
             <div className="card-header bg-body mb-1">
                 Best Sellers
             </div>
-            <CardDetail></CardDetail>
 
-            <CardDetail></CardDetail>
-
-            <CardDetail></CardDetail>
 
             <div className="card-footer bg-body border border-0">
                 <button className="btn btnhover-232321 border border-1 border-dark">

@@ -2,16 +2,18 @@ import CardDetail from "../components/CardDetail";
 import {useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import ProductDetailAPI from "../api/ProductDetailAPI";
+import SizeAPI from "../api/SizeAPI";
 
 function ProductDetail() {
     const {id} = useParams();
 
-    const [productDetail, setProductDetail] = useState([]); // State lưu danh sách người dùng
+    const [productDetail, setProductDetail, ] = useState([]); // State lưu danh sách
+    // const [size, setSize] = useState([]); // State lưu danh sách
 
     useEffect(() => {
         ProductDetailAPI.getAll(id)
             .then((data) => {
-                console.log(data);
+                //console.log(data);
                 setProductDetail(data); // Lưu danh sách vào state
             })
             .catch((error) => console.error("Lỗi khi lấy danh sách người dùng:", error));
@@ -35,7 +37,6 @@ function ProductDetail() {
                     </div>
                 </div>
             </div>
-
             {
                 productDetail.length > 0 ?
                     (productDetail.map((item) =>
@@ -43,14 +44,14 @@ function ProductDetail() {
                                 id={item.id}
                                 name={item.name}
                                 color={item.color}
-                                discount={item.discount}
+                                //discount={item.discount}
+                                //size={size}
                             />
                         )
                     ) : (
                         <p> 404 </p>
                     )
             }
-
         </>
     );
 }

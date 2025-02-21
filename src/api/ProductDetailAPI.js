@@ -1,7 +1,7 @@
 import axios from "axios";
 import ProductDetailModel from "../models/ProductDetailModel";
 
-const ShowProductDetail_API = "http://localhost:8080/api/show-products/";
+const ShowProductDetail_API = "http://localhost:8080/api/show-product/";
 
 class ProductAPI {
     async getAll(id) {

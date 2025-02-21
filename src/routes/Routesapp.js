@@ -19,7 +19,7 @@ function RoutesApp() {
                     <Route path="orderlist" element={<Orders />} />
                     <Route path="categories" element={<Categories />} />
                     <Route path="newproduct" element={<ProductNew />} />
-                    <Route path="productdetail/:id" element={<ProductDetail />} />
+                    <Route path="product/:id" element={<ProductDetail />} />
                 </Route>
             </Routes>
         </Router>

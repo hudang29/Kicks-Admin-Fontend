@@ -1,6 +1,11 @@
 import {Link} from "react-router-dom";
+import {useEffect, useState} from "react";
+import CategoryAPI from "../api/CategoryAPI";
 
 function Product(props) {
+    const [category, setCategory] = useState([]); // State lưu danh sách người dùng
+
+
     return (
         <div className="card p-3" key={props.id}>
             <div className="row g-0">
@@ -14,7 +19,7 @@ function Product(props) {
                                 <p className="bg-body-secondary">{props.name}</p>
                             </div>
                             <div className="ms-auto">
-                                <Link to={`/productdetail/${props.id}`}
+                                <Link to={`/product/${props.id}`}
                                       className="nav-link mb-3 px-1 rounded rounded-1 btnhover-232321 bg-body-secondary">
                                     <i className="bi bi-three-dots"></i>
                                 </Link>
@@ -22,7 +27,7 @@ function Product(props) {
                         </div>
                         <div className="hstack">
                             <div>
-                                <p><small className="text-body-secondary">{props.category}</small></p>
+                                <p><small className="text-body-secondary">{category.name ?? ''}</small></p>
                             </div>
                             <div className="ms-auto">
                                 <p><small className="text-body-secondary">{props.price}</small></p>
