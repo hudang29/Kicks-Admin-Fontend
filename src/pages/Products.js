@@ -4,7 +4,6 @@ import {Link} from "react-router-dom";
 import {useEffect, useState} from "react";
 import ProductAPI from "../api/ProductAPI";
 
-
 function Products() {
 
     const [products, setProducts] = useState([]); // State lưu danh sách người dùng
@@ -22,10 +21,6 @@ function Products() {
             })
             .catch((error) => console.error("Lỗi khi lấy danh sách người dùng:", error));
     }, []);
-
-    // useEffect(() => {
-    //     console.log("Cập nhật danh sách sản phẩm:", products.);
-    // }, [products]);
 
     return (
         <>
@@ -58,7 +53,9 @@ function Products() {
                                     name={product.name}
                                     price={product.price}
                                     description={product.description}
-                                    category={product.categoryID}
+                                    shoesCategoryID={product.shoesCategoryID}
+                                    genderCategoryID={product.genderCategoryID}
+                                    brand={product.brand}
                                     id={product.id}
                                 />
                             </div>

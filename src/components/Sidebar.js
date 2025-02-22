@@ -10,7 +10,7 @@ function Sidebar() {
     };
     return (
         <>
-            <div className="" style={{minWidth: "20vw"}}>
+            <div className="position-sticky" style={{minWidth: "20vw", height: "80vh"}}>
 
                 <div className="bg-kicks d-flex justify-content-center" style={{height: "10vh"}}>
                     <img src={logo} className="object-fit-cover" style={{height: "100%"}}/>
@@ -18,19 +18,19 @@ function Sidebar() {
 
                 <div className="vstack gap-2 mx-auto mb-3 p-2">
                     <Link to="/dashboard"
-                          className={`btn p-3 ${active === "dashboard" ? "btn btn-kicks p-3" : "btn btnhover-4A69E2 p-3"}`}
+                          className={`btn p-3 ${active === "dashboard" ? "btn-kicks" : "btnhover-4A69E2"}`}
                           onClick={() => handleClick("dashboard")}>DASHBOARD</Link>
                     <Link to="/allproducts"
-                          className={`btn p-3 ${active === "products" ? "btn btn-kicks p-3" : "btn btnhover-4A69E2 p-3"}`}
+                          className={`btn p-3 ${active === "products" ? "btn-kicks" : "btnhover-4A69E2"}`}
                           onClick={() => handleClick("products")}>ALL PRODUCTS</Link>
                     <Link to="/staffs"
-                          className={`btn p-3 ${active === "staffs" ? "btn btn-kicks p-3" : "btn btnhover-4A69E2 p-3"}`}
+                          className={`btn p-3 ${active === "staffs" ? "btn-kicks" : "btnhover-4A69E2"}`}
                           onClick={() => handleClick("staffs")}>STAFFS</Link>
                     <Link to="/orderlist"
-                          className={`btn p-3 ${active === "orders" ? "btn btn-kicks p-3" : "btn btnhover-4A69E2 p-3"}`}
+                          className={`btn p-3 ${active === "orders" ? "btn-kicks" : "btnhover-4A69E2"}`}
                           onClick={() => handleClick("orders")}>ORDER LIST</Link>
                     <Link to="/categories"
-                          className={`btn p-3 ${active === "categories" ? "btn btn-kicks p-3" : "btn btnhover-4A69E2 p-3"}`}
+                          className={`btn p-3 ${active === "categories" ? "btn-kicks" : "btnhover-4A69E2"}`}
                           onClick={() => handleClick("categories")}>CATEGORIES</Link>
                 </div>
 

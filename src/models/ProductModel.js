@@ -1,19 +1,23 @@
 class ProductModel {
-    constructor(id, name, categoryID, price, description) {
+    constructor(id, name, shoesCategoryID, brand, price, description, genderCategoryID) {
         this.id = id;
         this.name = name;
-        this.categoryID = categoryID;
+        this.shoesCategoryID = shoesCategoryID;
+        this.brand = brand;
         this.price = price;
         this.description = description;
+        this.genderCategoryID = genderCategoryID;
     }
 
     static fromJson(json) {
         return new ProductModel(
             json.id,
             json.name,
-            json.categoryID,
+            json.shoesCategoryID,
+            json.brand,
             json.price,
-            json.description
+            json.description,
+            json.genderCategoryID,
         );
     }
 }

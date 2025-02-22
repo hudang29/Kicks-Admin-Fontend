@@ -7,6 +7,7 @@ import Orders from "../pages/Orders";
 import Categories from "../pages/Categories";
 import ProductNew from "../pages/Productnew";
 import ProductDetail from "../pages/Productdetail";
+import ProductForm from "../pages/ProductForm";
 
 function RoutesApp() {
     return (
@@ -20,6 +21,7 @@ function RoutesApp() {
                     <Route path="categories" element={<Categories />} />
                     <Route path="newproduct" element={<ProductNew />} />
                     <Route path="product/:id" element={<ProductDetail />} />
+                    <Route path="/product-detail/:id" element={<ProductForm />} />
                 </Route>
             </Routes>
         </Router>
