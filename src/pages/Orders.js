@@ -1,28 +1,12 @@
 import List from "../components/List";
 import Pagination from "../components/Pagination";
-import {useEffect, useState} from "react";
-import OrderAPI from "../api/OrderAPI";
-
+import OrdersVM from "../viewmodels/OrdersVM";
 
 const TableHeader = ["No.", "Customer Name", "Date", "Payment Method", "Status", "Amount"];
-const CardName ="Recent Purchases"
+const CardName = "Recent Purchases"
 
 function Orders() {
-    const [order, setOrder] = useState([]); // State lưu danh sách người dùng
-
-    // Cập nhật document.title
-    useEffect(() => {
-        document.title = "Orders";
-    }, []);
-
-    useEffect(() => {
-        OrderAPI.getAll()
-            .then((data) => {
-                //console.log(data);
-                setOrder(data); // Lưu danh sách vào state
-            })
-            .catch((error) => console.error("Lỗi khi lấy danh sách người dùng:", error));
-    }, []);
+    const {order} = OrdersVM();
     return (
         <>
             <div className="mb-3">

@@ -1,11 +1,12 @@
 class ProductModel {
-    constructor(id, name, shoesCategoryID, brand, price, description, genderCategoryID) {
+    constructor(id, name, shoesCategoryID, brand, price, description, supplierID, genderCategoryID) {
         this.id = id;
         this.name = name;
         this.shoesCategoryID = shoesCategoryID;
         this.brand = brand;
         this.price = price;
         this.description = description;
+        this.supplierID = supplierID;
         this.genderCategoryID = genderCategoryID;
     }
 
@@ -17,6 +18,7 @@ class ProductModel {
             json.brand,
             json.price,
             json.description,
+            json.supplierID,
             json.genderCategoryID,
         );
     }

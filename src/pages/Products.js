@@ -1,26 +1,11 @@
 import Product from "../components/Product";
 import Pagination from "../components/Pagination";
 import {Link} from "react-router-dom";
-import {useEffect, useState} from "react";
-import ProductAPI from "../api/ProductAPI";
+import ProductsVM from "../viewmodels/ProductsVM";
 
 function Products() {
 
-    const [products, setProducts] = useState([]); // State lưu danh sách người dùng
-
-    // Cập nhật document.title
-    useEffect(() => {
-        document.title = "Products";
-    }, []);
-
-    useEffect(() => {
-        ProductAPI.getAll()
-            .then((data) => {
-                //console.log(data);
-                setProducts(data); // Lưu danh sách vào state
-            })
-            .catch((error) => console.error("Lỗi khi lấy danh sách người dùng:", error));
-    }, []);
+    const products = ProductsVM();
 
     return (
         <>

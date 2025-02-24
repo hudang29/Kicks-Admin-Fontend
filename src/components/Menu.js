@@ -1,7 +1,7 @@
-
-function Menu(){
+function Menu() {
     return (
-        <div className="pe-5 d-flex align-items-center justify-content-end" style={{height: "10vh"}}>
+        <div className="pe-5 d-flex align-items-center justify-content-end"
+             style={{height: "10vh"}}>
             <div className="hstack gap-3 ">
                 <div className="border border-dark border-2 rounded">
                     <div className="hstack gap-1">

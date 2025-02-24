@@ -10,7 +10,7 @@ function Sidebar() {
     };
     return (
         <>
-            <div className="position-sticky" style={{minWidth: "20vw", height: "80vh"}}>
+            <div className="position-sticky position-sticky top-0 h-100" style={{minWidth: "20vw", height: "80vh"}}>
 
                 <div className="bg-kicks d-flex justify-content-center" style={{height: "10vh"}}>
                     <img src={logo} className="object-fit-cover" style={{height: "100%"}}/>
@@ -29,9 +29,9 @@ function Sidebar() {
                     <Link to="/orderlist"
                           className={`btn p-3 ${active === "orders" ? "btn-kicks" : "btnhover-4A69E2"}`}
                           onClick={() => handleClick("orders")}>ORDER LIST</Link>
-                    <Link to="/categories"
+                    <Link to="/other"
                           className={`btn p-3 ${active === "categories" ? "btn-kicks" : "btnhover-4A69E2"}`}
-                          onClick={() => handleClick("categories")}>CATEGORIES</Link>
+                          onClick={() => handleClick("categories")}>OTHER</Link>
                 </div>
 
                 {/*<div className="accordion accordion-flush" id="accordionFlushExample">*/}

@@ -2,7 +2,7 @@
 function Categories() {
     return (
         <>
-            <div className="mb-3">
+            <div className="mb-3 pt-3">
                 <h3>Categories</h3>
                 <div className="hstack">
                     <div className="p-1">

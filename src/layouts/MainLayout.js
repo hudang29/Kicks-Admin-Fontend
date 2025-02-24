@@ -12,9 +12,11 @@ function MainLayout() {
                 {/*<!-- body -->*/}
                 <div className="vstack" style={{width: "80vw"}}>
                     {/*<!-- menu -->*/}
-                    <Menu/>
+                    <div className="position-sticky top-0 w-100 bg-white z-3">
+                        <Menu/>
+                    </div>
                     {/*----main---*/}
-                    <div className="card rounded rounded-0 bg-kicks border border-0 p-3"
+                    <div className="card rounded rounded-0 bg-kicks border border-0 px-3"
                          style={{minHeight: "90vh"}}>
                         <Outlet/>
                         {/*-- footer --*/}

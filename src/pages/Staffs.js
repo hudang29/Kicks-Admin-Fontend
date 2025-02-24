@@ -1,28 +1,14 @@
-import StaffList from "../components/StaffList";
 import List from "../components/List";
 import Pagination from "../components/Pagination";
-import {useEffect, useState} from "react";
-import StaffAPI from "../api/StaffAPI";
+import StaffsVM from "../viewmodels/StaffsVM";
 
 const TableHeader = ["No.", "Name", "ID", "Email", "Role", "Status"];
 const CardName = "Staffs"
 
 function Staffs() {
-    const [staff, setstaff] = useState([]); // State lưu danh sách người dùng
 
-    // Cập nhật document.title
-    useEffect(() => {
-        document.title = "Staffs";
-    }, []);
+    const {staff} = StaffsVM();
 
-    useEffect(() => {
-        StaffAPI.getAll()
-            .then((data) => {
-                //console.log(data);
-                setstaff(data); // Lưu danh sách vào state
-            })
-            .catch((error) => console.error("Lỗi khi lấy danh sách người dùng:", error));
-    }, []);
     return (
         <>
             <div className="mb-3">

@@ -1,7 +1,7 @@
 
 function Footer() {
     return (
-        <div className="mt-auto">
+        <div className="mt-auto mb-3">
             <hr/>
             <div className="hstack">
                 <div className="">

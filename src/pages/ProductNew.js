@@ -1,43 +1,81 @@
-import {Link} from "react-router-dom";
 import logo from "../assets/IconKicks.png";
-import ProductFormVM from "../viewmodels/ProductFormVM";
+import {useEffect, useState} from "react";
+import CategoryAPI from "../api/CategoryAPI";
+import SizeAPI from "../api/SizeAPI";
+import SupplierAPI from "../api/SupplierAPI";
+import DiscountAPI from "../api/DiscountAPI";
 
-function ProductForm() {
+function ProductNew() {
 
-    const {
-        id,
-        productDetail,
-        product,
-        productName,
-        setProductName,
-        productBrand,
-        setProductBrand,
-        productPrice,
-        setProductPrice,
-        productDescription,
-        setProductDescription,
-        genderCategory,
-        selectedGender,
-        setSelectedGender,
-        shoesCategory,
-        selectedShoes,
-        setSelectedShoes,
-        supplier,
-        selectedSupplier,
-        setSelectedSupplier,
-        discount,
-        selectDiscount,
-        setSelectDiscount,
-        salePrice,
-        size,
-        handleChangeStock,
-        handleCancel
-    } = ProductFormVM();
+    const [genderCategory, setGenderCategory] = useState([]);
+    const [selectedGender, setSelectedGender] = useState("errors");
+    const [shoesCategory, setShoesCategory] = useState([]);
+    const [selectedShoeType, setSelectedShoeType] = useState(null);
+    const [size, setSize] = useState([]);
+    const [supplier, setSupplier] = useState([]);
+    const [selectedSupplier, setSelectedSupplier] = useState(null);
+    const [discount, setDiscount] = useState([]);
+    const [selectedDiscount, setSelectedDiscount] = useState("errors");
+
+    const [stock, setStock] = useState(0);
+    const handleChangeStock = (e, sizeId) => {
+        const value = Number(e.target.value);
+        setStock((prevStock) => ({
+            ...prevStock,
+            [sizeId]: value < 0 ? 0 : value // Không cho số âm
+        }));
+    };
+
+
+    useEffect(() => {
+        CategoryAPI.getAllGenderCategory()
+            .then((data) => {
+                //console.log(data);
+                setGenderCategory(data); // Lưu danh sách vào state
+            })
+            .catch((error) => console.error("Lỗi gender", error));
+    }, []);
+
+    // Lấy danh sách shoe type khi selectedGender thay đổi
+    useEffect(() => {
+        if (selectedGender) {
+            CategoryAPI.getAllCategoryShoesByGenderId(selectedGender)
+                .then((data) => setShoesCategory(data))
+                .catch((error) => console.error("Lỗi shoe type", error));
+        }
+    }, [selectedGender]);
+
+    useEffect(() => {
+        SizeAPI.getAllSample()
+            .then((data) => {
+                console.log(data);
+                setSize(data);
+            })
+            .catch((error) => console.error("Lỗi size", error));
+    }, []);
+
+    useEffect(() => {
+        SupplierAPI.getAll()
+            .then((data) => {
+                //console.log(data);
+                setSupplier(data); // Lưu danh sách vào state
+            })
+            .catch((error) => console.error("Lỗi supplier", error));
+    }, []);
+
+    useEffect(() => {
+        DiscountAPI.getAll()
+            .then((data) => {
+                console.log(data);
+                setDiscount(data);
+            })
+            .catch((error) => console.error("Lỗi discount", error));
+    }, []);
 
     return (
         <>
             <div className="mb-3">
-                <h3>Product Form</h3>
+                <h3>New Product</h3>
                 <div className="hstack">
                     <div className="p-1">
                         <nav style={{"--bs-breadcrumb-divider": "'>'"}} aria-label="breadcrumb">
@@ -46,37 +84,30 @@ function ProductForm() {
                                 <li className="breadcrumb-item">
                                     <a href="#" className="nav-link d-inline-block">All Products</a>
                                 </li>
-                                <li className="breadcrumb-item">
-                                    <Link to={`/product/${product?.id}`}
-                                          className="nav-link d-inline-block">
-                                        Products Detail
-                                    </Link>
-                                </li>
-                                <li className="breadcrumb-item active" aria-current="page">Product Form</li>
+                                <li className="breadcrumb-item active" aria-current="page">New Product</li>
                             </ol>
                         </nav>
                     </div>
 
-                    <div className="ms-auto">select date</div>
-                </div>
-            </div>
-
-            <div className="card mb-3">
-                <div className="card-body text-center">
-                    <h5># {id}</h5>
+                    <div className="ms-auto">
+                        <input
+                            type="date"
+                            className="form-control"
+                            id="selectDate"
+                        />
+                    </div>
                 </div>
             </div>
 
             <div className="card mb-3 p-3">
                 <div className="row g-3">
                     <div className="col-md-8">
-                        <form className="row g-3">
+                    <form className="row g-3">
 
                             <div className="col-12">
                                 <label htmlFor="name" className="form-label">Product Name</label>
                                 <input type="text" className="form-control" id="name"
-                                       value={productName}
-                                       onChange={(e) => setProductName(e.target.value)}/>
+                                       value={""}/>
                             </div>
 
                             <div className="col-12">
@@ -84,8 +115,7 @@ function ProductForm() {
                                     Description
                                 </label>
                                 <textarea className="form-control" id="exampleFormControlTextarea1" rows="3"
-                                          value={productDescription}
-                                          onChange={(e) => setProductDescription(e.target.value)}/>
+                                          value={""}/>
                             </div>
 
                             <div className="col-md-6">
@@ -94,9 +124,7 @@ function ProductForm() {
                                         aria-label="Default select example"
                                         id="supplier"
                                         value={selectedSupplier}
-                                        onChange={
-                                            (e) => setSelectedSupplier(e.target.value)
-                                        }>
+                                        onChange={(e) => setSelectedSupplier(e.target.value)}>
                                     <option>Choose Supplier</option>
                                     {
                                         supplier.length > 0 ? (
@@ -117,7 +145,7 @@ function ProductForm() {
                                         id="gender"
                                         value={selectedGender}
                                         onChange={(e) => setSelectedGender(e.target.value)}>
-                                    <option selected value="errors">Choose Gender</option>
+                                    <option value="errors">Choose Gender</option>
                                     {
                                         genderCategory.length > 0 ? (
                                             genderCategory.map((gender) => (
@@ -132,9 +160,7 @@ function ProductForm() {
 
                             <div className="col-md-6">
                                 <label htmlFor="brand" className="form-label">Brand</label>
-                                <input type="text" className="form-control" id="brand"
-                                       value={productBrand}
-                                       onChange={(e) => setProductBrand(e.target.value)}/>
+                                <input type="text" className="form-control" id="brand" value={""}/>
                             </div>
 
                             <div className="col-md-6">
@@ -143,11 +169,9 @@ function ProductForm() {
                                         aria-label="Default select example"
                                         id="shoeType"
                                         disabled={selectedGender === "errors"}
-                                        value={selectedShoes}
-                                        onChange={
-                                            (e) => setSelectedShoes(e.target.value)
-                                        }>
-                                    <option selected>Open this select menu</option>
+                                        value={selectedShoeType}
+                                        onChange={(e) => setSelectedShoeType(e.target.value)}>
+                                    <option selected>Choose Type</option>
                                     {
                                         shoesCategory.length > 0 ? (
                                             shoesCategory.map((shoe) => (
@@ -163,14 +187,12 @@ function ProductForm() {
                             <div className="col-md-6">
                                 <label htmlFor="color" className="form-label">Color</label>
                                 <input type="text" className="form-control" id="color"
-                                       value={productDetail?.color || ''}/>
+                                       value={""}/>
                             </div>
 
                             <div className="col-md-6">
                                 <label htmlFor="price" className="form-label">Regular Price</label>
-                                <input type="number" className="form-control" id="price"
-                                       value={productPrice}
-                                       onChange={(e) => setProductPrice(e.target.value)}/>
+                                <input type="number" className="form-control" id="price" value={''}/>
                             </div>
 
                             <div className="col-12">
@@ -178,27 +200,45 @@ function ProductForm() {
                                 <select className="form-select"
                                         aria-label="Default select example"
                                         id="discount"
-                                        value={selectDiscount}
+                                        value={selectedDiscount}
                                         onChange={
-                                            (e) => setSelectDiscount(e.target.value)
+                                            (e) => setSelectedDiscount(e.target.value)
                                         }>
                                     <option value="errors">0 %</option>
                                     {
                                         discount.length > 0 ? (
                                             discount.map((discount) => (
                                                 <option key={discount.id}
-                                                        value={discount.id}>{discount.discountRate} %</option>
+                                                        value={discount.id}>{discount.discountRate}</option>
                                             ))
                                         ) : (
                                             <option>Errors</option>
                                         )
                                     }
                                 </select>
+                                {/*<div className="row" >*/}
+                                {/*    <div className="col-md-6 mt-3">*/}
+                                {/*        <label htmlFor="discountDateStart" className="form-label">Start</label>*/}
+                                {/*        <input*/}
+                                {/*            type="date"*/}
+                                {/*            className="form-control"*/}
+                                {/*            id="discountDateStart"*/}
+                                {/*        />*/}
+                                {/*    </div>*/}
+                                {/*    <div className="col-md-6 mt-3">*/}
+                                {/*        <label htmlFor="discountDateEnd" className="form-label">End</label>*/}
+                                {/*        <input*/}
+                                {/*            type="date"*/}
+                                {/*            className="form-control"*/}
+                                {/*            id="discountDateEnd"*/}
+                                {/*        />*/}
+                                {/*    </div>*/}
+                                {/*</div>*/}
                             </div>
 
                             <div className="col-12">
-                                <label htmlFor="price" className="form-label">Sale Price</label>
-                                <input type="number" className="form-control" id="price" readOnly value={salePrice}/>
+                                <label htmlFor="salePrice" className="form-label">Sale Price</label>
+                                <input type="number" className="form-control" id="salePrice" readOnly={true} value={0}/>
                             </div>
 
                             <div className="col-12">
@@ -213,17 +253,14 @@ function ProductForm() {
                                                               key={size.id}># {size.size}</span>
                                                         <input type="number" className="form-control"
                                                                aria-describedby="basic-addon1"
-                                                               value={size.stock} // Giá trị riêng cho từng size
-                                                               min={0}
-                                                               onChange={
-                                                                   (e) => handleChangeStock(e, size.id)
-                                                               }/>
+                                                               onChange={(e) => handleChangeStock(e, size.id)}
+                                                               value={stock[size.id] || 0} // Giá trị riêng cho từng size
+                                                               min={0}/>
                                                     </div>
                                                 </div>
                                             ))
                                         ) : (
-                                            <>
-                                            </>
+                                            <p>Lỗi</p>
                                         )
                                     }
                                 </div>
@@ -231,13 +268,8 @@ function ProductForm() {
 
                             <div className="col-12">
                                 <div className="d-grid gap-2 d-md-flex justify-content-md-end">
-                                    <button className="btn btn-dark" type="button">Update</button>
-                                    <button className="btn btn-danger" type="button">Delete</button>
-                                    <button className="btn btn-light border border-dark"
-                                            type="button"
-                                            onClick={handleCancel}>
-                                        Cancel
-                                    </button>
+                                    <button className="btn btn-dark" type="button">Create</button>
+                                    <button className="btn btn-light border border-dark" type="button">Cancel</button>
                                 </div>
                             </div>
                         </form>
@@ -252,4 +284,4 @@ function ProductForm() {
     );
 }
 
-export default ProductForm;
+export default ProductNew;

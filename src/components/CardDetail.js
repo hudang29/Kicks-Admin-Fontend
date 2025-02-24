@@ -3,7 +3,7 @@ import logo from "../assets/IconKicks.png";
 import {useEffect, useState} from "react";
 import CategoryAPI from "../api/CategoryAPI";
 
-function CardDetail({id, productId, color, product}) {
+function CardDetail({id, color, product}) {
 
     const [shoesCategory, setShoesCategory] = useState(null);
 

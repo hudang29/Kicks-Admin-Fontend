@@ -1,13 +1,15 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Layout from "../layouts/Mainlayout";
+import Layout from "../layouts/MainLayout";
+import SubLayout from "../layouts/SubLayout";
 import Dashboard from "../pages/Dashboard";
 import Products from "../pages/Products";
 import Staffs from "../pages/Staffs";
 import Orders from "../pages/Orders";
 import Categories from "../pages/Categories";
-import ProductNew from "../pages/Productnew";
-import ProductDetail from "../pages/Productdetail";
+import ProductNew from "../pages/ProductNew";
+import ProductDetail from "../pages/ProductDetail";
 import ProductForm from "../pages/ProductForm";
+import Size from "../pages/Size";
 
 function RoutesApp() {
     return (
@@ -18,10 +20,13 @@ function RoutesApp() {
                     <Route path="allproducts" element={<Products />} />
                     <Route path="staffs" element={<Staffs />} />
                     <Route path="orderlist" element={<Orders />} />
-                    <Route path="categories" element={<Categories />} />
+                    <Route path="other/" element={<SubLayout />} >
+                        <Route path="category" element={<Categories />} />
+                        <Route path="size" element={<Size />} />
+                    </Route>
                     <Route path="newproduct" element={<ProductNew />} />
                     <Route path="product/:id" element={<ProductDetail />} />
-                    <Route path="/product-detail/:id" element={<ProductForm />} />
+                    <Route path="product-detail/:id" element={<ProductForm />} />
                 </Route>
             </Routes>
         </Router>
