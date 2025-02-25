@@ -4,6 +4,7 @@ import ProductDetailModel from "../models/ProductDetailModel";
 const ShowProductDetail_API = "http://localhost:8080/api/list-product-detail/";
 const ShowProductDetailById_API = "http://localhost:8080/api/product-detail/";
 const UpdateProductDetail_API = "http://localhost:8080/api/product-detail-update";
+const CreateProductDetail_API = "http://localhost:8080/api/product-detail-create";
 
 class ProductDetainAPI {
     async getAll(id) {
@@ -28,6 +29,21 @@ class ProductDetainAPI {
         } catch (error) {
             console.error("Lỗi khi cập nhật chi tiết sản phẩm:", error);
             throw error; // Ném lỗi để xử lý ở nơi gọi hàm
+        }
+    }
+
+    async createProductDetail(productDetail) {
+        try{
+            const response = await axios.post(`${CreateProductDetail_API}`, productDetail, {
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+            return response.data;
+        }
+        catch (error) {
+            console.error("Lỗi khi thêm chi tiết sản phẩm:", error);
+            throw error;
         }
     }
 }

@@ -18,6 +18,7 @@ function ProductForm() {
         color, setColor, size,
         discount, selectDiscount, setSelectDiscount,
         salePrice,
+        sizeSample,
         handleChangeStock, handleCancel, handleUpdate
     } = ProductFormVM();
 
@@ -189,7 +190,7 @@ function ProductForm() {
                                 <label htmlFor="price" className="form-label">Sale Price</label>
                                 <input type="text" className="form-control" id="price" readOnly
                                        value={formatCurrency(salePrice)}
-                                       // value={salePrice}
+                                    // value={salePrice}
                                 />
                             </div>
 
@@ -214,8 +215,28 @@ function ProductForm() {
                                                 </div>
                                             ))
                                         ) : (
-                                            <>
-                                            </>
+                                            sizeSample.length > 0 ? (
+                                                sizeSample.map((sample) => (
+                                                    <div className="col-md-3">
+                                                        <div className="input-group mb-3">
+                                                        <span className="input-group-text"
+                                                              key={sample.id}># {sample.size}</span>
+                                                            <input type="number" className="form-control"
+                                                                   aria-describedby="basic-addon1"
+                                                                   value={size.stock} // Giá trị riêng cho từng size
+                                                                   min={0}
+                                                                   onChange={
+                                                                       (e) =>
+                                                                           handleChangeStock(e, sample.id)
+                                                                   }/>
+                                                        </div>
+                                                    </div>
+                                                ))
+                                            ) : (
+                                                <div className="">
+                                                    <span>Errors</span>
+                                                </div>
+                                            )
                                         )
                                     }
                                 </div>

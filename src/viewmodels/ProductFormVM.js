@@ -39,6 +39,7 @@ function ProductFormVM() {
     const [selectDiscount, setSelectDiscount] = useState(null);
     const [salePrice, setSalePrice] = useState(0);
     const [size, setSize] = useState([]);
+    const [sizeSample, setSizeSample] = useState([]);
 
     //thay đổi giá trị
     const [productName, setProductName] = useState(null);
@@ -105,6 +106,19 @@ function ProductFormVM() {
 
         fetchData();
     }, [id]);
+
+    useEffect(() => {
+            const loadSizes = async () => {
+                try {
+                    const data = await SizeAPI.getAllSample();
+                    setSizeSample(data);
+                } catch (error) {
+                    console.error("Lỗi khi tải danh sách size:", error);
+                }
+            };
+            loadSizes();
+        }
+    )
 
     // Fetch category shoes khi selectedGender thay đổi
     useEffect(() => {
@@ -269,6 +283,7 @@ function ProductFormVM() {
         size,
         color,
         setColor,
+        sizeSample,
         handleChangeStock,
         handleCancel,
         handleUpdate

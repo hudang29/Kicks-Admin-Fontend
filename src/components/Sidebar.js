@@ -18,20 +18,30 @@ function Sidebar() {
 
                 <div className="vstack gap-2 mx-auto mb-3 p-2">
                     <Link to="/dashboard"
-                          className={`btn p-3 ${active === "dashboard" ? "btn-kicks" : "btnhover-4A69E2"}`}
-                          onClick={() => handleClick("dashboard")}>DASHBOARD</Link>
+                          className={`btn p-3 hstack ${active === "dashboard" ? "btn-kicks" : "btnhover-4A69E2"}`}
+                          onClick={() => handleClick("dashboard")}>
+                        <span className="me-auto"><i className="bi bi-clipboard-data"></i> DASHBOARD</span>
+                    </Link>
                     <Link to="/allproducts"
-                          className={`btn p-3 ${active === "products" ? "btn-kicks" : "btnhover-4A69E2"}`}
-                          onClick={() => handleClick("products")}>ALL PRODUCTS</Link>
+                          className={`btn p-3 hstack ${active === "products" ? "btn-kicks" : "btnhover-4A69E2"}`}
+                          onClick={() => handleClick("products")}>
+                        <span className="me-auto"><i className="bi bi-inboxes"></i> ALL PRODUCTS</span>
+                    </Link>
                     <Link to="/staffs"
-                          className={`btn p-3 ${active === "staffs" ? "btn-kicks" : "btnhover-4A69E2"}`}
-                          onClick={() => handleClick("staffs")}>STAFFS</Link>
+                          className={`btn p-3 hstack ${active === "staffs" ? "btn-kicks" : "btnhover-4A69E2"}`}
+                          onClick={() => handleClick("staffs")}>
+                        <span className="me-auto"><i className="bi bi-pc-display-horizontal"></i> STAFFS</span>
+                    </Link>
                     <Link to="/orderlist"
-                          className={`btn p-3 ${active === "orders" ? "btn-kicks" : "btnhover-4A69E2"}`}
-                          onClick={() => handleClick("orders")}>ORDER LIST</Link>
+                          className={`btn p-3 hstack ${active === "orders" ? "btn-kicks" : "btnhover-4A69E2"}`}
+                          onClick={() => handleClick("orders")}>
+                        <span className="me-auto">
+                            <i className="bi bi-file-earmark-bar-graph-fill"></i> ORDER LIST</span>
+                    </Link>
                     <Link to="/other"
-                          className={`btn p-3 ${active === "categories" ? "btn-kicks" : "btnhover-4A69E2"}`}
-                          onClick={() => handleClick("categories")}>OTHER</Link>
+                          className={`btn p-3 hstack ${active === "categories" ? "btn-kicks" : "btnhover-4A69E2"}`}
+                          onClick={() => handleClick("categories")}>
+                        <span className="me-auto"><i className="bi bi-boxes"></i> OTHER</span></Link>
                 </div>
 
                 {/*<div className="accordion accordion-flush" id="accordionFlushExample">*/}

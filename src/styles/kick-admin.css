@@ -3,6 +3,7 @@
     background-color: #232321 !important;
     color: #FAFAFA;
 }
+
 .accordion-button {
     background-color: #FAFAFA;
 }
@@ -57,13 +58,24 @@
     border-color: #232321;
     border-width: 1px;
 }
+
 :focus {
     outline: none !important;
     box-shadow: none !important;
 }
-.top-Submenu{
+
+.top-Submenu {
     position: sticky;
     top: 10vh;
+}
+
+.bg-kicks-dark {
+    background-color: #232321;
+}
+
+.btn-kicks-dark {
+    background-color: #232321 !important;
+    color: #FAFAFA !important;
 }
 
 
