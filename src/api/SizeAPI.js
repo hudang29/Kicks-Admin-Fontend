@@ -5,6 +5,8 @@ import SizeSampleModel from "../models/SizeSampleModel";
 const ShowSize_API = "http://localhost:8080/api/sizes/";
 const ShowSizeSample_API = "http://localhost:8080/api/size-sample";
 
+const UpdateSize_API = "http://localhost:8080/api/sizes/update";
+
 class SizeAPI {
     async getAll(id) {
         const sizes = await axios.get(ShowSize_API + id);
@@ -33,6 +35,7 @@ class SizeAPI {
             throw error;
         }
     }
+
     async delete(id) {
         try {
             const response = await axios.delete(`${ShowSizeSample_API}-delete/${id}`, {
@@ -47,6 +50,20 @@ class SizeAPI {
         } catch (error) {
             console.error("Lỗi khi xóa size:", error.response?.data || error.message);
             throw error; // Ném lỗi để xử lý trong component
+        }
+    }
+
+    async update(sizeData, id) {
+        try {
+            const response = await axios.put(`${UpdateSize_API}/${id}`, sizeData, {
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            });
+            return response.data;
+        } catch (error) {
+            console.error("Lỗi khi cập nhập size:", error.response?.data || error.message);
+            throw error;
         }
     }
 }

@@ -22,6 +22,7 @@ function ProductFormVM() {
         productPrice: null,
         productBrand: null,
         productDescription: null,
+        color: null,
         size: [],
     });
 
@@ -36,7 +37,6 @@ function ProductFormVM() {
     const [selectedSupplier, setSelectedSupplier] = useState(null);
     const [discount, setDiscount] = useState([]);
     const [selectDiscount, setSelectDiscount] = useState(null);
-
     const [salePrice, setSalePrice] = useState(0);
     const [size, setSize] = useState([]);
 
@@ -45,8 +45,11 @@ function ProductFormVM() {
     const [productDescription, setProductDescription] = useState(null);
     const [productPrice, setProductPrice] = useState(null);
     const [productBrand, setProductBrand] = useState(null);
+    const [color, setColor] = useState(null);
 
-
+    useEffect(() => {
+        document.title = "Product Detail";
+    }, []);
 
     // Fetch dữ liệu
     useEffect(() => {
@@ -91,6 +94,7 @@ function ProductFormVM() {
                     productPrice: productData?.price || null,
                     productBrand: productData?.brand || null,
                     productDescription: productData?.description || null,
+                    color: productDetailData?.color || null,
                     size: formattedSize,
                 });
 
@@ -98,8 +102,8 @@ function ProductFormVM() {
                 console.error("Lỗi khi tải dữ liệu:", error);
             }
         };
+
         fetchData();
-        //console.log(initialData);
     }, [id]);
 
     // Fetch category shoes khi selectedGender thay đổi
@@ -112,12 +116,12 @@ function ProductFormVM() {
 
     // Cập nhật giá khi product hoặc discount thay đổi
     useEffect(() => {
-        const price = product?.price || NaN;
+        const price = productPrice || NaN;
         const discountId = Number(selectDiscount);
         const discountRate = discount.find(d => d.id === discountId)?.discountRate || 0;
 
         setSalePrice(discountRate > 0 ? price - (price * discountRate / 100) : price);
-    }, [product?.price, selectDiscount, discount]);
+    }, [productPrice, selectDiscount, discount]);
 
     // Gán ID khi mở form
     useEffect(() => {
@@ -135,6 +139,7 @@ function ProductFormVM() {
     useEffect(() => {
         if (productDetail) {
             setSelectDiscount(productDetail.discountId || "errors");
+            setColor(productDetail.color || null);
         }
     }, [productDetail]);
 
@@ -161,6 +166,7 @@ function ProductFormVM() {
         setProductPrice(initialData.productPrice);
         setProductBrand(initialData.productBrand);
         setProductDescription(initialData.productDescription);
+        setColor(initialData.color);
         setSize(initialData.size);
     };
 
@@ -175,28 +181,58 @@ function ProductFormVM() {
             // Chuẩn bị dữ liệu cập nhật
             const updatedProduct = {
                 ...product,
+                name: productName,
                 genderCategoryID: selectedGender,
                 shoesCategoryID: selectedShoes,
                 supplierID: selectedSupplier,
+                price: productPrice,
+                brand: productBrand,
+                description: productDescription,
             };
 
             const updatedProductDetail = {
                 ...productDetail,
-                discountId: selectDiscount,
-                //salePrice: salePrice,
+                name: productName,
+                discountId: selectDiscount === 'errors' ? 0 : selectDiscount,
+                color: color,
             };
 
+            // Chuẩn bị dữ liệu gửi lên API
             const updatedSizes = size.map(item => ({
                 id: item.id,
+                size: item.size,
                 stock: item.stock,
             }));
 
-            // Gửi yêu cầu cập nhật
-            await Promise.all([
-                ProductAPI.update(product.id, updatedProduct),
-                ProductDetailAPI.update(productDetail.id, updatedProductDetail),
-                SizeAPI.updateSizes(updatedSizes),
+
+            const results = await Promise.allSettled([
+                ProductAPI.updateProduct(updatedProduct),
+                ProductDetailAPI.updateProductDetail(updatedProductDetail),
+                SizeAPI.update(updatedSizes, id),
             ]);
+            // console.log(updatedProduct);
+            // console.log(updatedProductDetail);
+
+            results.forEach((result, index) => {
+                if (result.status === "rejected") {
+                    console.error(`API thứ ${index + 1} thất bại:`, result.reason);
+                    alert(`Cập nhật thất bại: ${result.reason}`);
+                }
+            });
+            setInitialData({
+                productDetail: updatedProductDetail,
+                product: updatedProduct,
+                productName: updatedProduct?.name || null,
+                selectedGender: updatedProduct?.genderCategoryID || null,
+                selectedShoes: updatedProduct?.shoesCategoryID || null,
+                selectedSupplier: updatedProduct.supplierID || null,
+                selectDiscount: updatedProductDetail?.discountId || null,
+                productPrice: updatedProduct?.price || null,
+                productBrand: updatedProduct?.brand || null,
+                productDescription: updatedProduct?.description || null,
+                color: updatedProductDetail?.color || null,
+                size: size,
+            });
 
             alert("Cập nhật thành công!");
 
@@ -208,7 +244,6 @@ function ProductFormVM() {
 
     return {
         id,
-        productDetail,
         product,
         productName,
         setProductName,
@@ -232,8 +267,11 @@ function ProductFormVM() {
         setSelectDiscount,
         salePrice,
         size,
+        color,
+        setColor,
         handleChangeStock,
-        handleCancel
+        handleCancel,
+        handleUpdate
     };
 }
 

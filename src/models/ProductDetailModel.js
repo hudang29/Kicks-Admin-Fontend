@@ -5,6 +5,7 @@ class ProductDetailModel {
         this.name = name;
         this.color = color;
         this.discountId = discountId;
+        //this.isDefault = isDefault;
     }
 
     static fromJson(json) {
@@ -14,6 +15,7 @@ class ProductDetailModel {
             json.name,
             json.color,
             json.discountId,
+            //json.isDefault
         );
     }
 }

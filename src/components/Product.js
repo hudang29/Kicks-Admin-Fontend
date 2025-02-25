@@ -1,6 +1,7 @@
 import {Link, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import CategoryAPI from "../api/CategoryAPI";
+import {formatCurrency} from "../utils/Format";
 
 function Product({name, price, description, shoesCategoryID, genderCategoryID, brand, id}) {
 
@@ -51,7 +52,7 @@ function Product({name, price, description, shoesCategoryID, genderCategoryID, b
                             </div>
                         </div>
                         <div>
-                            <p>{price}</p>
+                            <p>{formatCurrency(price)}</p>
                         </div>
                     </div>
                 </div>

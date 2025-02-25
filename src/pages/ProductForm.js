@@ -1,38 +1,26 @@
 import {Link} from "react-router-dom";
 import logo from "../assets/IconKicks.png";
 import ProductFormVM from "../viewmodels/ProductFormVM";
+import {formatCurrency} from "../utils/Format";
 
 function ProductForm() {
 
     const {
         id,
-        productDetail,
         product,
-        productName,
-        setProductName,
-        productBrand,
-        setProductBrand,
-        productPrice,
-        setProductPrice,
-        productDescription,
-        setProductDescription,
-        genderCategory,
-        selectedGender,
-        setSelectedGender,
-        shoesCategory,
-        selectedShoes,
-        setSelectedShoes,
-        supplier,
-        selectedSupplier,
-        setSelectedSupplier,
-        discount,
-        selectDiscount,
-        setSelectDiscount,
+        productName, setProductName,
+        productBrand, setProductBrand,
+        productPrice, setProductPrice,
+        productDescription, setProductDescription,
+        supplier, selectedSupplier, setSelectedSupplier,
+        genderCategory, selectedGender, setSelectedGender,
+        shoesCategory, selectedShoes, setSelectedShoes,
+        color, setColor, size,
+        discount, selectDiscount, setSelectDiscount,
         salePrice,
-        size,
-        handleChangeStock,
-        handleCancel
+        handleChangeStock, handleCancel, handleUpdate
     } = ProductFormVM();
+
 
     return (
         <>
@@ -117,7 +105,7 @@ function ProductForm() {
                                         id="gender"
                                         value={selectedGender}
                                         onChange={(e) => setSelectedGender(e.target.value)}>
-                                    <option selected value="errors">Choose Gender</option>
+                                    <option value="errors">Choose Gender</option>
                                     {
                                         genderCategory.length > 0 ? (
                                             genderCategory.map((gender) => (
@@ -147,7 +135,7 @@ function ProductForm() {
                                         onChange={
                                             (e) => setSelectedShoes(e.target.value)
                                         }>
-                                    <option selected>Open this select menu</option>
+                                    <option>Choose Type</option>
                                     {
                                         shoesCategory.length > 0 ? (
                                             shoesCategory.map((shoe) => (
@@ -163,7 +151,8 @@ function ProductForm() {
                             <div className="col-md-6">
                                 <label htmlFor="color" className="form-label">Color</label>
                                 <input type="text" className="form-control" id="color"
-                                       value={productDetail?.color || ''}/>
+                                       value={color}
+                                       onChange={(e) => setColor(e.target.value)}/>
                             </div>
 
                             <div className="col-md-6">
@@ -198,7 +187,10 @@ function ProductForm() {
 
                             <div className="col-12">
                                 <label htmlFor="price" className="form-label">Sale Price</label>
-                                <input type="number" className="form-control" id="price" readOnly value={salePrice}/>
+                                <input type="text" className="form-control" id="price" readOnly
+                                       value={formatCurrency(salePrice)}
+                                       // value={salePrice}
+                                />
                             </div>
 
                             <div className="col-12">
@@ -231,7 +223,10 @@ function ProductForm() {
 
                             <div className="col-12">
                                 <div className="d-grid gap-2 d-md-flex justify-content-md-end">
-                                    <button className="btn btn-dark" type="button">Update</button>
+                                    <button className="btn btn-dark"
+                                            type="button"
+                                            onClick={handleUpdate}>Update
+                                    </button>
                                     <button className="btn btn-danger" type="button">Delete</button>
                                     <button className="btn btn-light border border-dark"
                                             type="button"

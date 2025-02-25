@@ -39,6 +39,7 @@ function ProductDetail() {
                                         id={item.id}
                                         name={item.name}
                                         color={item.color}
+                                        productDetail={item}
                                         product={product}
                                     />
                                 )

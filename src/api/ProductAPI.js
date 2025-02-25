@@ -9,6 +9,7 @@ class ProductAPI {
         const response = await axios.get(ShowProduct_API);
         return response.data.map((response) => ProductModel.fromJson(response));
     }
+
     async getProductById(id) {
         const response = await axios.get(`${ShowProduct_API}/${id}`);
         return ProductModel.fromJson(response.data);
@@ -16,7 +17,12 @@ class ProductAPI {
 
     async updateProduct(product) {
         try {
-            const response = await axios.put(`${UpdateProduct_API}`, product);
+            const response = await axios.put(`${UpdateProduct_API}`, product, {
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+            console.log("✅ Phản hồi từ server:", response.data);
             return response.data; // Trả về dữ liệu phản hồi từ API
         } catch (error) {
             console.error("Lỗi khi cập nhật sản phẩm:", error);
@@ -24,4 +30,5 @@ class ProductAPI {
         }
     }
 }
+
 export default new ProductAPI();
