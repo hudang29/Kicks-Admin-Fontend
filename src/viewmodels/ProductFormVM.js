@@ -70,7 +70,10 @@ function ProductFormVM() {
                     : null;
                 setProduct(productData);
 
-                const [supplierData, genderData, discountData, sizeData] = await Promise.all([
+                const [supplierData,
+                    genderData,
+                    discountData,
+                    sizeData] = await Promise.all([
                     SupplierAPI.getAll(),
                     CategoryAPI.getAllGenderCategory(),
                     DiscountAPI.getAll(),
@@ -149,16 +152,16 @@ function ProductFormVM() {
     }, [productDetail]);
 
     useEffect(() => {
-            const loadSizes = async () => {
-                try {
-                    const data = await SizeAPI.getAllSample();
-                    setSizeSample(data);
-                } catch (error) {
-                    console.error("Lỗi khi tải danh sách size:", error);
-                }
-            };
-            loadSizes();
-        }, [])
+        const loadSizes = async () => {
+            try {
+                const data = await SizeAPI.getAllSample();
+                setSizeSample(data);
+            } catch (error) {
+                console.error("Lỗi khi tải danh sách size:", error);
+            }
+        };
+        loadSizes();
+    }, [])
 
     // Xử lý thay đổi số lượng size
     const handleChangeStock = (e, sizeId) => {

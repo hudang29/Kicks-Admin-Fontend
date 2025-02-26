@@ -19,6 +19,7 @@ function StaffsVM() {
         fetchStaffs();
     }, []);
 
-    return { staff };
+    return {staff};
 }
+
 export default StaffsVM;

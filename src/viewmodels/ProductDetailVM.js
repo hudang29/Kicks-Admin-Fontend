@@ -30,7 +30,7 @@ function ProductDetailVM() {
         };
 
         fetchProductData();
-    }, [id, productDetail]); // ✅ Thêm `id` vào dependency
+    }, [id]); // ✅ Thêm `id` vào dependency
 
     const handleAddColor = async () => {
         if (!newColor.trim()) {

@@ -19,7 +19,8 @@ function OrdersVM() {
         fetchOrders();
     }, []);
 
-    return { order };
+    return {order};
 
 }
+
 export default OrdersVM;

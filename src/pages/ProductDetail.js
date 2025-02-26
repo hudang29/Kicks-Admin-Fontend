@@ -30,7 +30,7 @@ function ProductDetail() {
 
             <div className="card mb-3">
                 <div className="card-body text-center">
-                    <h5>{productDetail.length > 0 ? (productDetail.at(0).name) : "errors"}</h5>
+                    <h5>{product?.name || "###"}</h5>
                 </div>
             </div>
 

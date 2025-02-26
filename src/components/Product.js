@@ -51,15 +51,15 @@ function Product({name, price, description, shoesCategoryID, genderCategoryID, b
                                 <p><small className="text-body-secondary">{brand}</small></p>
                             </div>
                         </div>
-                        <div>
-                            <p>{formatCurrency(price)}</p>
-                        </div>
+                        {/*<div>*/}
+                        {/*    <p>{formatCurrency(price)}</p>*/}
+                        {/*</div>*/}
                     </div>
                 </div>
             </div>
             <div className="card-body">
-                <h5 className="card-title">Description</h5>
-                <p className="card-text">{description}</p>
+                <h5 className="card-title">{formatCurrency(price)}</h5>
+                {/*<p className="card-text">{description}</p>*/}
             </div>
             <div className="card">
                 <ul className="list-group list-group-flush">
