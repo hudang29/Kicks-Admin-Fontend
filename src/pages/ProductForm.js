@@ -2,6 +2,7 @@ import {Link} from "react-router-dom";
 import logo from "../assets/IconKicks.png";
 import ProductFormVM from "../viewmodels/ProductFormVM";
 import {formatCurrency} from "../utils/Format";
+import button from "bootstrap/js/src/button";
 
 function ProductForm() {
 
@@ -18,8 +19,9 @@ function ProductForm() {
         color, setColor, size,
         discount, selectDiscount, setSelectDiscount,
         salePrice,
-        sizeSample,
-        handleChangeStock, handleCancel, handleUpdate
+        sizeSample, stockData,
+        handleChangeStock, handleChangeStockSample, handleCreateSize,
+        handleCancel, handleUpdate
     } = ProductFormVM();
 
 
@@ -206,6 +208,7 @@ function ProductForm() {
                                                               key={size.id}># {size.size}</span>
                                                         <input type="number" className="form-control"
                                                                aria-describedby="basic-addon1"
+                                                               id={size.id}
                                                                value={size.stock} // Giá trị riêng cho từng size
                                                                min={0}
                                                                onChange={
@@ -216,22 +219,32 @@ function ProductForm() {
                                             ))
                                         ) : (
                                             sizeSample.length > 0 ? (
-                                                sizeSample.map((sample) => (
-                                                    <div className="col-md-3">
-                                                        <div className="input-group mb-3">
-                                                        <span className="input-group-text"
-                                                              key={sample.id}># {sample.size}</span>
-                                                            <input type="number" className="form-control"
-                                                                   aria-describedby="basic-addon1"
-                                                                   value={size.stock} // Giá trị riêng cho từng size
-                                                                   min={0}
-                                                                   onChange={
-                                                                       (e) =>
-                                                                           handleChangeStock(e, sample.id)
-                                                                   }/>
+                                                <>
+                                                    {sizeSample.map((sample) => (
+                                                        <div className="col-md-3">
+                                                            <div className="input-group mb-3">
+                                                                <span className="input-group-text"
+                                                                      key={sample.id}># {sample.size}
+                                                                </span>
+                                                                <input type="number"
+                                                                       className="form-control"
+                                                                       aria-describedby="basic-addon1"
+                                                                       value={stockData[sample.id] || 0} // Giá trị riêng cho từng size
+                                                                       min={0}
+                                                                       onChange={
+                                                                           (e) =>
+                                                                               handleChangeStockSample(e, sample.id)
+                                                                       }/>
+                                                            </div>
                                                         </div>
+                                                    ))}
+                                                    <div className="col-md-3">
+                                                        <button className="btn btn-dark"
+                                                                type="button"
+                                                                onClick={handleCreateSize}>Create Size
+                                                        </button>
                                                     </div>
-                                                ))
+                                                </>
                                             ) : (
                                                 <div className="">
                                                     <span>Errors</span>
@@ -246,7 +259,9 @@ function ProductForm() {
                                 <div className="d-grid gap-2 d-md-flex justify-content-md-end">
                                     <button className="btn btn-dark"
                                             type="button"
-                                            onClick={handleUpdate}>Update
+                                            onClick={handleUpdate}
+                                            disabled={size.length === 0}
+                                            hidden={size.length === 0}>Update
                                     </button>
                                     <button className="btn btn-danger" type="button">Delete</button>
                                     <button className="btn btn-light border border-dark"

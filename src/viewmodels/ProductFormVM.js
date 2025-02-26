@@ -6,6 +6,7 @@ import SupplierAPI from "../api/SupplierAPI";
 import CategoryAPI from "../api/CategoryAPI";
 import DiscountAPI from "../api/DiscountAPI";
 import SizeAPI from "../api/SizeAPI";
+import SizeModel from "../models/SizeModel";
 
 function ProductFormVM() {
 
@@ -40,6 +41,9 @@ function ProductFormVM() {
     const [salePrice, setSalePrice] = useState(0);
     const [size, setSize] = useState([]);
     const [sizeSample, setSizeSample] = useState([]);
+    //const [newSize, setNewSize] = useState([]);
+    const [stockData, setStockData] = useState([]);
+    const [sizeModels, setSizeModels] = useState([]);
 
     //thay đổi giá trị
     const [productName, setProductName] = useState(null);
@@ -107,19 +111,6 @@ function ProductFormVM() {
         fetchData();
     }, [id]);
 
-    useEffect(() => {
-            const loadSizes = async () => {
-                try {
-                    const data = await SizeAPI.getAllSample();
-                    setSizeSample(data);
-                } catch (error) {
-                    console.error("Lỗi khi tải danh sách size:", error);
-                }
-            };
-            loadSizes();
-        }
-    )
-
     // Fetch category shoes khi selectedGender thay đổi
     useEffect(() => {
         if (!selectedGender) return;
@@ -157,6 +148,17 @@ function ProductFormVM() {
         }
     }, [productDetail]);
 
+    useEffect(() => {
+            const loadSizes = async () => {
+                try {
+                    const data = await SizeAPI.getAllSample();
+                    setSizeSample(data);
+                } catch (error) {
+                    console.error("Lỗi khi tải danh sách size:", error);
+                }
+            };
+            loadSizes();
+        }, [])
 
     // Xử lý thay đổi số lượng size
     const handleChangeStock = (e, sizeId) => {
@@ -167,6 +169,57 @@ function ProductFormVM() {
             )
         );
     };
+
+    useEffect(() => {
+        // Khi `sizeSample` thay đổi, map thành danh sách `SizeModel`
+        const mappedSizes = sizeSample.map(sample => new SizeModel(sample.id, sample.size, 0));
+        setSizeModels(mappedSizes);
+    }, [sizeSample]); // Chạy lại khi `sizeSample` thay đổi
+
+    // Xử lý thay số lượng size mới
+    const handleChangeStockSample = (e, sampleId) => {
+        const newStock = Number(e.target.value);
+
+        setStockData(prevStock => ({
+            ...prevStock,
+            [sampleId]: newStock // Gán stock theo ID của sample
+        }));
+
+        setSizeModels(prevSizes =>
+            prevSizes.map(size =>
+                size.id === sampleId ? new SizeModel(size.id, size.size, newStock) : size
+            )
+        );
+    };
+
+    const handleCreateSize = async () => {
+        if (sizeModels.length === 0) {
+            console.warn("Không có dữ liệu size để gửi!");
+            return;
+        }
+
+        try {
+            const newSizeList = sizeModels.map(item => ({
+                size: item.size,
+                stock: item.stock,
+            }));
+
+            const response = await SizeAPI.createSizeList(newSizeList, id);
+
+            if (response.status === 200 || response.status === 201) {
+                console.log("Tạo danh sách size thành công!", response.data);
+                // Cập nhật danh sách size sau khi API thành công
+                setSize(prevSizes => [...prevSizes, ...sizeModels]);
+                setSizeModels([]);
+            } else {
+                console.error("Có lỗi xảy ra khi Tạo danh sách size:", response);
+            }
+
+        } catch (error) {
+            console.error("Lỗi khi gọi sizeAPI:", error);
+        }
+    };
+
 
     // Cancel
     const handleCancel = () => {
@@ -186,6 +239,11 @@ function ProductFormVM() {
 
     // Update sản phẩm
     const handleUpdate = async () => {
+        const isConfirmed = window.confirm("Bạn có muốn cập nhật sản phẩm này?");
+
+        if (!isConfirmed) {
+            return; // Nếu người dùng nhấn "Hủy", không tiếp tục cập nhật
+        }
         try {
             if (!productDetail || !product) {
                 console.error("Dữ liệu không hợp lệ để cập nhật.");
@@ -224,8 +282,6 @@ function ProductFormVM() {
                 ProductDetailAPI.updateProductDetail(updatedProductDetail),
                 SizeAPI.update(updatedSizes, id),
             ]);
-            // console.log(updatedProduct);
-            // console.log(updatedProductDetail);
 
             results.forEach((result, index) => {
                 if (result.status === "rejected") {
@@ -249,7 +305,6 @@ function ProductFormVM() {
             });
 
             alert("Cập nhật thành công!");
-
         } catch (error) {
             console.error("Lỗi khi cập nhật sản phẩm:", error);
             alert("Cập nhật thất bại!");
@@ -259,32 +314,18 @@ function ProductFormVM() {
     return {
         id,
         product,
-        productName,
-        setProductName,
-        productBrand,
-        setProductBrand,
-        productPrice,
-        setProductPrice,
-        productDescription,
-        setProductDescription,
-        genderCategory,
-        selectedGender,
-        setSelectedGender,
-        shoesCategory,
-        selectedShoes,
-        setSelectedShoes,
-        supplier,
-        selectedSupplier,
-        setSelectedSupplier,
-        discount,
-        selectDiscount,
-        setSelectDiscount,
+        productName, setProductName,
+        productBrand, setProductBrand,
+        productPrice, setProductPrice,
+        productDescription, setProductDescription,
+        genderCategory, selectedGender, setSelectedGender,
+        shoesCategory, selectedShoes, setSelectedShoes,
+        supplier, selectedSupplier, setSelectedSupplier,
+        discount, selectDiscount, setSelectDiscount,
         salePrice,
-        size,
-        color,
-        setColor,
-        sizeSample,
-        handleChangeStock,
+        color, setColor,
+        size, sizeSample, stockData,
+        handleChangeStock, handleChangeStockSample, handleCreateSize,
         handleCancel,
         handleUpdate
     };

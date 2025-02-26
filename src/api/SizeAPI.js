@@ -6,6 +6,8 @@ const ShowSize_API = "http://localhost:8080/api/sizes/";
 const ShowSizeSample_API = "http://localhost:8080/api/size-sample";
 
 const UpdateSize_API = "http://localhost:8080/api/sizes/update";
+const CreateSize_API = "http://localhost:8080/api/sizes/create";
+
 
 class SizeAPI {
     async getAll(id) {
@@ -53,9 +55,23 @@ class SizeAPI {
         }
     }
 
-    async update(sizeData, id) {
+    async update(sizeData, productDetailId) {
         try {
-            const response = await axios.put(`${UpdateSize_API}/${id}`, sizeData, {
+            const response = await axios.put(`${UpdateSize_API}/${productDetailId}`, sizeData, {
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            });
+            return response.data;
+        } catch (error) {
+            console.error("Lỗi khi cập nhập size:", error.response?.data || error.message);
+            throw error;
+        }
+    }
+
+    async createSizeList(sizeData, productDetailId) {
+        try {
+            const response = await axios.post(`${CreateSize_API}/${productDetailId}`, sizeData, {
                 headers: {
                     "Content-Type": "application/json",
                 }

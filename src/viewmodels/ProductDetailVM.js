@@ -11,6 +11,10 @@ function ProductDetailVM() {
     const [newColor, setNewColor] = useState(null);
 
     useEffect(() => {
+        document.title = "Product Detail";
+    }, []);
+
+    useEffect(() => {
         if (!id) return; // Bảo vệ khi id chưa có
 
         const fetchProductData = async () => {
@@ -26,7 +30,7 @@ function ProductDetailVM() {
         };
 
         fetchProductData();
-    }, [id]); // ✅ Thêm `id` vào dependency
+    }, [id, productDetail]); // ✅ Thêm `id` vào dependency
 
     const handleAddColor = async () => {
         if (!newColor.trim()) {
@@ -47,10 +51,9 @@ function ProductDetailVM() {
             setProductDetail((prev) => [...prev, response]);
 
             // Reset input
-            setNewColor("");
+            setNewColor(null);
             alert("thêm thành công ");
-            // Đóng modal
-            //document.getElementById("closeModalBtn").click();
+
         } catch (error) {
             console.error("Lỗi khi thêm màu mới:", error);
             alert("thêm thất bại ");
