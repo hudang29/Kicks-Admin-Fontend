@@ -22,9 +22,7 @@ function Products() {
                     </div>
 
                     <div className="ms-auto">
-                        <Link to="/newproduct" className="nav-link rounded rounded-2 px-5 py-2 btn-kicks-dark"
-                              // style={{backgroundColor: "#232321", color: "#FAFAFA"}}
-                        >
+                        <Link to="/newproduct" className="nav-link rounded rounded-2 px-5 py-2 btn-kicks-dark">
                             ADD NEW PRODUCT
                         </Link>
                     </div>

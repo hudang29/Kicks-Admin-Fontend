@@ -1,6 +1,5 @@
 import logo from "../assets/IconKicks.png";
 import ProductNewVM from "../viewmodels/ProductNewVM";
-import {formatCurrency} from "../utils/Format";
 import {useNavigate} from "react-router-dom";
 
 function ProductNew() {
@@ -8,8 +7,8 @@ function ProductNew() {
 
     const {
         supplier, selectedSupplier, setSelectedSupplier,
-        shoesCategory, selectedShoeType, setSelectedShoeType, type,
-        genderCategory, selectedGender, setSelectedGender, gender,
+        shoesCategory, selectedShoeType, setSelectedShoeType,
+        genderCategory, selectedGender, setSelectedGender,
         productName, description, brand, price, setProductName, setPrice, setDescription, setBrand,
         activeCreateBtn, handleCreateProduct
     } = ProductNewVM();

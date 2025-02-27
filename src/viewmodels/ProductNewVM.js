@@ -3,6 +3,7 @@ import CategoryAPI from "../api/CategoryAPI";
 import SupplierAPI from "../api/SupplierAPI";
 import categoryAPI from "../api/CategoryAPI";
 import ProductAPI from "../api/ProductAPI";
+import {validateForm} from "../utils/Validate";
 
 
 function ProductNewVM() {
@@ -61,6 +62,7 @@ function ProductNewVM() {
     }
 
     const handleCreateProduct = async (navigate) => {
+
         const isConfirmed = window.confirm("Create this Product?");
 
         if (!isConfirmed) {

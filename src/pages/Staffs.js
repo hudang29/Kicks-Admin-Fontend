@@ -1,13 +1,14 @@
 import List from "../components/List";
 import Pagination from "../components/Pagination";
 import StaffsVM from "../viewmodels/StaffsVM";
+import {Link} from "react-router-dom";
 
-const TableHeader = ["No.", "Name", "ID", "Email", "Role", "Status"];
+const TableHeader = ["No.", "Name", "Email", "Phone", "Role", "Status", "Action"];
 const CardName = "Staffs"
 
 function Staffs() {
 
-    const {staff} = StaffsVM();
+    const {staffList} = StaffsVM();
 
     return (
         <>
@@ -23,16 +24,15 @@ function Staffs() {
                         </nav>
                     </div>
                     <div className="ms-auto">
-                        <button className="rounded rounded-2 px-5 py-2"
-                                style={{backgroundColor: "#232321", color: "#FAFAFA"}}>
+                        <Link to="/newstaff" className="nav-link rounded rounded-2 px-5 py-2 btn-kicks-dark">
                             ADD NEW STAFF
-                        </button>
+                        </Link>
                     </div>
                 </div>
             </div>
             {/*-- component --*/}
             <List items={TableHeader}
-                  information={staff}
+                  information={staffList}
                   CardName={CardName}/>
 
             <Pagination/>

@@ -1,4 +1,7 @@
 // Hàm để đổi màu badge dựa trên trạng thái đơn hàng
+import {formatCurrency, formatDate} from "../utils/Format";
+import {Link} from "react-router-dom";
+
 const getStatusClass = (status) => {
     switch (status) {
         case "Chờ xử lý":
@@ -37,21 +40,41 @@ function List(props) {
                         <tr key={information.id}>
                             <th scope="row">{index + 1}</th>
                             <td>{information.customer ?? information.name}</td>
-                            <td>{information.orderDate ?? information.id}</td>
-                            <td>{information.payment ?? information.email}</td>
+                            <td>
+                                {information.orderDate ? formatDate(information.orderDate) : information.email}
+                            </td>
+                            {
+                                information.phone && (
+                                    <td>{information.phone}</td>
+                                )
+                            }
+                            <td>{information.payment ?? information.role}</td>
                             <td>
                                 <span className={getStatusClass(information.orderStatus)}>
-                                        {information.orderStatus ?? information.role}
+                                        {information.orderStatus ?? (information.status ? ("Còn làm") : ("Nghỉ việc"))}
                                 </span>
                             </td>
-                            <td>{information.totalAmount ?? (information.status? ("Còn làm") : ("Nghỉ việc"))}</td>
+                            {information.totalAmount && (
+                                <>
+                                    <td>{formatCurrency(information.totalAmount)}</td>
+                                    <td>
+                                        <Link to="#" className="btn btn-danger">View</Link>
+                                    </td>
+                                </>
+                            )}
+                            {information.role && (
+                                <td>
+                                    <Link to={`/staff-detail/${information.id}`} className="btn btn-danger">View</Link>
+                                </td>
+                            )}
                         </tr>
                     ))}
                     </tbody>
                 </table>
             </div>
         </div>
-    );
+    )
+        ;
 }
 
 export default List;
