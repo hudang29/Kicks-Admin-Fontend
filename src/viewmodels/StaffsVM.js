@@ -69,7 +69,6 @@ function StaffsVM() {
         const updateStaff = {
             id: id,
             phone: phone,
-            address: address,
             selectedRole: selectedRole,
             name: staffName,
             email: email,
@@ -106,7 +105,6 @@ function StaffsVM() {
         try {
             const newStaff = {
                 phone: phone,
-                address: address,
                 selectedRole: selectedRole,
                 name: staffName,
                 email: email,
@@ -121,7 +119,7 @@ function StaffsVM() {
 
     const activeBtn = () => {
         return (
-            phone && address && email && staffName && password);
+            phone && email && staffName);
     }
 
     return {

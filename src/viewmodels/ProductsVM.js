@@ -1,8 +1,10 @@
 import {useEffect, useState} from "react";
 import ProductAPI from "../api/ProductAPI";
+import CategoryAPI from "../api/CategoryAPI";
 
 function ProductsVM() {
-    const [products, setProducts] = useState([]); // State lưu danh sách người dùng
+    const [products, setProducts] = useState([]);
+
 
     // Cập nhật document.title
     useEffect(() => {
@@ -21,7 +23,6 @@ function ProductsVM() {
 
         fetchProducts();
     }, []);
-
 
     return products;
 }

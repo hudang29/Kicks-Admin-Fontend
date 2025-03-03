@@ -7,6 +7,7 @@ import CategoryAPI from "../api/CategoryAPI";
 import DiscountAPI from "../api/DiscountAPI";
 import SizeAPI from "../api/SizeAPI";
 import SizeModel from "../models/SizeModel";
+import GalleryAPI from "../api/GalleryAPI";
 
 function ProductFormVM() {
 
@@ -52,6 +53,8 @@ function ProductFormVM() {
     const [productBrand, setProductBrand] = useState(null);
     const [color, setColor] = useState(null);
 
+    const [galleryList, setGalleryList] = useState([]);
+
     useEffect(() => {
         document.title = "Product Detail";
     }, []);
@@ -89,6 +92,9 @@ function ProductFormVM() {
                     stock: item.stock ?? 0,
                 }));
                 setSize(formattedSize);
+
+                const galleries = await GalleryAPI.getAllProductDetailGallery(id)
+                setGalleryList(galleries);
 
                 // Lưu trạng thái ban đầu
                 setInitialData({
@@ -328,6 +334,7 @@ function ProductFormVM() {
         salePrice,
         color, setColor,
         size, sizeSample, stockData,
+        galleryList,
         handleChangeStock, handleChangeStockSample, handleCreateSize,
         handleCancel,
         handleUpdate

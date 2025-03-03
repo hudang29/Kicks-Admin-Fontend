@@ -5,7 +5,7 @@ import ProductDetailVM from "../viewmodels/ProductDetailVM";
 function ProductDetail() {
     const {
         productDetail, product,
-        newColor, setNewColor,
+        newColor, setNewColor, gender, type,
         handleAddColor,
     } = ProductDetailVM();
 
@@ -30,12 +30,12 @@ function ProductDetail() {
 
             <div className="card mb-3">
                 <div className="card-body text-center">
-                    <h5>{product?.name || "###"}</h5>
+                    <h5>{product?.brand || "###"}</h5>
                 </div>
             </div>
 
             <div className="row mb-3">
-                <div className="col-md-8">
+                <div className="col-md-7">
                     {
                         productDetail.length > 0 ?
                             (productDetail.map((item) =>
@@ -94,8 +94,14 @@ function ProductDetail() {
                         </div>
                     </div>
                 </div>
-                <div className="col-md-4 border border-1" style={{height: "fit-content"}}>
-                    <img src={logo} className="img-fluid rounded-start" alt="..."/>
+                <div className="col-md-5 border border-1">
+                    <div className="card mb-3 h-100">
+                        <div className="card-body">
+                            <h5>{product?.name || "###"}</h5>
+                            <p className="text-body-secondary">{gender?.name || "###"}</p>
+                            <p className="fs-5 my-5">{product?.description || "###"}</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </>

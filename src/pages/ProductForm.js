@@ -20,6 +20,7 @@ function ProductForm() {
         discount, selectDiscount, setSelectDiscount,
         salePrice,
         sizeSample, stockData,
+        galleryList,
         handleChangeStock, handleChangeStockSample, handleCreateSize,
         handleCancel, handleUpdate
     } = ProductFormVM();
@@ -74,7 +75,7 @@ function ProductForm() {
                                 <label htmlFor="exampleFormControlTextarea1" className="form-label">
                                     Description
                                 </label>
-                                <textarea className="form-control" id="exampleFormControlTextarea1" rows="3"
+                                <textarea className="form-control" id="exampleFormControlTextarea1" rows="4"
                                           value={productDescription}
                                           onChange={(e) => setProductDescription(e.target.value)}/>
                             </div>
@@ -276,6 +277,21 @@ function ProductForm() {
 
                     <div className="col-md-4">
                         <img src={logo} className="img-fluid rounded border border-1 border-dark" alt="..."/>
+                        <div className="my-3 row row-cols-4">
+                            {
+                                galleryList.length > 0 ? (
+                                    galleryList.map((gallery) => (
+                                        <div className="col-md-3 col-lg-3 col-6 kicks-img" key={gallery.id}>
+                                            <img src={gallery.image} className="img-fluid"
+                                                 alt="..."/>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <></>
+                                )
+                            }
+
+                        </div>
                     </div>
                 </div>
             </div>

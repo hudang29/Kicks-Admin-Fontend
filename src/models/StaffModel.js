@@ -1,5 +1,5 @@
 class StaffModel {
-    constructor(id, name, email, phone, address, role, status) {
+    constructor(id, name, email, phone, address, role, status, createAt) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -7,6 +7,7 @@ class StaffModel {
         this.address = address;
         this.role = role;
         this.status = status;
+        this.createAt = createAt;
     }
 
     static fromJson(json) {
@@ -18,6 +19,7 @@ class StaffModel {
             json.address,
             json.role,
             json.status,
+            json.createAt
         );
     }
 }

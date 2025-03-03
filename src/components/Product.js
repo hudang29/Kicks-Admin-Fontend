@@ -2,11 +2,13 @@ import {Link, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import CategoryAPI from "../api/CategoryAPI";
 import {formatCurrency} from "../utils/Format";
+import GalleryAPI from "../api/GalleryAPI";
 
 function Product({name, price, description, shoesCategoryID, genderCategoryID, brand, id}) {
 
     const [shoesCategory, setShoesCategory] = useState(null);
     const [genderCategory, setGenderCategory] = useState(null);
+    const [gallery, setGallery] = useState();
 
     useEffect(() => {
         if (genderCategoryID) {
@@ -23,12 +25,20 @@ function Product({name, price, description, shoesCategoryID, genderCategoryID, b
                 .catch((error) => console.error("Lỗi khi lấy danh mục giày:", error));
         }
     }, [shoesCategoryID]);
+    
+    useEffect(() => {
+        GalleryAPI.getProductGallery(id)
+            .then((data) => setGallery(data))
+            .catch((error) => console.error("Lỗi khi lấy ảnh", error));
+    }, [id])
 
     return (
         <div className="card p-3" key={id}>
             <div className="row g-0">
                 <div className="col-md-4 border border-1">
-                    <img src={""} className="img-fluid rounded-start" alt={"..."}/>
+                    <img
+                        src={gallery}
+                        className="img-fluid rounded-start" alt={name}/>
                 </div>
                 <div className="col-md-8">
                     <div className="card-body">

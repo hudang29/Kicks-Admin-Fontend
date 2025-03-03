@@ -2,13 +2,17 @@ import {useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import ProductDetailAPI from "../api/ProductDetailAPI";
 import ProductAPI from "../api/ProductAPI";
+import GalleryAPI from "../api/GalleryAPI";
+import CategoryAPI from "../api/CategoryAPI";
 
 function ProductDetailVM() {
     const {id} = useParams();
 
     const [productDetail, setProductDetail,] = useState([]);
-    const [product, setProduct] = useState(null);
+    const [product, setProduct] = useState({});
     const [newColor, setNewColor] = useState(null);
+    const [gender, setGender] = useState({});
+    const [type, setType] = useState({});
 
     useEffect(() => {
         document.title = "Product Detail";
@@ -30,7 +34,18 @@ function ProductDetailVM() {
         };
 
         fetchProductData();
-    }, [id]); // ✅ Thêm `id` vào dependency
+    }, [id]);
+
+    useEffect(() => {
+        if (product) {
+            CategoryAPI.getShoesCategoryById(product.shoesCategoryID)
+                .then((data) => setType(data))
+                .catch((error) => console.error("Lỗi", error));
+            CategoryAPI.getGenderCategoryById(product.genderCategoryID)
+                .then((data) => setGender(data))
+                .catch((error) => console.log("error", error));
+        }
+    }, [product]);
 
     const handleAddColor = async () => {
         if (!newColor.trim()) {
@@ -65,6 +80,7 @@ function ProductDetailVM() {
         product,
         newColor,
         setNewColor,
+        gender, type,
         handleAddColor
     }
 }

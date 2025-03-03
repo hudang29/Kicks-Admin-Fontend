@@ -64,8 +64,8 @@ function StaffNew() {
                         <select id="role" className="form-select"
                         value={selectedRole}
                         onChange={(e) => setSelectedRole(e.target.value)}>
-                            <option value="Nhân viên">Staff</option>
-                            <option value="Quản lý">Manager</option>
+                            <option value="Staff">Staff</option>
+                            <option value="Manager">Manager</option>
                             <option value="Admin">Admin</option>
                         </select>
                     </div>
@@ -75,7 +75,8 @@ function StaffNew() {
                     <div className="col-sm-10">
                         <textarea className="form-control" id="address" rows="3"
                         value={address}
-                        onChange={(e) => setAddress(e.target.value)}/>
+                        onChange={(e) => setAddress(e.target.value)}
+                        readOnly/>
                     </div>
                 </div>
                 <div className="hstack">

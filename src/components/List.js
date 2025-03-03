@@ -39,33 +39,32 @@ function List(props) {
                     {props.information.map((information, index) => (
                         <tr key={information.id}>
                             <th scope="row">{index + 1}</th>
-                            <td>{information.customer ?? information.name}</td>
-                            <td>
-                                {information.orderDate ? formatDate(information.orderDate) : information.email}
-                            </td>
-                            {
-                                information.phone && (
-                                    <td>{information.phone}</td>
-                                )
-                            }
-                            <td>{information.payment ?? information.role}</td>
-                            <td>
-                                <span className={getStatusClass(information.orderStatus)}>
-                                        {information.orderStatus ?? (information.status ? ("Còn làm") : ("Nghỉ việc"))}
-                                </span>
-                            </td>
                             {information.totalAmount && (
                                 <>
-                                    <td>{formatCurrency(information.totalAmount)}</td>
+                                    <td>{information.customer ?? null}</td>
+                                    <td>{formatDate(information.orderDate)}</td>
+                                    <td>{information.payment ?? null}</td>
                                     <td>
-                                        <Link to="#" className="btn btn-danger">View</Link>
+                                        <span className={getStatusClass(information.orderStatus)}>
+                                            {information.orderStatus ?? null}
+                                        </span>
                                     </td>
+                                    <td>{formatCurrency(information.totalAmount)}</td>
+                                    <td><Link to="#" className="btn btn-danger">View</Link></td>
                                 </>
                             )}
                             {information.role && (
-                                <td>
-                                    <Link to={`/staff-detail/${information.id}`} className="btn btn-danger">View</Link>
-                                </td>
+                                <>
+                                    <td>{information.name}</td>
+                                    <td>{information.phone}</td>
+                                    <td>{information.email}</td>
+                                    <td>{information.role}</td>
+                                    <td>{information.status ? ("Còn làm") : ("Nghỉ việc")}</td>
+                                    <td>{formatDate(information.createAt)}</td>
+                                    <td><Link to={`/staff-detail/${information.id}`}
+                                              className="btn btn-danger">View</Link>
+                                    </td>
+                                </>
                             )}
                         </tr>
                     ))}

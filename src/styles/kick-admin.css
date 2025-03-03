@@ -78,4 +78,8 @@
     color: #FAFAFA !important;
 }
 
+.kicks-img img:hover {
+    border: 1px solid black; /* Hiện viền khi hover */
+}
+
 
