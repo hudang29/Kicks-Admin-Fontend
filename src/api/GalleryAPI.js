@@ -28,7 +28,7 @@ class GalleryAPI {
                 headers:{
                     "Content-Type": "application/json"
                 }
-            })
+            });
             return response.data;
         } catch (error) {
             console.error("Lỗi khi thêm ảnh:", error.response?.data || error.message);
