@@ -13,6 +13,7 @@ function ProductDetailVM() {
     const [newColor, setNewColor] = useState(null);
     const [gender, setGender] = useState({});
     const [type, setType] = useState({});
+    const [isDefault, setIsDefault] = useState(null);
 
     useEffect(() => {
         document.title = "Product Detail";
@@ -34,7 +35,7 @@ function ProductDetailVM() {
         };
 
         fetchProductData();
-    }, [id]);
+    }, [id, isDefault]);
 
     useEffect(() => {
         if (product) {
@@ -75,13 +76,25 @@ function ProductDetailVM() {
         }
     };
 
+    // const handleChangeDefault = async (IsDefault) => {
+    //     //const Detail = await ProductDetailAPI.getDetailByID(id)
+    //
+    //     setIsDefault(IsDefault)
+    //     const updateDefault = {
+    //         productId: id,
+    //         isDefault: isDefault};
+    //
+    //     ProductDetailAPI.updateProductDetail(updateDefault)
+    //         .catch((error) => console.log("error", error))
+    // };
+
     return {
         productDetail,
         product,
         newColor,
         setNewColor,
         gender, type,
-        handleAddColor
+        handleAddColor,
     }
 }
 

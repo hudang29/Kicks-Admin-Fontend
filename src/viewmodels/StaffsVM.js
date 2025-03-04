@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
 import StaffAPI from "../api/StaffAPI";
-import {data, useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
+import axios from "axios";
 
 function StaffsVM() {
     const {id} = useParams();
@@ -59,6 +60,58 @@ function StaffsVM() {
         }
         fetchStaff();
     }, [id, status]);
+
+    const [provinces, setProvinces] = useState([]);
+    const [selectedProvince, setSelectedProvince] = useState("");
+    const [districts, setDistricts] = useState([]);
+    const [selectedDistrict, setSelectedDistrict] = useState("");
+    const [wards, setWards] = useState([]);
+    const [selectedWard, setSelectedWard] = useState("");
+
+    useEffect(() => {
+        const fetchProvinces = async () => {
+            try {
+                const response = await axios.get("https://provinces.open-api.vn/api/p/");
+                setProvinces(response.data);
+            } catch (error) {
+                console.error("Lỗi tải tỉnh/thành:", error);
+            }
+        };
+        fetchProvinces();
+    }, []);
+
+    useEffect(() => {
+        if (!selectedProvince) return;
+
+        const fetchDistricts = async () => {
+            try {
+                const response = await axios
+                    .get(`https://provinces.open-api.vn/api/p/${selectedProvince}?depth=2`);
+                setDistricts(response.data.districts);
+            } catch (error) {
+                console.error("Lỗi tải quận/huyện:", error);
+            }
+        };
+
+        fetchDistricts();
+    }, [selectedProvince]);
+
+    useEffect(() => {
+        if (!selectedDistrict) return;
+
+        const fetchWards = async () => {
+            try {
+                const response = await axios
+                    .get(`https://provinces.open-api.vn/api/d/${selectedDistrict}?depth=2`);
+                setWards(response.data.wards);
+            } catch (error) {
+                console.error("Lỗi tải phường/xã:", error);
+            }
+        };
+
+        fetchWards();
+    }, [selectedDistrict]);
+
 
     const handleUpdate = async () => {
         const isConfirmed = window.confirm("Bạn có muốn cập nhật thông tin nhân viên này?");
@@ -127,6 +180,9 @@ function StaffsVM() {
         staffName, setStaffName, email, setEmail, phone, setPhone,
         setAddress, address, setSelectedRole, selectedRole, setStatus, status,
         password, setPassword,
+        provinces, selectedProvince, setSelectedProvince,
+        districts, selectedDistrict, setSelectedDistrict,
+        wards, selectedWard, setSelectedWard,
         handleUpdate, handleStatus, activeBtn
     };
 }

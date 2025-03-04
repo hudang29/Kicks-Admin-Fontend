@@ -3,7 +3,7 @@ import Pagination from "../components/Pagination";
 import StaffsVM from "../viewmodels/StaffsVM";
 import {Link} from "react-router-dom";
 
-const TableHeader = ["No.", "Name", "Email", "Phone", "Role", "Status", "Create at", "Action"];
+const TableHeader = ["No.", "Name", "Phone", "Email", "Role", "Status", "Create at", "Action"];
 const CardName = "Staffs"
 
 function Staffs() {

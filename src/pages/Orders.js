@@ -2,7 +2,7 @@ import List from "../components/List";
 import Pagination from "../components/Pagination";
 import OrdersVM from "../viewmodels/OrdersVM";
 
-const TableHeader = ["No.", "Customer Name", "Date", "Payment Method", "Status", "Amount", "Action"];
+const TableHeader = ["No.", "Customer Name", "Order Date", "Payment Method", "Status", "Amount", "Action"];
 const CardName = "Recent Purchases"
 
 function Orders() {

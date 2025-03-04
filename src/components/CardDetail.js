@@ -1,11 +1,11 @@
 import {Link} from "react-router-dom";
 import {useEffect, useState} from "react";
 import DiscountAPI from "../api/DiscountAPI";
-import { formatCurrency } from "../utils/Format";
+import {formatCurrency} from "../utils/Format";
 import GalleryAPI from "../api/GalleryAPI";
 
 
-function CardDetail({id, color, product, productDetail}) {
+function CardDetail({id, color, product, productDetail, isDefault}) {
 
     const [discount, setDiscount] = useState(null);
     const [gallery, setGallery] = useState(null);
@@ -46,6 +46,12 @@ function CardDetail({id, color, product, productDetail}) {
                                       className="nav-link mb-3 px-1 rounded rounded-1 btnhover-232321 bg-body-secondary">
                                     <i className="bi bi-three-dots"></i>
                                 </Link>
+                                <div className="form-check">
+                                    <input className="form-check-input" type="radio" name="flexRadioDefault"
+                                           id={id}
+                                           //value={isDefault}
+                                           checked={isDefault}/>
+                                </div>
                             </div>
                         </div>
                         {

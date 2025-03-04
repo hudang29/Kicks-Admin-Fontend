@@ -42,7 +42,6 @@ function ProductFormVM() {
     const [salePrice, setSalePrice] = useState(0);
     const [size, setSize] = useState([]);
     const [sizeSample, setSizeSample] = useState([]);
-    //const [newSize, setNewSize] = useState([]);
     const [stockData, setStockData] = useState([]);
     const [sizeModels, setSizeModels] = useState([]);
 

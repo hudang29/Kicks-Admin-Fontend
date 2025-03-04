@@ -1,12 +1,13 @@
 import CardDetail from "../components/CardDetail";
 import logo from "../assets/IconK.png";
 import ProductDetailVM from "../viewmodels/ProductDetailVM";
+import {Link} from "react-router-dom";
 
 function ProductDetail() {
     const {
         productDetail, product,
         newColor, setNewColor, gender, type,
-        handleAddColor,
+        handleAddColor, handleChangeDefault
     } = ProductDetailVM();
 
     return (
@@ -41,8 +42,8 @@ function ProductDetail() {
                             (productDetail.map((item) =>
                                     <CardDetail
                                         id={item.id}
-                                        name={item.name}
                                         color={item.color}
+                                        isDefault={item.isDefault}
                                         productDetail={item}
                                         product={product}
                                     />
@@ -99,6 +100,7 @@ function ProductDetail() {
                         <div className="card-body">
                             <h5>{product?.name || "###"}</h5>
                             <p className="text-body-secondary">{gender?.name || "###"}</p>
+                            <p className="text-body-secondary">{type?.name || "###"}</p>
                             <p className="fs-5 my-5">{product?.description || "###"}</p>
                         </div>
                     </div>

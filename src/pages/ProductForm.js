@@ -292,6 +292,10 @@ function ProductForm() {
                             }
 
                         </div>
+                        <div className="mb-3">
+                            <label htmlFor="formFile" className="form-label">Upload new gallery</label>
+                            <input className="form-control" type="file" id="formFile"/>
+                        </div>
                     </div>
                 </div>
             </div>
