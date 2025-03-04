@@ -64,7 +64,7 @@ class SizeAPI {
             });
             return response.data;
         } catch (error) {
-            console.error("Lỗi khi cập nhập size:", error.response?.data || error.message);
+            console.error("Lỗi", error.response?.data || error.message);
             throw error;
         }
     }
@@ -78,7 +78,7 @@ class SizeAPI {
             });
             return response.data;
         } catch (error) {
-            console.error("Lỗi khi cập nhập size:", error.response?.data || error.message);
+            console.error("Lỗi", error.response?.data || error.message);
             throw error;
         }
     }

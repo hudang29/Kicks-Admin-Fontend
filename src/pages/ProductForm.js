@@ -2,7 +2,7 @@ import {Link} from "react-router-dom";
 import logo from "../assets/IconKicks.png";
 import ProductFormVM from "../viewmodels/ProductFormVM";
 import {formatCurrency} from "../utils/Format";
-import button from "bootstrap/js/src/button";
+import Upload from "../components/Upload";
 
 function ProductForm() {
 
@@ -22,7 +22,8 @@ function ProductForm() {
         sizeSample, stockData,
         galleryList,
         handleChangeStock, handleChangeStockSample, handleCreateSize,
-        handleCancel, handleUpdate
+        handleCancel, handleUpdate,
+        handleFileChange, handleUpload
     } = ProductFormVM();
 
 
@@ -59,7 +60,7 @@ function ProductForm() {
                 </div>
             </div>
 
-            <div className="card mb-3 p-3">
+            <div className="card mb-3 p-3 rounded rounded-0">
                 <div className="row g-3">
                     <div className="col-md-8">
                         <form className="row g-3">
@@ -277,11 +278,11 @@ function ProductForm() {
 
                     <div className="col-md-4">
                         <img src={logo} className="img-fluid rounded border border-1 border-dark" alt="..."/>
-                        <div className="my-3 row row-cols-4">
+                        <div className="my-3 row row-cols-4 g-1">
                             {
                                 galleryList.length > 0 ? (
                                     galleryList.map((gallery) => (
-                                        <div className="col-md-3 col-lg-3 col-6 kicks-img" key={gallery.id}>
+                                        <div className="col-md-3 col-lg-3 col-6 kicks-img p-1" key={gallery.id}>
                                             <img src={gallery.image} className="img-fluid"
                                                  alt="..."/>
                                         </div>
@@ -293,9 +294,11 @@ function ProductForm() {
 
                         </div>
                         <div className="mb-3">
-                            <label htmlFor="formFile" className="form-label">Upload new gallery</label>
-                            <input className="form-control" type="file" id="formFile"/>
+                            <input type="file" onChange={handleFileChange}/>
+                            <button className="btn btn-kicks" onClick={handleUpload}>Upload</button>
                         </div>
+                        {/*<Upload id={id}/>*/}
+
                     </div>
                 </div>
             </div>

@@ -1,13 +1,12 @@
 import CardDetail from "../components/CardDetail";
-import logo from "../assets/IconK.png";
 import ProductDetailVM from "../viewmodels/ProductDetailVM";
-import {Link} from "react-router-dom";
+
 
 function ProductDetail() {
     const {
         productDetail, product,
         newColor, setNewColor, gender, type,
-        handleAddColor, handleChangeDefault
+        handleAddColor,
     } = ProductDetailVM();
 
     return (

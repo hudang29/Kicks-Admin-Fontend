@@ -8,6 +8,7 @@ import DiscountAPI from "../api/DiscountAPI";
 import SizeAPI from "../api/SizeAPI";
 import SizeModel from "../models/SizeModel";
 import GalleryAPI from "../api/GalleryAPI";
+import UploadImgAPI from "../api/UploadImgAPI";
 
 function ProductFormVM() {
 
@@ -29,16 +30,16 @@ function ProductFormVM() {
     });
 
     // State
-    const [productDetail, setProductDetail] = useState(null);
-    const [product, setProduct] = useState(null);
+    const [productDetail, setProductDetail] = useState({});
+    const [product, setProduct] = useState({});
     const [genderCategory, setGenderCategory] = useState([]);
-    const [selectedGender, setSelectedGender] = useState(null);
+    const [selectedGender, setSelectedGender] = useState("");
     const [shoesCategory, setShoesCategory] = useState([]);
-    const [selectedShoes, setSelectedShoes] = useState(null);
+    const [selectedShoes, setSelectedShoes] = useState("");
     const [supplier, setSupplier] = useState([]);
-    const [selectedSupplier, setSelectedSupplier] = useState(null);
+    const [selectedSupplier, setSelectedSupplier] = useState("");
     const [discount, setDiscount] = useState([]);
-    const [selectDiscount, setSelectDiscount] = useState(null);
+    const [selectDiscount, setSelectDiscount] = useState("");
     const [salePrice, setSalePrice] = useState(0);
     const [size, setSize] = useState([]);
     const [sizeSample, setSizeSample] = useState([]);
@@ -46,32 +47,29 @@ function ProductFormVM() {
     const [sizeModels, setSizeModels] = useState([]);
 
     //thay đổi giá trị
-    const [productName, setProductName] = useState(null);
-    const [productDescription, setProductDescription] = useState(null);
-    const [productPrice, setProductPrice] = useState(null);
-    const [productBrand, setProductBrand] = useState(null);
-    const [color, setColor] = useState(null);
+    const [productName, setProductName] = useState("");
+    const [productDescription, setProductDescription] = useState("");
+    const [productPrice, setProductPrice] = useState("");
+    const [productBrand, setProductBrand] = useState("");
+    const [color, setColor] = useState("");
 
     const [galleryList, setGalleryList] = useState([]);
+    const [file, setFile] = useState("");
 
     useEffect(() => {
         document.title = "Product Detail";
     }, []);
-
     // Fetch dữ liệu
     useEffect(() => {
         if (!id) return;
-
         const fetchData = async () => {
             try {
                 const productDetailData = await ProductDetailAPI.getDetailByID(id);
                 setProductDetail(productDetailData);
-
                 const productData = productDetailData?.productId
                     ? await ProductAPI.getProductById(productDetailData.productId)
                     : null;
                 setProduct(productData);
-
                 const [supplierData,
                     genderData,
                     discountData,
@@ -81,19 +79,14 @@ function ProductFormVM() {
                     DiscountAPI.getAll(),
                     SizeAPI.getAll(id),
                 ]);
-
                 setSupplier(supplierData);
                 setGenderCategory(genderData);
                 setDiscount(discountData);
-
                 const formattedSize = sizeData.map(item => ({
                     ...item,
                     stock: item.stock ?? 0,
                 }));
                 setSize(formattedSize);
-
-                const galleries = await GalleryAPI.getAllProductDetailGallery(id)
-                setGalleryList(galleries);
 
                 // Lưu trạng thái ban đầu
                 setInitialData({
@@ -110,7 +103,6 @@ function ProductFormVM() {
                     color: productDetailData?.color || null,
                     size: formattedSize,
                 });
-
             } catch (error) {
                 console.error("Lỗi khi tải dữ liệu:", error);
             }
@@ -118,6 +110,14 @@ function ProductFormVM() {
 
         fetchData();
     }, [id]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const fetchGallery = async () => {
+        const galleries = await GalleryAPI.getAllProductDetailGallery(id)
+        setGalleryList(galleries);
+    }
+    useEffect(() => {
+        fetchGallery();
+    }, [fetchGallery])
 
     // Fetch category shoes khi selectedGender thay đổi
     useEffect(() => {
@@ -132,7 +132,6 @@ function ProductFormVM() {
         const price = productPrice || NaN;
         const discountId = Number(selectDiscount);
         const discountRate = discount.find(d => d.id === discountId)?.discountRate || 0;
-
         setSalePrice(discountRate > 0 ? price - (price * discountRate / 100) : price);
     }, [productPrice, selectDiscount, discount]);
 
@@ -182,17 +181,15 @@ function ProductFormVM() {
         // Khi `sizeSample` thay đổi, map thành danh sách `SizeModel`
         const mappedSizes = sizeSample.map(sample => new SizeModel(sample.id, sample.size, 0));
         setSizeModels(mappedSizes);
-    }, [sizeSample]); // Chạy lại khi `sizeSample` thay đổi
+    }, [sizeSample]);
 
     // Xử lý thay số lượng size mới
     const handleChangeStockSample = (e, sampleId) => {
         const newStock = Number(e.target.value);
-
         setStockData(prevStock => ({
             ...prevStock,
             [sampleId]: newStock // Gán stock theo ID của sample
         }));
-
         setSizeModels(prevSizes =>
             prevSizes.map(size =>
                 size.id === sampleId ? new SizeModel(size.id, size.size, newStock) : size
@@ -205,15 +202,12 @@ function ProductFormVM() {
             console.warn("Không có dữ liệu size để gửi!");
             return;
         }
-
         try {
             const newSizeList = sizeModels.map(item => ({
                 size: item.size,
                 stock: item.stock,
             }));
-
             const response = await SizeAPI.createSizeList(newSizeList, id);
-
             if (response.status === 200 || response.status === 201) {
                 console.log("Tạo danh sách size thành công!", response.data);
                 // Cập nhật danh sách size sau khi API thành công
@@ -222,7 +216,6 @@ function ProductFormVM() {
             } else {
                 console.error("Có lỗi xảy ra khi Tạo danh sách size:", response);
             }
-
         } catch (error) {
             console.error("Lỗi khi gọi sizeAPI:", error);
         }
@@ -248,7 +241,6 @@ function ProductFormVM() {
     // Update sản phẩm
     const handleUpdate = async () => {
         const isConfirmed = window.confirm("Bạn có muốn cập nhật sản phẩm này?");
-
         if (!isConfirmed) {
             return; // Nếu người dùng nhấn "Hủy", không tiếp tục cập nhật
         }
@@ -257,7 +249,6 @@ function ProductFormVM() {
                 console.error("Dữ liệu không hợp lệ để cập nhật.");
                 return;
             }
-
             // Chuẩn bị dữ liệu cập nhật
             const updatedProduct = {
                 ...product,
@@ -269,28 +260,23 @@ function ProductFormVM() {
                 brand: productBrand,
                 description: productDescription,
             };
-
             const updatedProductDetail = {
                 ...productDetail,
                 name: productName,
                 discountId: selectDiscount === 'errors' ? 0 : selectDiscount,
                 color: color,
             };
-
             // Chuẩn bị dữ liệu gửi lên API
             const updatedSizes = size.map(item => ({
                 id: item.id,
                 size: item.size,
                 stock: item.stock,
             }));
-
-
             const results = await Promise.allSettled([
                 ProductAPI.updateProduct(updatedProduct),
                 ProductDetailAPI.updateProductDetail(updatedProductDetail),
                 SizeAPI.update(updatedSizes, id),
             ]);
-
             results.forEach((result, index) => {
                 if (result.status === "rejected") {
                     console.error(`API thứ ${index + 1} thất bại:`, result.reason);
@@ -311,12 +297,32 @@ function ProductFormVM() {
                 color: updatedProductDetail?.color || null,
                 size: size,
             });
-
             alert("Cập nhật thành công!");
         } catch (error) {
             console.error("Lỗi khi cập nhật sản phẩm:", error);
             alert("Cập nhật thất bại!");
         }
+    };
+
+    const handleFileChange = (event) => {
+        setFile(event.target.files[0]);
+    };
+
+    const handleUpload = async () => {
+        if (!file) return alert("Vui lòng chọn file!");
+        // 1️⃣ Upload lên Cloudinary
+        const url = await UploadImgAPI.uploadFile(file);
+        if (!url) {
+            return alert("Không có hình");
+        }
+        const newGallery = {
+            image: url,
+            productDetailID: id,
+        }
+        GalleryAPI.addGallery(newGallery)
+            .catch((error) => console.error("Lỗi thêm img",error.toJSON()))
+        await fetchGallery();
+        alert("Lưu ảnh thành công!");
     };
 
     return {
@@ -336,7 +342,8 @@ function ProductFormVM() {
         galleryList,
         handleChangeStock, handleChangeStockSample, handleCreateSize,
         handleCancel,
-        handleUpdate
+        handleUpdate,
+        handleFileChange, handleUpload
     };
 }
 
