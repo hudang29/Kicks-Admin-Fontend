@@ -2,7 +2,6 @@ import {Link} from "react-router-dom";
 import logo from "../assets/IconKicks.png";
 import ProductFormVM from "../viewmodels/ProductFormVM";
 import {formatCurrency} from "../utils/Format";
-import Upload from "../components/Upload";
 
 function ProductForm() {
 
@@ -20,10 +19,10 @@ function ProductForm() {
         discount, selectDiscount, setSelectDiscount,
         salePrice,
         sizeSample, stockData,
-        galleryList,
+        galleryList, gallery, setGallery,
         handleChangeStock, handleChangeStockSample, handleCreateSize,
         handleCancel, handleUpdate,
-        handleFileChange, handleUpload
+        handleFileChange, handleUpload, handleImgChange,
     } = ProductFormVM();
 
 
@@ -176,7 +175,7 @@ function ProductForm() {
                                         onChange={
                                             (e) => setSelectDiscount(e.target.value)
                                         }>
-                                    <option value="errors">0 %</option>
+                                    <option value="errors">Choose Discount</option>
                                     {
                                         discount.length > 0 ? (
                                             discount.map((discount) => (
@@ -277,14 +276,15 @@ function ProductForm() {
                     </div>
 
                     <div className="col-md-4">
-                        <img src={logo} className="img-fluid rounded border border-1 border-dark" alt="..."/>
+                        <img src={gallery} className="img-fluid square-img border border-1 border-dark" alt="..."/>
                         <div className="my-3 row row-cols-4 g-1">
                             {
                                 galleryList.length > 0 ? (
-                                    galleryList.map((gallery) => (
-                                        <div className="col-md-3 col-lg-3 col-6 kicks-img p-1" key={gallery.id}>
-                                            <img src={gallery.image} className="img-fluid"
-                                                 alt="..."/>
+                                    galleryList.map((g) => (
+                                        <div className="col-md-3 col-lg-3 col-6 kicks-img p-1" key={g.id}>
+                                            <img src={g.image} className="img-fluid square-img"
+                                                 alt="..."
+                                            onClick={() => handleImgChange(g.image)}/>
                                         </div>
                                     ))
                                 ) : (
@@ -293,12 +293,10 @@ function ProductForm() {
                             }
 
                         </div>
-                        <div className="mb-3">
+                        <div className="my-3">
                             <input type="file" onChange={handleFileChange}/>
                             <button className="btn btn-kicks" onClick={handleUpload}>Upload</button>
                         </div>
-                        {/*<Upload id={id}/>*/}
-
                     </div>
                 </div>
             </div>

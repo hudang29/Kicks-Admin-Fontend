@@ -1,5 +1,5 @@
 import {useParams} from "react-router-dom";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import ProductDetailAPI from "../api/ProductDetailAPI";
 import ProductAPI from "../api/ProductAPI";
 import SupplierAPI from "../api/SupplierAPI";
@@ -13,6 +13,8 @@ import UploadImgAPI from "../api/UploadImgAPI";
 function ProductFormVM() {
 
     const {id} = useParams();
+
+    const [refresh, setRefresh] = useState(false);
 
     const [initialData, setInitialData] = useState({
         productDetail: null,
@@ -54,6 +56,7 @@ function ProductFormVM() {
     const [color, setColor] = useState("");
 
     const [galleryList, setGalleryList] = useState([]);
+    const [gallery, setGallery] = useState("");
     const [file, setFile] = useState("");
 
     useEffect(() => {
@@ -110,14 +113,18 @@ function ProductFormVM() {
 
         fetchData();
     }, [id]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    const fetchGallery = async () => {
-        const galleries = await GalleryAPI.getAllProductDetailGallery(id)
-        setGalleryList(galleries);
-    }
+
     useEffect(() => {
+        const fetchGallery =async () => {
+            GalleryAPI.getProductDetailGallery(id)
+                .then((data) => setGallery(data))
+                .catch((error) => console.error("Lỗi lấy hình detail", error));
+
+            const galleries = await GalleryAPI.getAllProductDetailGallery(id)
+            setGalleryList(galleries);
+        }
         fetchGallery();
-    }, [fetchGallery])
+    }, [id])
 
     // Fetch category shoes khi selectedGender thay đổi
     useEffect(() => {
@@ -304,24 +311,31 @@ function ProductFormVM() {
         }
     };
 
+    const handleImgChange = (img) => {
+        setGallery(img);
+    };
+
     const handleFileChange = (event) => {
         setFile(event.target.files[0]);
     };
 
     const handleUpload = async () => {
         if (!file) return alert("Vui lòng chọn file!");
-        // 1️⃣ Upload lên Cloudinary
+        // Upload lên Cloudinary
         const url = await UploadImgAPI.uploadFile(file);
         if (!url) {
             return alert("Không có hình");
         }
+        console.log(url);
         const newGallery = {
             image: url,
             productDetailID: id,
         }
+        console.log(newGallery);
         GalleryAPI.addGallery(newGallery)
-            .catch((error) => console.error("Lỗi thêm img",error.toJSON()))
-        await fetchGallery();
+            .catch((error) => console.error("Lỗi thêm img", error.toJSON()))
+        setGalleryList(prev => [...prev, newGallery]);
+        //await fetchGallery();
         alert("Lưu ảnh thành công!");
     };
 
@@ -339,11 +353,11 @@ function ProductFormVM() {
         salePrice,
         color, setColor,
         size, sizeSample, stockData,
-        galleryList,
+        galleryList, gallery, setGallery,
         handleChangeStock, handleChangeStockSample, handleCreateSize,
         handleCancel,
         handleUpdate,
-        handleFileChange, handleUpload
+        handleFileChange, handleUpload, handleImgChange
     };
 }
 

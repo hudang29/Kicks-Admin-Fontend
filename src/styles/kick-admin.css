@@ -82,4 +82,19 @@
     border: 1px solid black; /* Hiện viền khi hover */
 }
 
+.square-img {
+    width: 100%; /* Tự động co giãn */
+    max-width: 500px; /* Giới hạn kích thước tối đa *!*/
+    aspect-ratio: 1 / 1; /* Luôn giữ hình vuông */
+    overflow: hidden; /* Cắt phần thừa */
+    border-radius: 8px; /* Bo góc nhẹ */
+    object-fit: cover;
+}
+
+.square-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Giữ đúng tỷ lệ, cắt phần dư */
+}
+
 

@@ -4,7 +4,7 @@ import CategoryAPI from "../api/CategoryAPI";
 import {formatCurrency} from "../utils/Format";
 import GalleryAPI from "../api/GalleryAPI";
 
-function Product({name, price, description, shoesCategoryID, genderCategoryID, brand, id}) {
+function Product({name, price, page, shoesCategoryID, genderCategoryID, brand, id}) {
 
     const [shoesCategory, setShoesCategory] = useState(null);
     const [genderCategory, setGenderCategory] = useState(null);
@@ -25,7 +25,7 @@ function Product({name, price, description, shoesCategoryID, genderCategoryID, b
                 .catch((error) => console.error("Lỗi khi lấy danh mục giày:", error));
         }
     }, [shoesCategoryID]);
-    
+
     useEffect(() => {
         GalleryAPI.getProductGallery(id)
             .then((data) => setGallery(data))
@@ -33,12 +33,12 @@ function Product({name, price, description, shoesCategoryID, genderCategoryID, b
     }, [id])
 
     return (
-        <div className="card p-3" key={id}>
+        <div className="card p-3 h-100" key={id}>
             <div className="row g-0">
-                <div className="col-md-4 border border-1">
+                <div className="col-md-4">
                     <img
                         src={gallery}
-                        className="img-fluid rounded-start" alt={name}/>
+                        className="img-fluid square-img" alt={name}/>
                 </div>
                 <div className="col-md-8">
                     <div className="card-body">
@@ -47,7 +47,7 @@ function Product({name, price, description, shoesCategoryID, genderCategoryID, b
                                 <p>{name}</p>
                             </div>
                             <div className="ms-auto">
-                                <Link to={`/product/${id}`}
+                                <Link to={`/product/${id}?page=${page}`}
                                       className="nav-link mb-2 px-1 rounded rounded-1 btnhover-232321 bg-body-secondary">
                                     <i className="bi bi-three-dots"></i>
                                 </Link>

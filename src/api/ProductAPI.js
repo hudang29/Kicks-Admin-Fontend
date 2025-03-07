@@ -2,6 +2,7 @@ import axios from "axios";
 import ProductModel from "../models/ProductModel";
 
 const ShowProduct_API = "http://localhost:8080/api/list-product";
+const ShowPageProduct_API = "http://localhost:8080/api/page-product";
 const UpdateProduct_API = "http://localhost:8080/api/product-update";
 const CreateProduct_API = "http://localhost:8080/api/product-create";
 
@@ -9,6 +10,12 @@ class ProductAPI {
     async getAll() {
         const response = await axios.get(ShowProduct_API);
         return response.data.map((response) => ProductModel.fromJson(response));
+    }
+    async getPageProducts(page) {
+        const response = await axios.get(ShowPageProduct_API,{
+            params: {page}
+        });
+        return response.data;
     }
 
     async getProductById(id) {

@@ -1,30 +1,37 @@
 import {useEffect, useState} from "react";
 import ProductAPI from "../api/ProductAPI";
-import CategoryAPI from "../api/CategoryAPI";
+import ProductModel from "../models/ProductModel";
 
 function ProductsVM() {
-    const [products, setProducts] = useState([]);
+    const [state, setState] = useState({
+        page: 0,
+        totalPages: 0,
+        shoes: [],
+    });
 
-
-    // Cập nhật document.title
     useEffect(() => {
         document.title = "Products";
     }, []);
-
     useEffect(() => {
-        const fetchProducts = async () => {
-            try {
-                const data = await ProductAPI.getAll();
-                setProducts(data);
-            } catch (error) {
-                console.error("Lỗi khi lấy danh sách sản phẩm:", error);
-            }
-        };
-
-        fetchProducts();
-    }, []);
-
-    return products;
+        const controller = new AbortController();
+        const fetchData = async () => {
+            const response = await ProductAPI.getPageProducts(state.page, {signal: controller.signal})
+            setState(prevState => ({
+                ...prevState,
+                shoes: response.content.map(ProductModel.fromJson),
+                totalPages: response.totalPages
+            }));
+        }
+        fetchData();
+    }, [state.page])
+    const handleChangePage = async (p) => {
+        setState(prevState => ({...prevState,
+            page: Number(p)}));
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+    return {
+        ...state,
+        handleChangePage
+    };
 }
-
 export default ProductsVM;

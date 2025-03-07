@@ -3,39 +3,59 @@ import Pagination from "../components/Pagination";
 import OrdersVM from "../viewmodels/OrdersVM";
 
 const TableHeader = ["No.", "Customer Name", "Order Date", "Payment Method", "Status", "Amount", "Action"];
-const CardName = "Recent Purchases"
+const CardName = "Orders List"
 
 function Orders() {
-    const {order} = OrdersVM();
+    const {order, handleFetchDataByStatus, showAllOrder} = OrdersVM();
     return (
         <>
-            <div className="mb-3">
-                <h3>Staff List</h3>
+            <div className="my-3">
+                <h3>Order List</h3>
                 <div className="hstack">
                     <div className="p-1">
                         <nav style={{"--bs-breadcrumb-divider": "'>'"}} aria-label="breadcrumb">
                             <ol className="breadcrumb">
                                 <li className="breadcrumb-item"><a href="#" className="nav-link">Home</a></li>
-                                <li className="breadcrumb-item active" aria-current="page">Staff List</li>
+                                <li className="breadcrumb-item active" aria-current="page">Order List</li>
                             </ol>
                         </nav>
                     </div>
-
-                    <div className="ms-auto">select date</div>
-                </div>
-                <div className="rounded w-25 ms-auto">
-                    <select className="form-select nonfocus" aria-label="Default select example">
-                        <option selected>Change Status</option>
-                        <option value="1">Delivered</option>
-                        <option value="2">Canceled</option>
-                    </select>
                 </div>
             </div>
             {/*-- component --*/}
             <List
                 items={TableHeader}
                 information={order}
-                CardName={CardName}/>
+                CardName={
+                    <>
+
+                        <div className="hstack gap-3 mb-3">
+                            <button className="btn btn-warning"
+                                    onClick={() => handleFetchDataByStatus("Pending")}>Pending
+                            </button>
+                            <button className="btn btn-primary"
+                                    onClick={() => handleFetchDataByStatus("Confirmed")}>Confirmed
+                            </button>
+                            <button className="btn btn-secondary"
+                                    onClick={() => handleFetchDataByStatus("Processing")}>Processing
+                            </button>
+                            <button className="btn btn-dark"
+                                    onClick={() => handleFetchDataByStatus("Delivering")}>Delivering
+                            </button>
+                            <button className="btn btn-success"
+                                    onClick={() => handleFetchDataByStatus("Completed")}>Completed
+                            </button>
+                            <button className="btn btn-danger"
+                                    onClick={() => handleFetchDataByStatus("Cancelled")}>Cancelled
+                            </button>
+                            <button className="btn btn-light ms-auto"
+                                    onClick={showAllOrder}>Show All
+                            </button>
+                        </div>
+
+                        {/*<h5>{CardName}</h5>*/}
+                    </>
+                }/>
 
             <Pagination/>
         </>

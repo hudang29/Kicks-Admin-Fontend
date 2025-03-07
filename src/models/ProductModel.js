@@ -1,5 +1,5 @@
 class ProductModel {
-    constructor(id, name, shoesCategoryID, brand, price, description, supplierID, genderCategoryID) {
+    constructor(id, name, shoesCategoryID, brand, price, description, supplierID, genderCategoryID, page) {
         this.id = id;
         this.name = name;
         this.shoesCategoryID = shoesCategoryID;

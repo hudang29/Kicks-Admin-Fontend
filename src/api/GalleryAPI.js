@@ -22,9 +22,9 @@ class GalleryAPI {
         return response.data.map((response) => GalleryModel.fromJson(response));
     }
 
-    async addGallery(galleryData) {
+    async addGallery(galleryDTO) {
         try {
-            const response = await axios.post(`${AddGallery_API}`,galleryData,{
+            const response = await axios.post(`${AddGallery_API}`, galleryDTO,{
                 headers:{
                     "Content-Type": "application/json"
                 }

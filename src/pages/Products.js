@@ -1,12 +1,13 @@
 import Product from "../components/Product";
-import Pagination from "../components/Pagination";
 import {Link} from "react-router-dom";
 import ProductsVM from "../viewmodels/ProductsVM";
+import {useEffect} from "react";
 
 function Products() {
+    const {shoes, page, totalPages, handleChangePage} = ProductsVM();
+    useEffect(() => {
 
-    const products = ProductsVM();
-
+    }, [])
     return (
         <>
             <div className="mb-3">
@@ -15,8 +16,8 @@ function Products() {
                     <div className="">
                         <nav style={{"--bs-breadcrumb-divider": "'>'"}} aria-label="breadcrumb">
                             <ol className="breadcrumb">
-                                <li className="breadcrumb-item"><a href="#" className="nav-link">Home</a></li>
-                                <li className="breadcrumb-item active" aria-current="page">All Products</li>
+                                <li className="breadcrumb-item"><Link to="#" className="nav-link">Home</Link></li>
+                                <li className="breadcrumb-item active" aria-current="page">All Products Page #{page+1}</li>
                             </ol>
                         </nav>
                     </div>
@@ -30,8 +31,8 @@ function Products() {
             </div>
             <div className="row row-cols-1 row-cols-md-3 g-3 mb-3">
                 {
-                    products.length > 0 ? (
-                        products.map((product) => (
+                    shoes.length > 0 ? (
+                        shoes.map((product) => (
                             <div className="col">
                                 <Product
                                     name={product.name}
@@ -41,16 +42,57 @@ function Products() {
                                     genderCategoryID={product.genderCategoryID}
                                     brand={product.brand}
                                     id={product.id}
+                                    page={page}
                                 />
                             </div>
                         ))
                     ) : (
-                        <p>404</p>
+                        <div className="text-center">
+                            <p>Not Available</p>
+                        </div>
+
                     )
                 }
             </div>
+            {
+                totalPages > 0 ? (
+                    <nav aria-label="...">
+                        <ul className="pagination hstack gap-3">
+                            <li className={`page-item ${page === 0 ? "disabled" : ""}`}>
+                                <button
+                                    className="page-link"
+                                    onClick={() => handleChangePage(page - 1)}
+                                    disabled={page === 0}
+                                >
+                                    Previous
+                                </button>
+                            </li>
+                            {[...Array(totalPages)].map((_, index) => (
+                                <li key={index} className="page-item">
+                                    <button
+                                        className={`page-link px-3 ${page === index ? "btn-kicks-dark" : ""}`}
+                                        onClick={() => handleChangePage(index)}
+                                    >
+                                        {index + 1}
+                                    </button>
+                                </li>
+                            ))}
 
-            <Pagination/>
+                            <li className={`page-item ${page + 1 >= totalPages ? "disabled" : ""}`}>
+                                <button
+                                    className="page-link"
+                                    onClick={() => handleChangePage(page + 1)}
+                                    disabled={page + 1 >= totalPages}
+                                >
+                                    Next
+                                </button>
+                            </li>
+                        </ul>
+                    </nav>
+                ) : (
+                    <></>
+                )
+            }
         </>
     );
 }

@@ -1,8 +1,11 @@
 import CardDetail from "../components/CardDetail";
 import ProductDetailVM from "../viewmodels/ProductDetailVM";
-
+import {Link, useSearchParams} from "react-router-dom";
 
 function ProductDetail() {
+    const [searchParams] = useSearchParams();
+    const page = searchParams.get("page") || 0;
+
     const {
         productDetail, product,
         newColor, setNewColor, gender, type,
@@ -17,9 +20,10 @@ function ProductDetail() {
                     <div className="p-1">
                         <nav style={{"--bs-breadcrumb-divider": "'>'"}} aria-label="breadcrumb">
                             <ol className="breadcrumb">
-                                <li className="breadcrumb-item"><a href="#" className="nav-link">Home</a></li>
+                                <li className="breadcrumb-item"><Link to="#" className="nav-link">Home</Link></li>
                                 <li className="breadcrumb-item">
-                                    <a href="#" className="nav-link d-inline-block">All Products</a>
+                                    <Link to={`/allproducts?page=${page}`} className="nav-link d-inline-block">
+                                    >All Products {page}</Link>
                                 </li>
                                 <li className="breadcrumb-item active" aria-current="page">Product Detail</li>
                             </ol>
@@ -48,7 +52,9 @@ function ProductDetail() {
                                     />
                                 )
                             ) : (
-                                <p> 404 </p>
+                                <div className="text-center">
+                                    <p>No Available</p>
+                                </div>
                             )
                     }
                     <div className="hstack">
