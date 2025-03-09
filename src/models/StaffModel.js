@@ -1,5 +1,5 @@
 class StaffModel {
-    constructor(id, name, email, phone, address, role, status, createAt) {
+    constructor(id, name, email, phone, address, role, status, createAt, city, district, ward) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -8,6 +8,9 @@ class StaffModel {
         this.role = role;
         this.status = status;
         this.createAt = createAt;
+        this.city = city;
+        this.district = district;
+        this.ward = ward;
     }
 
     static fromJson(json) {
@@ -19,7 +22,10 @@ class StaffModel {
             json.address,
             json.role,
             json.status,
-            json.createAt
+            json.createAt,
+            json.city,
+            json.district,
+            json.ward,
         );
     }
 }

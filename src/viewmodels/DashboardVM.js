@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import DashboardAPI from "../api/DashboardAPI";
 
 function DashboardVM() {

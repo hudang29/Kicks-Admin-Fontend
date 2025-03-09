@@ -6,63 +6,55 @@ import axios from "axios";
 function StaffsVM() {
     const {id} = useParams();
     const [staffList, setStaffList] = useState([]);
-    const [staff, setStaff] = useState({});
-
-    // const [initialData, setInitialData] = useState({
-    //     name: null,
-    //     email: null,
-    //     phone: null,
-    //     address: null,
-    //     role: null,
-    //     status: null,
-    // });
-
-    const [staffName, setStaffName] = useState(null);
-    const [email, setEmail] = useState(null);
-    const [phone, setPhone] = useState(null);
-    const [address, setAddress] = useState(null);
-    const [selectedRole, setSelectedRole] = useState("Nhân viên");
-    const [status, setStatus] = useState(null);
-    const [password, setPassword] = useState(null);
-
-    const fetchStaffs = async () => {
-        try {
-            const data = await StaffAPI.getAll();
-            setStaffList(data);
-        } catch (error) {
-            console.error("Lỗi khi lấy danh sách nhân viên:", error);
-        }
-    };
-
+    const [staff, setStaff] = useState({
+        id: null,
+        name: "",
+        email: "",
+        phone: "",
+        address: "",
+        role: "Staff",
+        status: "",
+        createAt: "",
+        city: "No Province",
+        district: "",
+        ward: "",
+    });
+    const [password, setPassword] = useState(false);
 
     useEffect(() => {
-        document.title = "Staffs"; // Cập nhật tiêu đề
+        document.title = "Staffs";
+        const fetchStaffs = async () => {
+            try {
+                const data = await StaffAPI.getAll();
+                setStaffList(data);
+            } catch (error) {
+                console.error("An error occurred while loading data:", error);
+            }
+        };
         fetchStaffs();
     }, []);
 
     useEffect(() => {
+        document.title = "Staff Detail";
         if (!id) return;
         const fetchStaff = async () => {
             try {
                 const staffData = await StaffAPI.getById(id);
-                setStaff(staffData);
-
-                setStaffName(staffData.name);
-                setEmail(staffData.email);
-                setPhone(staffData.phone);
-                setAddress(staffData.address);
-                setSelectedRole(staffData.role);
-                setStatus(staffData.status);
-
+                setStaff(prevStaff => ({
+                    ...prevStaff,
+                    ...staffData,
+                }));
+                const response = await StaffAPI.checkPasswordExists(id);
+                setPassword(response);
             } catch (error) {
-                console.error("Lỗi khi tải dữ liệu:", error);
+                console.error("An error occurred while loading data:", error);
             }
         }
         fetchStaff();
-    }, [id, status]);
+    }, [id, staff.status]);
 
     const [provinces, setProvinces] = useState([]);
-    const [selectedProvince, setSelectedProvince] = useState("");
+    const [selectedProvince, setSelectedProvince] = useState("No Province");
     const [districts, setDistricts] = useState([]);
     const [selectedDistrict, setSelectedDistrict] = useState("");
     const [wards, setWards] = useState([]);
@@ -73,6 +65,14 @@ function StaffsVM() {
             try {
                 const response = await axios.get("https://provinces.open-api.vn/api/p/");
                 setProvinces(response.data);
+                setStaff(prevStaff => ({
+                    ...prevStaff,
+                    district: "No District",
+                }));
+                setStaff(prevStaff => ({
+                    ...prevStaff,
+                    ward: "No Ward",
+                }));
             } catch (error) {
                 console.error("Lỗi tải tỉnh/thành:", error);
             }
@@ -114,76 +114,121 @@ function StaffsVM() {
 
 
     const handleUpdate = async () => {
-        const isConfirmed = window.confirm("Bạn có muốn cập nhật thông tin nhân viên này?");
-        if (!isConfirmed) {
-            return; // Nếu người dùng nhấn "Hủy", không tiếp tục cập nhật
-        }
-
+        const isConfirmed = window.confirm("Are you sure you want to update?");
+        if (!isConfirmed) return;
         const updateStaff = {
             id: id,
-            phone: phone,
-            selectedRole: selectedRole,
-            name: staffName,
-            email: email,
+            name: staff.name,
+            email: staff.email,
+            phone: staff.phone,
+            role: staff.role,
+            address: staff.address,
+            city: staff.city,
+            district: staff.district,
+            ward: staff.ward,
+        };
+        await StaffAPI.update(updateStaff);
+        const updatedStaff = await StaffAPI.getById(id);
+        setStaff(updatedStaff);
+        alert("Successful");
+    }
+
+    const handleResetData = async () => {
+        try {
+            const staffData = await StaffAPI.getById(id);
+            setStaff(prevStaff => ({
+                ...prevStaff,
+                ...staffData,
+            }));
+        } catch (error) {
+            console.error("An error occurred while reset data:", error);
         }
-
-        const updateResult = await StaffAPI.update(updateStaff);
-        console.log(updateResult);
-
-        alert("Cập nhật thành công!");
     }
 
     const handleStatus = async () => {
-        const isConfirmed = window.confirm("Bạn có muốn thay đổi trạng thái của nhân viên này?");
+        const isConfirmed = window.confirm("Are you sure you want to change?");
         if (!isConfirmed) {
             return; // Nếu người dùng nhấn "Hủy", không tiếp tục cập nhật
         }
-        const updatedStatus = !status;
-        await StaffAPI.changeStatus({id: staff.id, status: updatedStatus});
+        try {
+            const updatedStatus = !staff.status;
+            await StaffAPI.changeStatus({id: id, status: updatedStatus});
 
-        alert("Cập nhật thành công!");
+            setStaff(prevStaff => ({
+                ...prevStaff,
+                status: updatedStatus,
+            }));
 
-        // Cập nhật state ngay lập tức
-        setStatus(updatedStatus);
-
-        // Gọi lại API để lấy dữ liệu mới
-        //fetchStaff();
+            alert("Successful");
+        } catch (error) {
+            console.error("An error occurred while change status:", error);
+            alert("Operation failed!");
+        }
     }
 
     const handleCreate = async () => {
-        const isConfirmed = window.confirm("Bạn có muốn tạo mói thông tin của nhân viên này?");
+        const isConfirmed = window.confirm(`Are you sure you want to create this information about ${staff.name}?`);
         if (!isConfirmed) {
             return;
         }
         try {
             const newStaff = {
-                phone: phone,
-                selectedRole: selectedRole,
-                name: staffName,
-                email: email,
+                name: staff.name,
+                email: staff.email,
+                phone: staff.phone,
+                role: staff.role,
+                address: staff.address,
+                city: staff.city,
+                district: staff.district,
+                ward: staff.ward,
             }
-            await StaffAPI.create(newStaff);
-            alert("thành công!");
+            console.log(newStaff);
+            const response = await StaffAPI.create(newStaff);
+            console.log(response.data);
+            alert(`Successful`);
         } catch (error) {
-            console.error("Lỗi khi tải dữ liệu:", error);
-            alert("Thất bại!");
+            console.error("An error occurred while loading data:", error);
+            alert("Operation failed!");
+
+        }
+    }
+
+    const handleCreatePassword = async () => {
+        const staffData = await StaffAPI.getById(id);
+        const isConfirmed = window
+            .confirm(`Are you sure you want to create password for ${staffData.name}?\nTo Email address ${staffData.email}?`);
+        if (!isConfirmed) {
+            return;
+        }
+        try {
+            const staffEmail = {
+                email: staffData.email,
+            }
+            await StaffAPI.createPassword(staffEmail);
+        } catch (e) {
+            console.error("An error occurred while create:", e);
+            alert("Operation failed!");
+
         }
     }
 
     const activeBtn = () => {
-        return (
-            phone && email && staffName);
+        const requiredFields = ["name", "email", "phone", "address", "role", "city", "district", "ward"];
+        return requiredFields.every(field => (
+            staff[field] !== "" && staff[field] !== null &&
+            staff[field] !== "No Province" && staff[field] !== "No District" && staff[field] !== "No Ward"
+        ));
     }
 
     return {
-        staffList, staff,
-        staffName, setStaffName, email, setEmail, phone, setPhone,
-        setAddress, address, setSelectedRole, selectedRole, setStatus, status,
+        id,
+        staffList, staff, setStaff,
         password, setPassword,
         provinces, selectedProvince, setSelectedProvince,
         districts, selectedDistrict, setSelectedDistrict,
         wards, selectedWard, setSelectedWard,
-        handleUpdate, handleStatus, activeBtn
+        handleUpdate, handleStatus, activeBtn,
+        handleCreate, handleCreatePassword, handleResetData,
     };
 }
 

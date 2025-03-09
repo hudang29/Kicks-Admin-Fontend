@@ -12,13 +12,19 @@ import ProductForm from "../pages/ProductForm";
 import Size from "../pages/Size";
 import StaffDetail from "../pages/StaffDetail";
 import StaffNew from "../pages/StaffNew";
+import Login from "../pages/Login";
+import Profile from "../pages/Profile";
 
 function RoutesApp() {
     return (
         <Router>
             <Routes>
+                <Route index element={<Login />} />
+                <Route path="/login" element={<Login />} />
+
                 <Route path="/" element={<Layout />}>
-                    <Route index path="dashboard" element={<Dashboard />}/> {/* Trang mặc định */}
+                    <Route path="profile" element={<Profile />} />
+                    <Route path="dashboard" element={<Dashboard />}/>
                     <Route path="allproducts" element={<Products />} />
                     <Route path="staffs" element={<Staffs />} />
                     <Route path="newstaff" element={<StaffNew />} />

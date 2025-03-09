@@ -42,40 +42,12 @@ function Sidebar() {
                           className={`btn p-3 hstack ${active === "categories" ? "btn-kicks" : "btnhover-4A69E2"}`}
                           onClick={() => handleClick("categories")}>
                         <span className="me-auto"><i className="bi bi-boxes"></i> OTHER</span></Link>
+                    <hr/>
+                    <Link to="/profile"
+                          className={`btn p-3 hstack ${active === "profile" ? "btn-kicks" : "btnhover-4A69E2"}`}
+                          onClick={() => handleClick("profile")}>
+                        <span className="me-auto"><i className="bi bi-shop"></i> HOME</span></Link>
                 </div>
-
-                {/*<div className="accordion accordion-flush" id="accordionFlushExample">*/}
-                {/*    <div className="accordion-item">*/}
-                {/*        <h2 className="accordion-header">*/}
-                {/*            <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"*/}
-                {/*                    data-bs-target="#flush-collapseOne" aria-expanded="false"*/}
-                {/*                    aria-controls="flush-collapseOne">*/}
-                {/*                <h5 className="fw-bold">Categories</h5>*/}
-                {/*            </button>*/}
-                {/*        </h2>*/}
-                {/*        <div id="flush-collapseOne" className="accordion-collapse collapse"*/}
-                {/*             data-bs-parent="#accordionFlushExample">*/}
-                {/*            <div className="accordion-body">*/}
-                {/*                <div className="hstack gap-3">*/}
-                {/*                    <div className="p-2">First item</div>*/}
-                {/*                    <div className="p-2 ms-auto">*/}
-                {/*                        <input type="checkbox" className="btn-check" id="btn-check1" checked*/}
-                {/*                               autoComplete="off"/>*/}
-                {/*                        <label className="btn btn-outline-primary" htmlFor="btn-check1">1</label><br/>*/}
-                {/*                    </div>*/}
-                {/*                </div>*/}
-                {/*                <div className="hstack gap-3">*/}
-                {/*                    <div className="p-2">First item</div>*/}
-                {/*                    <div className="p-2 ms-auto">*/}
-                {/*                        <input type="checkbox" className="btn-check" id="btn-check2" checked*/}
-                {/*                               autoComplete="off"/>*/}
-                {/*                        <label className="btn btn-outline-primary" htmlFor="btn-check2">2</label><br/>*/}
-                {/*                    </div>*/}
-                {/*                </div>*/}
-                {/*            </div>*/}
-                {/*        </div>*/}
-                {/*    </div>*/}
-                {/*</div>*/}
             </div>
         </>
     );

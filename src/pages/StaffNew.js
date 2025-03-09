@@ -1,16 +1,19 @@
 import StaffsVM from "../viewmodels/StaffsVM";
+import {useEffect} from "react";
 
 function StaffNew() {
 
     const {
-        staffName, setStaffName, email, setEmail, phone, setPhone,
-        setAddress, address, setSelectedRole, selectedRole,
-        password, setPassword,
-        provinces, selectedProvince, setSelectedProvince,
-        districts, selectedDistrict, setSelectedDistrict,
-        wards, selectedWard, setSelectedWard,
-        activeBtn
-    } = StaffsVM()
+        staff, setStaff,
+        provinces, setSelectedProvince,
+        districts, setSelectedDistrict,
+        wards,
+        activeBtn, handleCreate,
+    } = StaffsVM();
+
+    useEffect(() => {
+        document.title = "New Staff";
+    }, []);
 
     return (
         <>
@@ -33,40 +36,48 @@ function StaffNew() {
                     <label htmlFor="name" className="col-sm-2 col-form-label">Name</label>
                     <div className="col-sm-10">
                         <input type="text" className="form-control" id="name"
-                               value={staffName}
-                               onChange={(e) => setStaffName(e.target.value)}/>
+                               value={staff.name}
+                               onChange={(e) => setStaff(
+                                   prev => ({...prev, name: e.target.value})
+                               )}/>
                     </div>
                 </div>
-                <div className="row mb-3">
-                    <label htmlFor="inputPassword3" className="col-sm-2 col-form-label">Password</label>
-                    <div className="col-sm-10">
-                        <input type="password" className="form-control" id="inputPassword3"
-                               value={password}
-                               onChange={(e) => setPassword(e.target.value)}/>
-                    </div>
-                </div>
+                {/*<div className="row mb-3">*/}
+                {/*    <label htmlFor="inputPassword3" className="col-sm-2 col-form-label">Password</label>*/}
+                {/*    <div className="col-sm-10">*/}
+                {/*        <input type="password" className="form-control" id="inputPassword3"*/}
+                {/*               value={staff.}*/}
+                {/*               onChange={(e) => setPassword(e.target.value)}/>*/}
+                {/*    </div>*/}
+                {/*</div>*/}
                 <div className="row mb-3">
                     <label htmlFor="inputEmail3" className="col-sm-2 col-form-label">Email</label>
                     <div className="col-sm-10">
                         <input type="email" className="form-control" id="inputEmail3"
-                               value={email}
-                               onChange={(e) => setEmail(e.target.value)}/>
+                               value={staff.email}
+                               onChange={(e) => setStaff(
+                                   prev => ({...prev, email: e.target.value})
+                               )}/>
                     </div>
                 </div>
                 <div className="row mb-3">
                     <label htmlFor="phone" className="col-sm-2 col-form-label">Phone</label>
                     <div className="col-sm-10">
                         <input type="text" className="form-control" id="phone"
-                               value={phone}
-                               onChange={(e) => setPhone(e.target.value)}/>
+                               value={staff.phone}
+                               onChange={(e) => setStaff(
+                                   prev => ({...prev, phone: e.target.value})
+                               )}/>
                     </div>
                 </div>
                 <div className="row mb-3">
                     <label htmlFor="role" className="col-sm-2 col-form-label">Role</label>
                     <div className="col-sm-10">
                         <select id="role" className="form-select"
-                                value={selectedRole}
-                                onChange={(e) => setSelectedRole(e.target.value)}>
+                                value={staff.role}
+                                onChange={(e) => setStaff(
+                                    prev => ({...prev, role: e.target.value})
+                                )}>
                             <option value="Staff">Staff</option>
                             <option value="Manager">Manager</option>
                             <option value="Admin">Admin</option>
@@ -74,16 +85,23 @@ function StaffNew() {
                     </div>
                 </div>
                 <div className="row mb-3">
-                    <label htmlFor="address" className="col-sm-2 col-form-label">Address</label>
+                    <label htmlFor="province" className="col-sm-2 col-form-label">Address</label>
                     <div className="col-sm-4">
                         <select id="province" className="form-select"
-                                value={selectedProvince}
-                                onChange={(e) => setSelectedProvince(e.target.value)}>
+                                value={staff.city}
+                                onChange={(e) => {
+                                    setStaff(
+                                        prev => ({...prev, city: e.target.value})
+                                    )
+                                    const provinceCode = e.target.selectedOptions[0].getAttribute("data-code");
+                                    setSelectedProvince(provinceCode)
+                                }}>
                             <option>Choose Province</option>
                             {
                                 provinces.length > 0 ? (
                                     provinces.map((province) => (
-                                        <option key={province.code} value={province.code}>{province.name}</option>
+                                        <option key={province.code} value={province.name}
+                                                data-code={province.code}>{province.name}</option>
                                     ))
                                 ) : (
                                     <option>Errors</option>
@@ -93,13 +111,20 @@ function StaffNew() {
                     </div>
                     <div className="col-sm-3">
                         <select id="district" className="form-select"
-                                value={selectedDistrict}
-                                onChange={(e) => setSelectedDistrict(e.target.value)}>
+                                value={staff.district}
+                                onChange={(e) => {
+                                    setStaff(
+                                        prev => ({...prev, district: e.target.value})
+                                    )
+                                    const districtCode = e.target.selectedOptions[0].getAttribute("data-code");
+                                    setSelectedDistrict(districtCode)
+                                }}>
                             <option>Choose District</option>
                             {
                                 districts.length > 0 ? (
                                     districts.map((district) => (
-                                        <option key={district.code} value={district.code}>{district.name}</option>
+                                        <option key={district.code} value={district.name}
+                                                data-code={district.code}>{district.name}</option>
                                     ))
                                 ) : (
                                     <option>Errors</option>
@@ -108,14 +133,16 @@ function StaffNew() {
                         </select>
                     </div>
                     <div className="col-sm-3">
-                        <select id="district" className="form-select"
-                                value={selectedWard}
-                                onChange={(e) => setSelectedWard(e.target.value)}>
+                        <select id="ward" className="form-select"
+                                value={staff.ward}
+                                onChange={(e) => setStaff(
+                                    prev => ({...prev, ward: e.target.value})
+                                )}>
                             <option>Choose Ward</option>
                             {
                                 wards.length > 0 ? (
                                     wards.map((ward) => (
-                                        <option key={ward.code} value={ward.code}>{ward.name}</option>
+                                        <option key={ward.code} value={ward.name}>{ward.name}</option>
                                     ))
                                 ) : (
                                     <option>Errors</option>
@@ -123,20 +150,21 @@ function StaffNew() {
                             }
                         </select>
                     </div>
-
                 </div>
                 <div className="row mb-3">
-                    <label htmlFor="province" className="col-sm-2 col-form-label"></label>
+                    <label htmlFor="address" className="col-sm-2 col-form-label"></label>
                     <div className="col-sm-10">
                         <textarea className="form-control" id="address" rows="3"
-                                  value={address}
-                                  onChange={(e) => setAddress(e.target.value)}
-                                  readOnly/>
+                                  value={staff.address}
+                                  onChange={(e) => setStaff(
+                                      prev => ({...prev, address: e.target.value})
+                                  )}/>
                     </div>
                 </div>
                 <div className="hstack">
-                    <button type="submit" className="btn btn-dark ms-auto"
-                            disabled={!activeBtn()}>Create
+                    <button type="button" className="btn btn-dark ms-auto"
+                            disabled={!activeBtn()}
+                    onClick={handleCreate}>Create
                     </button>
                 </div>
             </form>

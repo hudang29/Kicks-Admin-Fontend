@@ -1,4 +1,4 @@
-import {Link, useParams} from "react-router-dom";
+import {Link} from "react-router-dom";
 import {useEffect, useState} from "react";
 import CategoryAPI from "../api/CategoryAPI";
 import {formatCurrency} from "../utils/Format";

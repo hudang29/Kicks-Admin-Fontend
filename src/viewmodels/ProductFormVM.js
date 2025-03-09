@@ -1,5 +1,5 @@
 import {useParams} from "react-router-dom";
-import {useCallback, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import ProductDetailAPI from "../api/ProductDetailAPI";
 import ProductAPI from "../api/ProductAPI";
 import SupplierAPI from "../api/SupplierAPI";
@@ -13,9 +13,6 @@ import UploadImgAPI from "../api/UploadImgAPI";
 function ProductFormVM() {
 
     const {id} = useParams();
-
-    const [refresh, setRefresh] = useState(false);
-
     const [initialData, setInitialData] = useState({
         productDetail: null,
         product: null,

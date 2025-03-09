@@ -1,5 +1,4 @@
 import {Link} from "react-router-dom";
-import logo from "../assets/IconKicks.png";
 import ProductFormVM from "../viewmodels/ProductFormVM";
 import {formatCurrency} from "../utils/Format";
 
@@ -34,9 +33,9 @@ function ProductForm() {
                     <div className="p-1">
                         <nav style={{"--bs-breadcrumb-divider": "'>'"}} aria-label="breadcrumb">
                             <ol className="breadcrumb">
-                                <li className="breadcrumb-item"><a href="#" className="nav-link">Home</a></li>
+                                <li className="breadcrumb-item"><Link to="#" className="nav-link">Home</Link></li>
                                 <li className="breadcrumb-item">
-                                    <a href="#" className="nav-link d-inline-block">All Products</a>
+                                    <Link to="#" className="nav-link d-inline-block">All Products</Link>
                                 </li>
                                 <li className="breadcrumb-item">
                                     <Link to={`/product/${product?.id}`}
