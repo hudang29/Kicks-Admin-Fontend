@@ -1,13 +1,18 @@
 import OrderModel from "../models/OrderModel";
-import {axiosInstance} from "../utils/Util";
+import {API_BASE_URL, axiosInstance} from "../config/config";
 
-const ShowOrder_API = "http://localhost:8080/staff/api/show-orders";
-const ShowOrderByStatus_API = "http://localhost:8080/staff/api/orders-by-status";
+const ShowOrder_API = `${API_BASE_URL}/staff/api/show-orders`;
+const ShowOrderByStatus_API = `${API_BASE_URL}/staff/api/orders-by-status`;
+const OrderStatuses_API = `${API_BASE_URL}/staff/api/statuses`;
 
 class OrderAPI {
     async getAll() {
         const orders = await axiosInstance.get(ShowOrder_API);
         return orders.data.map((order) => OrderModel.fromJson(order));
+    }
+
+    async getOrderStatuses() {
+        return await axiosInstance.get(OrderStatuses_API);
     }
 
     async getAllByStatus(status) {

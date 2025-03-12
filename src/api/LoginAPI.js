@@ -1,7 +1,8 @@
-import {axiosInstance} from "../utils/Util";
 
-const CheckLogin_API = "http://localhost:8080/api/login";
-const CheckLogout_API = "http://localhost:8080/api/logout";
+import {API_BASE_URL, axiosInstance} from "../config/config";
+
+const CheckLogin_API = `${API_BASE_URL}/api/login`;
+const CheckLogout_API = `${API_BASE_URL}/api/logout`;
 
 class LoginAPI {
     async login(account) {

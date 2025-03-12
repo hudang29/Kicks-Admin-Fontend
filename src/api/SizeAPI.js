@@ -1,12 +1,11 @@
 import SizeModel from "../models/SizeModel";
 import SizeSampleModel from "../models/SizeSampleModel";
-import {axiosInstance} from "../utils/Util";
+import {API_BASE_URL, axiosInstance} from "../config/config";
 
-const ShowSize_API = "http://localhost:8080/staff/api/sizes/";
-const ShowSizeSample_API = "http://localhost:8080/staff/api/size-sample";
-
-const UpdateSize_API = "http://localhost:8080/staff/api/sizes/update";
-const CreateSize_API = "http://localhost:8080/staff/api/sizes/create";
+const ShowSize_API = `${API_BASE_URL}/staff/api/sizes/`;
+const ShowSizeSample_API = `${API_BASE_URL}/staff/api/size-sample`;
+const UpdateSize_API = `${API_BASE_URL}/staff/api/sizes/update`;
+const CreateSize_API = `${API_BASE_URL}/staff/api/sizes/create`;
 
 
 class SizeAPI {

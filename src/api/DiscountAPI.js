@@ -1,7 +1,7 @@
 import DiscountModel from "../models/DiscountModel";
-import {axiosInstance} from "../utils/Util";
+import {API_BASE_URL, axiosInstance} from "../config/config";
 
-const ShowDiscount_API = "http://localhost:8080/staff/api/product-discount";
+const ShowDiscount_API = `${API_BASE_URL}/staff/api/product-discount`;
 
 class DiscountAPI{
     async getAll() {

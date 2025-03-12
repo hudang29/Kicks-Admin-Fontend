@@ -2,7 +2,6 @@ import {useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import ProductDetailAPI from "../api/ProductDetailAPI";
 import ProductAPI from "../api/ProductAPI";
-import GalleryAPI from "../api/GalleryAPI";
 import CategoryAPI from "../api/CategoryAPI";
 
 function ProductDetailVM() {
@@ -14,14 +13,9 @@ function ProductDetailVM() {
     const [gender, setGender] = useState({});
     const [type, setType] = useState({});
     const [reload, setReload] = useState(false);
-    // const [isDefault, setIsDefault] = useState(null);
-    // const [gallery, setGallery] = useState("");
 
     useEffect(() => {
-        document.title = "Product Detail";
-    }, []);
-
-    useEffect(() => {
+        document.title = "Shoes Detail";
         if (!id) return;
 
         const fetchProductData = async () => {
@@ -52,7 +46,7 @@ function ProductDetailVM() {
 
     const handleAddColor = async () => {
         if (!newColor.trim()) {
-            alert("Vui lòng nhập màu!");
+            alert("Enter new color Please!");
             return;
         }
 
@@ -70,30 +64,16 @@ function ProductDetailVM() {
             setReload(prev => !prev);
             // Reset input
             setNewColor("");
-            alert("thêm thành công ");
+            alert("Successfully add color");
         } catch (error) {
             console.error("Lỗi khi thêm màu mới:", error);
-            alert("thêm thất bại ");
+            alert("Failed to add color");
         }
     };
 
-    // const handleChangeDefault = async (IsDefault) => {
-    //     //const Detail = await ProductDetailAPI.getDetailByID(id)
-    //
-    //     setIsDefault(IsDefault)
-    //     const updateDefault = {
-    //         productId: id,
-    //         isDefault: isDefault};
-    //
-    //     ProductDetailAPI.updateProductDetail(updateDefault)
-    //         .catch((error) => console.log("error", error))
-    // };
-
     return {
-        productDetail,
-        product,
-        newColor,
-        setNewColor,
+        productDetail, product,
+        newColor, setNewColor,
         gender, type,
         handleAddColor,
     }

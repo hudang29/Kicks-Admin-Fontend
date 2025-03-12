@@ -16,6 +16,8 @@ function LoginVM() {
             const response = await LoginAPI.login({ email: email, password: password});
             if(response.success){
                 setMessage("Login Successful! Wait a second");
+                sessionStorage.setItem("employeeId", response?.employeeId);
+                sessionStorage.setItem("role", response?.role);
                 setTimeout(() => {
                     navigate("/profile");
                     setMessage("");

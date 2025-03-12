@@ -2,9 +2,12 @@ import {useEffect, useState} from "react";
 import StaffAPI from "../api/StaffAPI";
 import {useParams} from "react-router-dom";
 import axios from "axios";
+import StaffModel from "../models/StaffModel";
 
 function StaffsVM() {
     const {id} = useParams();
+    const employeeId = sessionStorage.getItem("employeeId");
+
     const [staffList, setStaffList] = useState([]);
     const [staff, setStaff] = useState({
         id: null,
@@ -53,8 +56,26 @@ function StaffsVM() {
         fetchStaff();
     }, [id, staff.status]);
 
+    const [profile, setProfile] = useState(new StaffModel(
+        "", "", "", "", "", "", "", "", "", "", "",
+    ));
+
+    useEffect(() => {
+        const fetchProfile = async () => {
+            if (!employeeId) return;
+            const response = await StaffAPI.getById(employeeId);
+            console.log(response);
+            setProfile(new StaffModel(
+                response.id, response.name, response.email, response.phone,
+                response.address, response.role, response.status, response.createAt,
+                response.city, response.district, response.ward
+            ));
+        }
+        fetchProfile();
+    }, [employeeId])
+
     const [provinces, setProvinces] = useState([]);
-    const [selectedProvince, setSelectedProvince] = useState("No Province");
+    const [selectedProvince, setSelectedProvince] = useState("");
     const [districts, setDistricts] = useState([]);
     const [selectedDistrict, setSelectedDistrict] = useState("");
     const [wards, setWards] = useState([]);
@@ -65,14 +86,6 @@ function StaffsVM() {
             try {
                 const response = await axios.get("https://provinces.open-api.vn/api/p/");
                 setProvinces(response.data);
-                // setStaff(prevStaff => ({
-                //     ...prevStaff,
-                //     district: "No District",
-                // }));
-                // setStaff(prevStaff => ({
-                //     ...prevStaff,
-                //     ward: "No Ward",
-                // }));
             } catch (error) {
                 console.error("Lỗi tải tỉnh/thành:", error);
             }
@@ -117,18 +130,22 @@ function StaffsVM() {
         const isConfirmed = window.confirm("Are you sure you want to update?");
         if (!isConfirmed) return;
         const updateStaff = {
-            id: id,
-            name: staff.name,
-            email: staff.email,
-            phone: staff.phone,
-            role: staff.role,
-            address: staff.address,
-            city: staff.city,
-            district: staff.district,
-            ward: staff.ward,
+            id: id ?? employeeId,
+            name: staff.name ?? profile.name,
+            email: staff.email ?? profile.email,
+            phone: staff.phone ?? profile.phone,
+            role: staff.role ?? profile.role,
+            address: staff.address ?? profile.address,
+            city: staff.city ?? profile.city,
+            district: staff.district ?? profile.district,
+            ward: staff.ward ?? profile.ward,
         };
         await StaffAPI.update(updateStaff);
-        const updatedStaff = await StaffAPI.getById(id);
+        let updatedStaff;
+        if (id) {
+            updatedStaff = await StaffAPI.getById(id);
+        } else
+            updatedStaff = await StaffAPI.getById(employeeId);
         setStaff(updatedStaff);
         alert("Successful");
     }
@@ -221,7 +238,7 @@ function StaffsVM() {
     }
 
     return {
-        id,
+        id, profile, setProfile,
         staffList, staff, setStaff,
         password, setPassword,
         provinces, selectedProvince, setSelectedProvince,

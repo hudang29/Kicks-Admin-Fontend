@@ -10,7 +10,7 @@ function ProductsVM() {
     });
 
     useEffect(() => {
-        document.title = "Products";
+        document.title = "Shoes";
     }, []);
     useEffect(() => {
         const controller = new AbortController();

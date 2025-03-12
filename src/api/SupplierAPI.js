@@ -1,7 +1,7 @@
 import SupplierModel from "../models/SupplierModel";
-import {axiosInstance} from "../utils/Util";
+import {API_BASE_URL, axiosInstance} from "../config/config";
 
-const ShowSupplier_API = "http://localhost:8080/staff/api/show-supplier";
+const ShowSupplier_API = `${API_BASE_URL}/staff/api/show-supplier`;
 
 class SupplierAPI {
     async getAll() {

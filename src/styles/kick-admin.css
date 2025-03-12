@@ -50,8 +50,8 @@ body {
 }
 
 .page-link:hover {
-    background-color: #232321;
-    color: #FAFAFA;
+    background-color: #232321 !important;
+    color: #FAFAFA !important;
 }
 
 .page-link {

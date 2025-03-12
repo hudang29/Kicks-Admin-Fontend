@@ -25,7 +25,7 @@ function Sidebar() {
                     <Link to="/allproducts"
                           className={`btn p-3 hstack ${active === "products" ? "btn-kicks" : "btnhover-4A69E2"}`}
                           onClick={() => handleClick("products")}>
-                        <span className="me-auto"><i className="bi bi-inboxes"></i> ALL PRODUCTS</span>
+                        <span className="me-auto"><i className="bi bi-inboxes"></i> ALL SHOES</span>
                     </Link>
                     <Link to="/staffs"
                           className={`btn p-3 hstack ${active === "staffs" ? "btn-kicks" : "btnhover-4A69E2"}`}

@@ -1,25 +1,6 @@
-// Hàm để đổi màu badge dựa trên trạng thái đơn hàng
 import {formatCurrency, formatDate} from "../utils/Format";
 import {Link} from "react-router-dom";
-
-const getStatusClass = (status) => {
-    switch (status) {
-        case "Pending":
-            return "badge text-bg-warning";
-        case "Confirmed":
-            return "badge text-bg-primary";
-        case "Processing":
-            return "badge text-bg-secondary";
-        case "Delivering":
-            return "badge text-bg-dark";
-        case "Completed":
-            return "badge text-bg-success";
-        case "Cancelled":
-            return "badge text-bg-danger";
-        default:
-            return " ";
-    }
-};
+import {getStatusClass} from "../utils/Util";
 
 function List(props) {
     return (
@@ -49,7 +30,7 @@ function List(props) {
                                         <td>{formatDate(information.orderDate)}</td>
                                         <td>{information.payment ?? null}</td>
                                         <td>
-                                        <span className={getStatusClass(information.orderStatus)}>
+                                        <span className={`badge text-bg-${getStatusClass(information.orderStatus)}`}>
                                             {information.orderStatus ?? null}
                                         </span>
                                         </td>

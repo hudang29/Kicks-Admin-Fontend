@@ -4,7 +4,7 @@ import {formatCurrency} from "../utils/Format";
 function Bestseller() {
     const {bestSellers} = DashboardVM();
     return (
-        <div className="card p-2">
+        <div className="card p-2 h-100">
             <div className="card-header bg-body mb-1">
                 Best Sellers
             </div>

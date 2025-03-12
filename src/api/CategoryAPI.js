@@ -1,11 +1,11 @@
 
 import ShoesCategoryModel from "../models/ShoesCategoryModel";
 import GenderCategoryModel from "../models/GenderCategoryModel";
-import {axiosInstance} from "../utils/Util";
+import {API_BASE_URL, axiosInstance} from "../config/config";
 
-const ShoesCategory_API = "http://localhost:8080/staff/api/shoes-category/";
-const ShoesCategoryByGenderCategoryId_API = "http://localhost:8080/staff/api/shoes-categories/";
-const GenderCategory_API = "http://localhost:8080/staff/api/gender-category";
+const ShoesCategory_API = `${API_BASE_URL}/staff/api/shoes-category/`;
+const ShoesCategoryByGenderCategoryId_API = `${API_BASE_URL}/staff/api/shoes-categories/`;
+const GenderCategory_API = `${API_BASE_URL}/staff/api/gender-category`;
 
 class CategoryAPI {
     async getAllCategoryShoesByGenderId(id) {

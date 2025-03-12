@@ -36,7 +36,7 @@ function RoutesApp() {
                     </Route>
                     <Route path="newproduct" element={<ProductNew />} />
                     <Route path="product/:id" element={<ProductDetail />} />
-                    <Route path="product-detail/:id" element={<ProductForm />} />
+                    <Route path="product-detail/:detailId" element={<ProductForm />} />
                 </Route>
             </Routes>
         </Router>

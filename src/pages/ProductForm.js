@@ -5,17 +5,9 @@ import {formatCurrency} from "../utils/Format";
 function ProductForm() {
 
     const {
-        id,
-        product,
-        productName, setProductName,
-        productBrand, setProductBrand,
-        productPrice, setProductPrice,
-        productDescription, setProductDescription,
-        supplier, selectedSupplier, setSelectedSupplier,
-        genderCategory, selectedGender, setSelectedGender,
-        shoesCategory, selectedShoes, setSelectedShoes,
-        color, setColor, size,
-        discount, selectDiscount, setSelectDiscount,
+        detailId, shoes, setShoes, shoesDetail, setShoesDetail,
+        supplier, genderCategory, shoesCategory, discount,
+        size,
         salePrice,
         sizeSample, stockData,
         galleryList, gallery,
@@ -27,23 +19,23 @@ function ProductForm() {
 
     return (
         <>
-            <div className="mb-3">
-                <h3>Product Form</h3>
+            <div className="my-3">
+                <p className="fw-semibold fs-2">Shoes Form</p>
                 <div className="hstack">
                     <div className="p-1">
                         <nav style={{"--bs-breadcrumb-divider": "'>'"}} aria-label="breadcrumb">
                             <ol className="breadcrumb">
                                 <li className="breadcrumb-item"><Link to="#" className="nav-link">Home</Link></li>
                                 <li className="breadcrumb-item">
-                                    <Link to="#" className="nav-link d-inline-block">All Products</Link>
+                                    <Link to="#" className="nav-link d-inline-block">All Shoes</Link>
                                 </li>
                                 <li className="breadcrumb-item">
-                                    <Link to={`/product/${product?.id}`}
+                                    <Link to={`/product/${shoes?.id}`}
                                           className="nav-link d-inline-block">
-                                        Products Detail
+                                        Shoes Detail
                                     </Link>
                                 </li>
-                                <li className="breadcrumb-item active" aria-current="page">Product Form</li>
+                                <li className="breadcrumb-item active" aria-current="page">Shoes Form</li>
                             </ol>
                         </nav>
                     </div>
@@ -54,7 +46,7 @@ function ProductForm() {
 
             <div className="card mb-3">
                 <div className="card-body text-center">
-                    <h5># {id}</h5>
+                    <h5># {detailId}</h5>
                 </div>
             </div>
 
@@ -66,8 +58,12 @@ function ProductForm() {
                             <div className="col-12">
                                 <label htmlFor="name" className="form-label">Product Name</label>
                                 <input type="text" className="form-control" id="name"
-                                       value={productName}
-                                       onChange={(e) => setProductName(e.target.value)}/>
+                                       value={shoes.name}
+                                       onChange={(e) => setShoes(
+                                           (prevShoes) => ({
+                                               ...prevShoes,
+                                               name: e.target.value,
+                                           }))}/>
                             </div>
 
                             <div className="col-12">
@@ -75,8 +71,12 @@ function ProductForm() {
                                     Description
                                 </label>
                                 <textarea className="form-control" id="exampleFormControlTextarea1" rows="4"
-                                          value={productDescription}
-                                          onChange={(e) => setProductDescription(e.target.value)}/>
+                                          value={shoes.description}
+                                          onChange={(e) => setShoes(
+                                              (prevShoes) => ({
+                                                  ...prevShoes,
+                                                  description: e.target.value,
+                                              }))}/>
                             </div>
 
                             <div className="col-md-6">
@@ -84,10 +84,11 @@ function ProductForm() {
                                 <select className="form-select"
                                         aria-label="Default select example"
                                         id="supplier"
-                                        value={selectedSupplier}
-                                        onChange={
-                                            (e) => setSelectedSupplier(e.target.value)
-                                        }>
+                                        value={shoes.supplierID}
+                                        onChange={(e) => setShoes(
+                                            (prevShoes) => ({
+                                                ...prevShoes,
+                                                supplierID: e.target.value}))}>
                                     <option>Choose Supplier</option>
                                     {
                                         supplier.length > 0 ? (
@@ -106,8 +107,12 @@ function ProductForm() {
                                 <select className="form-select"
                                         aria-label="Default select example"
                                         id="gender"
-                                        value={selectedGender}
-                                        onChange={(e) => setSelectedGender(e.target.value)}>
+                                        value={shoes.genderCategoryID}
+                                        onChange={(e) => setShoes(
+                                            (prevShoes) => ({
+                                                ...prevShoes,
+                                                genderCategoryID: e.target.value,
+                                            }))}>
                                     <option value="errors">Choose Gender</option>
                                     {
                                         genderCategory.length > 0 ? (
@@ -124,8 +129,11 @@ function ProductForm() {
                             <div className="col-md-6">
                                 <label htmlFor="brand" className="form-label">Brand</label>
                                 <input type="text" className="form-control" id="brand"
-                                       value={productBrand}
-                                       onChange={(e) => setProductBrand(e.target.value)}/>
+                                       value={shoes.brand}
+                                       onChange={(e) => setShoes(
+                                           (prevShoes) => ({
+                                               ...prevShoes,
+                                               brand: e.target.value}))}/>
                             </div>
 
                             <div className="col-md-6">
@@ -133,11 +141,12 @@ function ProductForm() {
                                 <select className="form-select"
                                         aria-label="Default select example"
                                         id="shoeType"
-                                        disabled={selectedGender === "errors"}
-                                        value={selectedShoes}
-                                        onChange={
-                                            (e) => setSelectedShoes(e.target.value)
-                                        }>
+                                        disabled={shoes.genderCategoryID === "errors"}
+                                        value={shoes.shoesCategoryID}
+                                        onChange={(e) => setShoes(
+                                            (prevShoes) => ({
+                                                ...prevShoes,
+                                                shoesCategoryID: e.target.value}))}>
                                     <option>Choose Type</option>
                                     {
                                         shoesCategory.length > 0 ? (
@@ -154,15 +163,21 @@ function ProductForm() {
                             <div className="col-md-6">
                                 <label htmlFor="color" className="form-label">Color</label>
                                 <input type="text" className="form-control" id="color"
-                                       value={color}
-                                       onChange={(e) => setColor(e.target.value)}/>
+                                       value={shoesDetail.color}
+                                       onChange={(e) => setShoesDetail(
+                                           (prevShoes) => ({
+                                               ...prevShoes,
+                                               color: e.target.value}))}/>
                             </div>
 
                             <div className="col-md-6">
                                 <label htmlFor="price" className="form-label">Regular Price</label>
                                 <input type="number" className="form-control" id="price"
-                                       value={productPrice}
-                                       onChange={(e) => setProductPrice(e.target.value)}/>
+                                       value={shoes.price}
+                                       onChange={(e) => setShoes(
+                                           (prevShoes) => ({
+                                               ...prevShoes,
+                                               price: e.target.value}))}/>
                             </div>
 
                             <div className="col-12">
@@ -170,10 +185,11 @@ function ProductForm() {
                                 <select className="form-select"
                                         aria-label="Default select example"
                                         id="discount"
-                                        value={selectDiscount}
-                                        onChange={
-                                            (e) => setSelectDiscount(e.target.value)
-                                        }>
+                                        value={shoesDetail.discountId}
+                                        onChange={(e) => setShoesDetail(
+                                            (prevShoes) => ({
+                                                ...prevShoes,
+                                                discountId: e.target.value}))}>
                                     <option value="errors">Choose Discount</option>
                                     {
                                         discount.length > 0 ? (
@@ -241,7 +257,7 @@ function ProductForm() {
                                                     <div className="col-md-3">
                                                         <button className="btn btn-dark"
                                                                 type="button"
-                                                                onClick={handleCreateSize}>Create Size
+                                                                onClick={handleCreateSize}>Add shoes size
                                                         </button>
                                                     </div>
                                                 </>
@@ -266,8 +282,7 @@ function ProductForm() {
                                     <button className="btn btn-danger" type="button">Delete</button>
                                     <button className="btn btn-light border border-dark"
                                             type="button"
-                                            onClick={handleCancel}>
-                                        Cancel
+                                            onClick={handleCancel}>Reset
                                     </button>
                                 </div>
                             </div>
@@ -283,7 +298,7 @@ function ProductForm() {
                                         <div className="col-md-3 col-lg-3 col-6 kicks-img p-1" key={g.id}>
                                             <img src={g.image} className="img-fluid square-img"
                                                  alt="..."
-                                            onClick={() => handleImgChange(g.image)}/>
+                                                 onClick={() => handleImgChange(g.image)}/>
                                         </div>
                                     ))
                                 ) : (

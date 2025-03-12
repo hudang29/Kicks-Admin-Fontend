@@ -1,9 +1,22 @@
 import axios from "axios";
 
-export const axiosInstance = axios.create({
-    baseURL: "http://localhost:8080",
-    withCredentials: true, // 🔥 Mặc định tất cả request sẽ gửi cookie
-    headers: {
-        "Content-Type": "application/json",
+
+
+export const getStatusClass = (status) => {
+    switch (status) {
+        case "PENDING":
+            return "warning";
+        case "CONFIRMED":
+            return "primary";
+        case "PROCESSING":
+            return "secondary";
+        case "DELIVERING":
+            return "dark";
+        case "COMPLETED":
+            return "success";
+        case "CANCELLED":
+            return "danger";
+        default:
+            return "btn-secondary";
     }
-});
+};

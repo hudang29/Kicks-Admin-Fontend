@@ -1,10 +1,10 @@
 import GalleryModel from "../models/GalleryModel";
-import {axiosInstance} from "../utils/Util";
+import {API_BASE_URL, axiosInstance} from "../config/config";
 
-const ShowProductGallery_API = "http://localhost:8080/staff/api/product-gallery";
-const ShowProductDetailGallery_API = "http://localhost:8080/staff/api/product-detail-gallery";
-const ShowListProductDetailGallery_API = "http://localhost:8080/staff/api/product-detail-galleries";
-const AddGallery_API = "http://localhost:8080/staff/api/add-gallery";
+const ShowProductGallery_API = `${API_BASE_URL}/staff/api/product-gallery`;
+const ShowProductDetailGallery_API = `${API_BASE_URL}/staff/api/product-detail-gallery`;
+const ShowListProductDetailGallery_API = `${API_BASE_URL}/staff/api/product-detail-galleries`;
+const AddGallery_API = `${API_BASE_URL}/staff/api/add-gallery`;
 
 class GalleryAPI {
     async getProductGallery(id) {

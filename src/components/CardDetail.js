@@ -5,7 +5,7 @@ import {formatCurrency} from "../utils/Format";
 import GalleryAPI from "../api/GalleryAPI";
 
 
-function CardDetail({id, color, product, productDetail, isDefault}) {
+function CardDetail({detailId, color, product, productDetail, isDefault}) {
 
     const [discount, setDiscount] = useState(null);
     const [gallery, setGallery] = useState(null);
@@ -42,13 +42,13 @@ function CardDetail({id, color, product, productDetail, isDefault}) {
                                 <p>{color}</p>
                             </div>
                             <div className="ms-auto">
-                                <Link to={`/product-detail/${id}`}
+                                <Link to={`/product-detail/${detailId}`}
                                       className="nav-link mb-3 px-1 rounded rounded-1 btnhover-232321 bg-body-secondary">
                                     <i className="bi bi-three-dots"></i>
                                 </Link>
                                 <div className="form-check">
                                     <input className="form-check-input" type="radio" name="flexRadioDefault"
-                                           id={id}
+                                           id={detailId}
                                            //value={isDefault}
                                            checked={isDefault}/>
                                 </div>

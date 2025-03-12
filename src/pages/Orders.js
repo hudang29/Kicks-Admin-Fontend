@@ -1,11 +1,13 @@
 import List from "../components/List";
 import Pagination from "../components/Pagination";
 import OrdersVM from "../viewmodels/OrdersVM";
+import {getStatusClass} from "../utils/Util";
 
 const TableHeader = ["No.", "Customer Name", "Order Date", "Payment Method", "Status", "Amount", "Action"];
 
 function Orders() {
-    const {order, handleFetchDataByStatus, showAllOrder} = OrdersVM();
+    const {order, statuses, handleFetchDataByStatus, showAllOrder} = OrdersVM();
+
     return (
         <>
             <div className="my-3">
@@ -28,25 +30,18 @@ function Orders() {
                 CardName={
                     <>
 
-                        <div className="hstack gap-3 mb-3">
-                            <button className="btn btn-warning"
-                                    onClick={() => handleFetchDataByStatus("Pending")}>Pending
-                            </button>
-                            <button className="btn btn-primary"
-                                    onClick={() => handleFetchDataByStatus("Confirmed")}>Confirmed
-                            </button>
-                            <button className="btn btn-secondary"
-                                    onClick={() => handleFetchDataByStatus("Processing")}>Processing
-                            </button>
-                            <button className="btn btn-dark"
-                                    onClick={() => handleFetchDataByStatus("Delivering")}>Delivering
-                            </button>
-                            <button className="btn btn-success"
-                                    onClick={() => handleFetchDataByStatus("Completed")}>Completed
-                            </button>
-                            <button className="btn btn-danger"
-                                    onClick={() => handleFetchDataByStatus("Cancelled")}>Cancelled
-                            </button>
+                        <div className="d-flex flex-wrap gap-2 mb-3">
+                            {
+                                statuses?.length > 0 ? (
+                                    statuses.map((item) => (
+                                        <button className={`btn btn-${getStatusClass(item)}`}
+                                                onClick={() => handleFetchDataByStatus(item)}>{item}
+                                        </button>
+                                    ))
+                                ) : (
+                                    <></>
+                                )
+                            }
                             <button className="btn btn-light ms-auto"
                                     onClick={showAllOrder}>Show All
                             </button>

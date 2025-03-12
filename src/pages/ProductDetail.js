@@ -23,9 +23,9 @@ function ProductDetail() {
                                 <li className="breadcrumb-item"><Link to="#" className="nav-link">Home</Link></li>
                                 <li className="breadcrumb-item">
                                     <Link to={`/allproducts?page=${page}`} className="nav-link d-inline-block">
-                                        >All Products {page}</Link>
+                                        >All Shoes {page}</Link>
                                 </li>
-                                <li className="breadcrumb-item active" aria-current="page">Product Detail</li>
+                                <li className="breadcrumb-item active" aria-current="page">Shoes Detail</li>
                             </ol>
                         </nav>
                     </div>
@@ -44,7 +44,7 @@ function ProductDetail() {
                         productDetail.length > 0 ?
                             (productDetail.map((item) =>
                                     <CardDetail
-                                        id={item.id}
+                                        detailId={item.id}
                                         color={item.color}
                                         isDefault={item.isDefault}
                                         productDetail={item}

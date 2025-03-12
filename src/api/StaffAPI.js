@@ -1,12 +1,12 @@
 import StaffModel from "../models/StaffModel";
-import {axiosInstance} from "../utils/Util";
+import {API_BASE_URL, axiosInstance} from "../config/config";
 
-const ShowStaff_API = "http://localhost:8080/manager/api/show-employee";
-const CheckPassword_API = "http://localhost:8080/manager/api/check-exists-password";
-const CreateStaff_API = "http://localhost:8080/manager/api/create-employee";
-const UpdateStaff_API = "http://localhost:8080/manager/api/update-employee";
-const ChangeStatusStaff_API = "http://localhost:8080/manager/api/change-status-employee";
-const CreatePassword_API = "http://localhost:8080/manager/api/create-password";
+const ShowStaff_API = `${API_BASE_URL}/manager/api/show-employee`;
+const CheckPassword_API = `${API_BASE_URL}/manager/api/check-exists-password`;
+const CreateStaff_API = `${API_BASE_URL}/manager/api/create-employee`;
+const UpdateStaff_API = `${API_BASE_URL}/manager/api/update-employee`;
+const ChangeStatusStaff_API = `${API_BASE_URL}/manager/api/change-status-employee`;
+const CreatePassword_API = `${API_BASE_URL}/manager/api/create-password`;
 
 class StaffAPI {
     async getAll() {

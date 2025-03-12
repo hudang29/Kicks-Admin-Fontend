@@ -1,10 +1,10 @@
 import ProductDetailModel from "../models/ProductDetailModel";
-import {axiosInstance} from "../utils/Util";
+import {API_BASE_URL, axiosInstance} from "../config/config";
 
-const ShowProductDetail_API = "http://localhost:8080/staff/api/list-product-detail/";
-const ShowProductDetailById_API = "http://localhost:8080/staff/api/product-detail/";
-const UpdateProductDetail_API = "http://localhost:8080/staff/api/product-detail-update";
-const CreateProductDetail_API = "http://localhost:8080/staff/api/product-detail-create";
+const ShowProductDetail_API = `${API_BASE_URL}/staff/api/list-product-detail/`;
+const ShowProductDetailById_API = `${API_BASE_URL}/staff/api/product-detail/`;
+const UpdateProductDetail_API = `${API_BASE_URL}/staff/api/product-detail-update`;
+const CreateProductDetail_API = `${API_BASE_URL}/staff/api/product-detail-create`;
 
 class ProductDetainAPI {
     async getAll(id) {
@@ -24,7 +24,7 @@ class ProductDetainAPI {
                     "Content-Type": "application/json"
                 }
             });
-            console.log("✅ Phản hồi từ server:", response.data);
+            console.log("Phản hồi từ server:", response.data);
             return response.data; // Trả về dữ liệu phản hồi từ API
         } catch (error) {
             console.error("Lỗi khi cập nhật chi tiết sản phẩm:", error);

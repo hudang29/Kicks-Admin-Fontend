@@ -17,7 +17,7 @@ function Products() {
                         <nav style={{"--bs-breadcrumb-divider": "'>'"}} aria-label="breadcrumb">
                             <ol className="breadcrumb">
                                 <li className="breadcrumb-item"><Link to="#" className="nav-link">Home</Link></li>
-                                <li className="breadcrumb-item active" aria-current="page">All Products Page
+                                <li className="breadcrumb-item active" aria-current="page">All Shoes Page
                                     #{page + 1}</li>
                             </ol>
                         </nav>
@@ -25,7 +25,7 @@ function Products() {
 
                     <div className="ms-auto">
                         <Link to="/newproduct" className="nav-link rounded rounded-2 px-5 py-2 btn-kicks-dark">
-                            ADD NEW PRODUCT
+                            ADD NEW SHOES
                         </Link>
                     </div>
                 </div>
