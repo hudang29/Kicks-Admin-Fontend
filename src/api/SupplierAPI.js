@@ -1,16 +1,16 @@
-import axios from "axios";
 import SupplierModel from "../models/SupplierModel";
+import {axiosInstance} from "../utils/Util";
 
-const ShowSupplier_API = "http://localhost:8080/api/show-supplier";
+const ShowSupplier_API = "http://localhost:8080/staff/api/show-supplier";
 
 class SupplierAPI {
     async getAll() {
-        const response = await axios.get(ShowSupplier_API);
+        const response = await axiosInstance.get(ShowSupplier_API);
         return response.data.map((response) => SupplierModel.fromJson(response));
     }
 
     async getById(id) {
-        const response = await axios.get(`${ShowSupplier_API}/${id}`);
+        const response = await axiosInstance.get(`${ShowSupplier_API}/${id}`);
         return SupplierModel.fromJson(response.data);
     }
 }

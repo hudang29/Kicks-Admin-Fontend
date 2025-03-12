@@ -14,8 +14,8 @@ function ProductDetail() {
 
     return (
         <>
-            <div className="mb-3">
-                <h3>Product Detail</h3>
+            <div className="my-3">
+                <p className="fw-semibold fs-2">Shoes Detail</p>
                 <div className="hstack">
                     <div className="p-1">
                         <nav style={{"--bs-breadcrumb-divider": "'>'"}} aria-label="breadcrumb">
@@ -23,7 +23,7 @@ function ProductDetail() {
                                 <li className="breadcrumb-item"><Link to="#" className="nav-link">Home</Link></li>
                                 <li className="breadcrumb-item">
                                     <Link to={`/allproducts?page=${page}`} className="nav-link d-inline-block">
-                                    >All Products {page}</Link>
+                                        >All Products {page}</Link>
                                 </li>
                                 <li className="breadcrumb-item active" aria-current="page">Product Detail</li>
                             </ol>
@@ -33,7 +33,7 @@ function ProductDetail() {
             </div>
 
             <div className="card mb-3">
-                <div className="card-body text-center">
+            <div className="card-body text-center">
                     <h5>{product?.brand || "###"}</h5>
                 </div>
             </div>

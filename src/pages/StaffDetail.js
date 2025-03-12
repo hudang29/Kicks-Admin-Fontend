@@ -3,9 +3,8 @@ import {useEffect} from "react";
 
 function StaffDetail() {
     const {
-        id,
         staff, setStaff, password,
-        provinces, setSelectedProvince, selectedProvince,
+        provinces, setSelectedProvince,
         districts, setSelectedDistrict,
         wards, setSelectedWard,
         handleUpdate, handleStatus, activeBtn, handleCreatePassword, handleResetData,
@@ -39,7 +38,7 @@ function StaffDetail() {
 
     return (<>
             <div className="mb-3">
-                <h3>Staff Detail</h3>
+                <p className="fw-semibold fs-2">Staff Detail</p>
                 <div className="hstack">
                     <div className="p-1">
                         <nav style={{"--bs-breadcrumb-divider": "'>'"}} aria-label="breadcrumb">

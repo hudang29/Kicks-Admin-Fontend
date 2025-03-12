@@ -1,4 +1,6 @@
-
+body {
+    font-family: Rubik, sans-serif;
+}
 .btnhover-232321:hover {
     background-color: #232321 !important;
     color: #FAFAFA;

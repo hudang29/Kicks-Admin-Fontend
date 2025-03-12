@@ -1,17 +1,17 @@
-import axios from "axios";
+import {axiosInstance} from "../utils/Util";
 
-const BestSellers_API = "http://localhost:8080/api/dashboard/get-top3-bestseller";
-const LowStock_API = "http://localhost:8080/api/dashboard/get-low-stock";
-const TotalRevenueByStatus_API = "http://localhost:8080/api/dashboard/total-revenue-by-status";
-const LatestOrders_API = "http://localhost:8080/api/dashboard/get-latest-orders";
-const TotalRevenue_API = "http://localhost:8080/api/dashboard/total-revenue";
-const TotalRevenueOrders_API = "http://localhost:8080/api/dashboard/total-revenue-orders";
+const BestSellers_API = "http://localhost:8080/admin/api/dashboard/get-top3-bestseller";
+const LowStock_API = "http://localhost:8080/admin/api/dashboard/get-low-stock";
+const TotalRevenueByStatus_API = "http://localhost:8080/admin/api/dashboard/total-revenue-by-status";
+const LatestOrders_API = "http://localhost:8080/admin/api/dashboard/get-latest-orders";
+const TotalRevenue_API = "http://localhost:8080/admin/api/dashboard/total-revenue";
+const TotalRevenueOrders_API = "http://localhost:8080/admin/api/dashboard/total-revenue-orders";
 
 
 class DashboardAPI {
     async bestSellers() {
         try {
-            const response = await axios.get(`${BestSellers_API}`);
+            const response = await axiosInstance.get(`${BestSellers_API}`);
             return response.data;
         } catch (error) {
             console.error("Error fetching low stock data:", error);
@@ -20,7 +20,7 @@ class DashboardAPI {
 
     async findLowStock(threshold) {
         try {
-            const response = await axios.get(`${LowStock_API}`, {
+            const response = await axiosInstance.get(`${LowStock_API}`, {
                 params: {threshold}
             });
             console.log(response.data);
@@ -32,7 +32,7 @@ class DashboardAPI {
 
     async getLatestOrders() {
         try {
-            const response = await axios.get(`${LatestOrders_API}`);
+            const response = await axiosInstance.get(`${LatestOrders_API}`);
             return response.data;
         } catch (error) {
             console.error("Error fetching low stock data:", error);
@@ -41,7 +41,7 @@ class DashboardAPI {
 
     async getTotalRevenue() {
         try {
-            const response = await axios.get(`${TotalRevenue_API}`);
+            const response = await axiosInstance.get(`${TotalRevenue_API}`);
             return response.data;
         } catch (error) {
             console.error("Error fetching low stock data:", error);
@@ -50,7 +50,7 @@ class DashboardAPI {
 
     async getTotalRevenueOrders() {
         try {
-            const response = await axios.get(`${TotalRevenueOrders_API}`);
+            const response = await axiosInstance.get(`${TotalRevenueOrders_API}`);
             return response.data;
         } catch (error) {
             console.error("Error fetching low stock data:", error);
@@ -59,7 +59,7 @@ class DashboardAPI {
 
     async getTotalRevenueByStatus() {
         try {
-            const response = await axios.get(`${TotalRevenueByStatus_API}`);
+            const response = await axiosInstance.get(`${TotalRevenueByStatus_API}`);
             return response.data;
         } catch (error) {
             console.error("Error fetching low stock data:", error);

@@ -39,7 +39,7 @@ function List(props) {
                     </tr>
                     </thead>
                     <tbody>
-                    {props.information.length > 0 ? (
+                    {Array.isArray(props.information) && props.information.length > 0 ? (
                         props.information.map((information, index) => (
                             <tr key={information.id}>
                                 <th scope="row">{index + 1}</th>

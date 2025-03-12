@@ -13,7 +13,7 @@ function Sidebar() {
             <div className="position-sticky position-sticky top-0 h-100" style={{minWidth: "20vw", height: "80vh"}}>
 
                 <div className="bg-kicks d-flex justify-content-center" style={{height: "10vh"}}>
-                    <img src={logo} className="object-fit-cover" style={{height: "100%"}}/>
+                    <img src={logo} className="img-fluid" style={{height: "100%"}} alt="KICKS"/>
                 </div>
 
                 <div className="vstack gap-2 mx-auto mb-3 p-2">

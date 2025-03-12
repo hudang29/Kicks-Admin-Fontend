@@ -1,15 +1,15 @@
-import axios from "axios";
 import DiscountModel from "../models/DiscountModel";
+import {axiosInstance} from "../utils/Util";
 
-const ShowDiscount_API = "http://localhost:8080/api/product-discount";
+const ShowDiscount_API = "http://localhost:8080/staff/api/product-discount";
 
 class DiscountAPI{
     async getAll() {
-        const response = await axios.get(ShowDiscount_API);
+        const response = await axiosInstance.get(ShowDiscount_API);
         return response.data.map((response) => DiscountModel.fromJson(response));
     }
     async getDiscount(id) {
-        const response = await axios.get(`${ShowDiscount_API}/${id}`);
+        const response = await axiosInstance.get(`${ShowDiscount_API}/${id}`);
         return DiscountModel.fromJson(response.data);
     }
 }

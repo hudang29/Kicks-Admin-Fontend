@@ -1,28 +1,28 @@
-import axios from "axios";
 import SizeModel from "../models/SizeModel";
 import SizeSampleModel from "../models/SizeSampleModel";
+import {axiosInstance} from "../utils/Util";
 
-const ShowSize_API = "http://localhost:8080/api/sizes/";
-const ShowSizeSample_API = "http://localhost:8080/api/size-sample";
+const ShowSize_API = "http://localhost:8080/staff/api/sizes/";
+const ShowSizeSample_API = "http://localhost:8080/staff/api/size-sample";
 
-const UpdateSize_API = "http://localhost:8080/api/sizes/update";
-const CreateSize_API = "http://localhost:8080/api/sizes/create";
+const UpdateSize_API = "http://localhost:8080/staff/api/sizes/update";
+const CreateSize_API = "http://localhost:8080/staff/api/sizes/create";
 
 
 class SizeAPI {
     async getAll(id) {
-        const sizes = await axios.get(ShowSize_API + id);
+        const sizes = await axiosInstance.get(ShowSize_API + id);
         return sizes.data.map((size) => SizeModel.fromJson(size));
     }
 
     async getAllSample() {
-        const sizes = await axios.get(ShowSizeSample_API);
+        const sizes = await axiosInstance.get(ShowSizeSample_API);
         return sizes.data.map((size) => SizeSampleModel.fromJson(size));
     }
 
     async create(sizeData) {
         try {
-            const response = await axios.post(
+            const response = await axiosInstance.post(
                 `${ShowSizeSample_API}-create`, sizeData,
                 {
                     headers: {
@@ -40,7 +40,7 @@ class SizeAPI {
 
     async delete(id) {
         try {
-            const response = await axios.delete(`${ShowSizeSample_API}-delete/${id}`, {
+            const response = await axiosInstance.delete(`${ShowSizeSample_API}-delete/${id}`, {
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -57,7 +57,7 @@ class SizeAPI {
 
     async update(sizeData, productDetailId) {
         try {
-            const response = await axios.put(`${UpdateSize_API}/${productDetailId}`, sizeData, {
+            const response = await axiosInstance.put(`${UpdateSize_API}/${productDetailId}`, sizeData, {
                 headers: {
                     "Content-Type": "application/json",
                 }
@@ -71,7 +71,7 @@ class SizeAPI {
 
     async createSizeList(sizeData, productDetailId) {
         try {
-            const response = await axios.post(`${CreateSize_API}/${productDetailId}`, sizeData, {
+            const response = await axiosInstance.post(`${CreateSize_API}/${productDetailId}`, sizeData, {
                 headers: {
                     "Content-Type": "application/json",
                 }

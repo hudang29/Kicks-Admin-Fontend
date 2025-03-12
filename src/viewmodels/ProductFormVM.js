@@ -350,7 +350,7 @@ function ProductFormVM() {
         salePrice,
         color, setColor,
         size, sizeSample, stockData,
-        galleryList, gallery, setGallery,
+        galleryList, gallery,
         handleChangeStock, handleChangeStockSample, handleCreateSize,
         handleCancel,
         handleUpdate,

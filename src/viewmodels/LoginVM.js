@@ -12,28 +12,47 @@ function LoginVM() {
             alert("Please enter an email and password");
             return;
         }
-        setMessage("Login Successful! Wait a second");
         try {
-            await LoginAPI.login({ email: email, password: password});
-            setTimeout(() => {
-                navigate("/profile");
-            }, 1900);
+            const response = await LoginAPI.login({ email: email, password: password});
+            if(response.success){
+                setMessage("Login Successful! Wait a second");
+                setTimeout(() => {
+                    navigate("/profile");
+                    setMessage("");
+                }, 1900);
+
+            } else {
+                setMessage("Login failed! Please try again");
+                setTimeout(() => setMessage(""), 900);
+            }
+
 
         } catch (error) {
-            console.error("Lỗi đăng nhập:", error);
-            setMessage("Login Failed! Wait a second");
+            console.error("Login failed", error);
+            setMessage("Login failed! Please try again");
+            setTimeout(() => setMessage(""), 1000);
         }
     }
 
-    const activeLogin = () => {
+    const activeLogin =  () => {
         const email = document.getElementById("email").value;
         const password = document.getElementById("password").value;
         return (email !== "" && password !== "" && email !== null && password !== null )
+
+
+    }
+
+    const handleLogout = async () => {
+        try {
+            await LoginAPI.logout();
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     return {
         message,
-        handleLogin, activeLogin,
+        handleLogin, activeLogin, handleLogout
     }
 }
 

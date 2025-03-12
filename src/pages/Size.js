@@ -5,8 +5,8 @@ function Size() {
 
     return (
         <>
-            <div className="mb-3 pt-3">
-                <h3>Size</h3>
+            <div className="my-3">
+                <p className="fw-semibold fs-2">Sizes</p>
                 <div className="hstack">
                     <div className="p-1">
                         <nav style={{"--bs-breadcrumb-divider": "'>'"}} aria-label="breadcrumb">

@@ -1,31 +1,36 @@
-import axios from "axios";
 import ProductModel from "../models/ProductModel";
+import {axiosInstance} from "../utils/Util";
 
-const ShowProduct_API = "http://localhost:8080/api/list-product";
-const ShowPageProduct_API = "http://localhost:8080/api/page-product";
-const UpdateProduct_API = "http://localhost:8080/api/product-update";
-const CreateProduct_API = "http://localhost:8080/api/product-create";
+const ShowProduct_API = "http://localhost:8080/staff/api/list-product";
+const ShowPageProduct_API = "http://localhost:8080/staff/api/page-product";
+const UpdateProduct_API = "http://localhost:8080/staff/api/product-update";
+const CreateProduct_API = "http://localhost:8080/staff/api/product-create";
 
 class ProductAPI {
     async getAll() {
-        const response = await axios.get(ShowProduct_API);
+        const response = await axiosInstance.get(ShowProduct_API);
         return response.data.map((response) => ProductModel.fromJson(response));
     }
     async getPageProducts(page) {
-        const response = await axios.get(ShowPageProduct_API,{
-            params: {page}
-        });
-        return response.data;
+        try {
+            const response = await axiosInstance.get(ShowPageProduct_API,{
+                params: {page}
+            });
+            return response.data;
+        } catch (error) {
+            console.log(error);
+            return null;
+        }
     }
 
     async getProductById(id) {
-        const response = await axios.get(`${ShowProduct_API}/${id}`);
+        const response = await axiosInstance.get(`${ShowProduct_API}/${id}`);
         return ProductModel.fromJson(response.data);
     }
 
     async updateProduct(product) {
         try {
-            const response = await axios.put(`${UpdateProduct_API}`, product, {
+            const response = await axiosInstance.put(`${UpdateProduct_API}`, product, {
                 headers: {
                     "Content-Type": "application/json"
                 }
@@ -40,7 +45,7 @@ class ProductAPI {
 
     async createProduct(product) {
         try {
-            const response = await axios.post(`${CreateProduct_API}`, product, {
+            const response = await axiosInstance.post(`${CreateProduct_API}`, product, {
                 headers: {
                     "Content-Type": "application/json"
                 }

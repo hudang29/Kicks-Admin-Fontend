@@ -10,14 +10,15 @@ function Products() {
     }, [])
     return (
         <>
-            <div className="mb-3">
-                <h3>All Products</h3>
+            <div className="my-3">
+                <p className="fw-semibold fs-2">All Shoes</p>
                 <div className="hstack">
                     <div className="">
                         <nav style={{"--bs-breadcrumb-divider": "'>'"}} aria-label="breadcrumb">
                             <ol className="breadcrumb">
                                 <li className="breadcrumb-item"><Link to="#" className="nav-link">Home</Link></li>
-                                <li className="breadcrumb-item active" aria-current="page">All Products Page #{page+1}</li>
+                                <li className="breadcrumb-item active" aria-current="page">All Products Page
+                                    #{page + 1}</li>
                             </ol>
                         </nav>
                     </div>

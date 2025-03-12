@@ -1,5 +1,5 @@
 class ProductDetailModel {
-    constructor(id, productId, color, discountId, isDefault) {
+    constructor(id = "", productId = "", color = "", discountId = "", isDefault = "") {
         this.id = id;
         this.productId = productId;
         this.color = color;

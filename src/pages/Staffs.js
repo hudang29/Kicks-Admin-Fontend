@@ -12,8 +12,8 @@ function Staffs() {
 
     return (
         <>
-            <div className="mb-3">
-                <h3>Staff List</h3>
+            <div className="my-3">
+                <p className="fw-semibold fs-2">Staff</p>
                 <div className="hstack">
                     <div className="p-1">
                         <nav style={{"--bs-breadcrumb-divider": "'>'"}} aria-label="breadcrumb">
@@ -34,9 +34,7 @@ function Staffs() {
             <List items={TableHeader}
                   information={staffList}
                   CardName={CardName}/>
-
-            <Pagination/>
-
+            {/*<Pagination/>*/}
         </>
     );
 }

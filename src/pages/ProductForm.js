@@ -18,7 +18,7 @@ function ProductForm() {
         discount, selectDiscount, setSelectDiscount,
         salePrice,
         sizeSample, stockData,
-        galleryList, gallery, setGallery,
+        galleryList, gallery,
         handleChangeStock, handleChangeStockSample, handleCreateSize,
         handleCancel, handleUpdate,
         handleFileChange, handleUpload, handleImgChange,

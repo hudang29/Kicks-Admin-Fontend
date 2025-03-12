@@ -16,8 +16,8 @@ function StaffsVM() {
         status: "",
         createAt: "",
         city: "No Province",
-        district: "",
-        ward: "",
+        district: "No District",
+        ward: "No Ward",
     });
     const [password, setPassword] = useState(false);
 
@@ -65,14 +65,14 @@ function StaffsVM() {
             try {
                 const response = await axios.get("https://provinces.open-api.vn/api/p/");
                 setProvinces(response.data);
-                setStaff(prevStaff => ({
-                    ...prevStaff,
-                    district: "No District",
-                }));
-                setStaff(prevStaff => ({
-                    ...prevStaff,
-                    ward: "No Ward",
-                }));
+                // setStaff(prevStaff => ({
+                //     ...prevStaff,
+                //     district: "No District",
+                // }));
+                // setStaff(prevStaff => ({
+                //     ...prevStaff,
+                //     ward: "No Ward",
+                // }));
             } catch (error) {
                 console.error("Lỗi tải tỉnh/thành:", error);
             }

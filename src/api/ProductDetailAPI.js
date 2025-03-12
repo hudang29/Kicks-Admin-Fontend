@@ -1,25 +1,25 @@
-import axios from "axios";
 import ProductDetailModel from "../models/ProductDetailModel";
+import {axiosInstance} from "../utils/Util";
 
-const ShowProductDetail_API = "http://localhost:8080/api/list-product-detail/";
-const ShowProductDetailById_API = "http://localhost:8080/api/product-detail/";
-const UpdateProductDetail_API = "http://localhost:8080/api/product-detail-update";
-const CreateProductDetail_API = "http://localhost:8080/api/product-detail-create";
+const ShowProductDetail_API = "http://localhost:8080/staff/api/list-product-detail/";
+const ShowProductDetailById_API = "http://localhost:8080/staff/api/product-detail/";
+const UpdateProductDetail_API = "http://localhost:8080/staff/api/product-detail-update";
+const CreateProductDetail_API = "http://localhost:8080/staff/api/product-detail-create";
 
 class ProductDetainAPI {
     async getAll(id) {
-        const details = await axios.get(ShowProductDetail_API + id);
+        const details = await axiosInstance.get(ShowProductDetail_API + id);
         return details.data.map((detail) => ProductDetailModel.fromJson(detail));
     }
 
     async getDetailByID(id) {
-        const details = await axios.get(ShowProductDetailById_API + id);
+        const details = await axiosInstance.get(ShowProductDetailById_API + id);
         return ProductDetailModel.fromJson(details.data);
     }
 
     async updateProductDetail(productDetail) {
         try {
-            const response = await axios.put(`${UpdateProductDetail_API}`, productDetail, {
+            const response = await axiosInstance.put(`${UpdateProductDetail_API}`, productDetail, {
                 headers: {
                     "Content-Type": "application/json"
                 }
@@ -34,7 +34,7 @@ class ProductDetainAPI {
 
     async createProductDetail(productDetail) {
         try{
-            const response = await axios.post(`${CreateProductDetail_API}`, productDetail, {
+            const response = await axiosInstance.post(`${CreateProductDetail_API}`, productDetail, {
                 headers: {
                     "Content-Type": "application/json"
                 }

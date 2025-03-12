@@ -16,7 +16,7 @@ function MainLayout() {
                         <Menu/>
                     </div>
                     {/*----main---*/}
-                    <div className="card rounded rounded-0 bg-kicks border border-0 px-3"
+                    <div className="card rounded rounded-0 bg-kicks border border-0 px-4"
                          style={{minHeight: "90vh"}}>
                         <Outlet/>
                         {/*-- footer --*/}

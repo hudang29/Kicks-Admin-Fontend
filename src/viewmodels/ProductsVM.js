@@ -18,8 +18,8 @@ function ProductsVM() {
             const response = await ProductAPI.getPageProducts(state.page, {signal: controller.signal})
             setState(prevState => ({
                 ...prevState,
-                shoes: response.content.map(ProductModel.fromJson),
-                totalPages: response.totalPages
+                totalPages: response?.totalPages ?? 0,
+                shoes: Array.isArray(response?.content) ? response?.content.map(ProductModel.fromJson) : []
             }));
         }
         fetchData();

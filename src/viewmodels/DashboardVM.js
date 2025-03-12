@@ -12,10 +12,13 @@ function DashboardVM() {
     const handleFindLowStock = async (stockSubmit) => {
         try {
             setStock(stockSubmit);
-            console.log(stock);
             const response = await DashboardAPI.findLowStock(stockSubmit);
             console.log(response);
-            setLowStock(response);
+            if (Array.isArray(response)) {
+                setLowStock(response);
+            } else {
+                setLowStock([]);
+            }
         } catch (error) {
             console.error("Lỗi load lại low stock",error);
         }
@@ -25,11 +28,19 @@ function DashboardVM() {
     useEffect(() => {
         const fetchBestSellerData = async () => {
             const response = await DashboardAPI.bestSellers();
-            setBestSellers(response);
+            if (Array.isArray(response)) {
+                setBestSellers(response);
+            } else {
+                setBestSellers([]);
+            }
         }
         const fetchLowStock = async () => {
             const response = await DashboardAPI.findLowStock();
-            setLowStock(response);
+            if (Array.isArray(response)) {
+                setLowStock(response);
+            } else {
+                setLowStock([]);
+            }
         }
         const fetchTotalRevenue = async () => {
             const response = await DashboardAPI.getTotalRevenue()
@@ -41,7 +52,11 @@ function DashboardVM() {
         }
         const fetchLatestOrders = async () => {
             const response = await DashboardAPI.getLatestOrders()
-            setLatestOrders(response);
+            if (Array.isArray(response)) {
+                setLatestOrders(response);
+            } else {
+                setLatestOrders([]);
+            }
         }
         fetchTotalRevenue();
         fetchTotalRevenueOrders();

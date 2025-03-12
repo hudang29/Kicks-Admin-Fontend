@@ -18,7 +18,7 @@ function StaffNew() {
     return (
         <>
             <div className="my-3">
-                <h3>New Staff</h3>
+                <p className="fw-semibold fs-2">New Staff</p>
                 <div className="hstack">
                     <div className="p-1">
                         <nav style={{"--bs-breadcrumb-divider": "'>'"}} aria-label="breadcrumb">

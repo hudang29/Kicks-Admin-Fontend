@@ -15,8 +15,8 @@ function ProductNew() {
 
     return (
         <>
-            <div className="mb-3">
-                <h3>New Product</h3>
+            <div className="my-3">
+                <p className="fw-semibold fs-2">New Shoes</p>
                 <div className="hstack">
                     <div className="p-1">
                         <nav style={{"--bs-breadcrumb-divider": "'>'"}} aria-label="breadcrumb">
@@ -41,7 +41,7 @@ function ProductNew() {
             </div>
 
             <div className="card mb-3 p-3">
-                <div className="row g-3">
+            <div className="row g-3">
                     <div className="col-md-8">
                         <form className="row g-3">
 

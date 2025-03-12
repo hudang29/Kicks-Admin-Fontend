@@ -3,14 +3,13 @@ import Pagination from "../components/Pagination";
 import OrdersVM from "../viewmodels/OrdersVM";
 
 const TableHeader = ["No.", "Customer Name", "Order Date", "Payment Method", "Status", "Amount", "Action"];
-const CardName = "Orders List"
 
 function Orders() {
     const {order, handleFetchDataByStatus, showAllOrder} = OrdersVM();
     return (
         <>
             <div className="my-3">
-                <h3>Order List</h3>
+                <p className="fw-semibold fs-2">Order List</p>
                 <div className="hstack">
                     <div className="p-1">
                         <nav style={{"--bs-breadcrumb-divider": "'>'"}} aria-label="breadcrumb">

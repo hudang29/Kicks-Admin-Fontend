@@ -1,27 +1,27 @@
-import axios from "axios";
 import StaffModel from "../models/StaffModel";
+import {axiosInstance} from "../utils/Util";
 
-const ShowStaff_API = "http://localhost:8080/api/show-employee";
-const CheckPassword_API = "http://localhost:8080/api/check-exists-password";
-const CreateStaff_API = "http://localhost:8080/api/create-employee";
-const UpdateStaff_API = "http://localhost:8080/api/update-employee";
-const ChangeStatusStaff_API = "http://localhost:8080/api/change-status-employee";
-const CreatePassword_API = "http://localhost:8080/api/create-password";
+const ShowStaff_API = "http://localhost:8080/manager/api/show-employee";
+const CheckPassword_API = "http://localhost:8080/manager/api/check-exists-password";
+const CreateStaff_API = "http://localhost:8080/manager/api/create-employee";
+const UpdateStaff_API = "http://localhost:8080/manager/api/update-employee";
+const ChangeStatusStaff_API = "http://localhost:8080/manager/api/change-status-employee";
+const CreatePassword_API = "http://localhost:8080/manager/api/create-password";
 
 class StaffAPI {
     async getAll() {
-        const staffs = await axios.get(ShowStaff_API);
+        const staffs = await axiosInstance.get(ShowStaff_API);
         return staffs.data.map((staff) => StaffModel.fromJson(staff));
     }
 
     async getById(id) {
-        const staff = await axios.get(`${ShowStaff_API}/${id}`);
+        const staff = await axiosInstance.get(`${ShowStaff_API}/${id}`);
         return StaffModel.fromJson(staff.data);
     }
 
     async checkPasswordExists(id) {
         try {
-            const response = await axios.get(`${CheckPassword_API}/${id}`);
+            const response = await axiosInstance.get(`${CheckPassword_API}/${id}`);
             return response.data;
         } catch (error) {
             console.error("Error fetching password existence:", error);
@@ -31,7 +31,7 @@ class StaffAPI {
 
     async create(data) {
         try {
-            const response = await axios.post(`${CreateStaff_API}`, data, {
+            const response = await axiosInstance.post(`${CreateStaff_API}`, data, {
                 headers: {
                     "Content-Type": "application/json",
                 }
@@ -45,7 +45,7 @@ class StaffAPI {
 
     async update(data) {
         try {
-            const response = await axios.put(`${UpdateStaff_API}`, data, {
+            const response = await axiosInstance.put(`${UpdateStaff_API}`, data, {
                 headers: {
                     "Content-Type": "application/json",
                 }
@@ -59,7 +59,7 @@ class StaffAPI {
 
     async changeStatus(data) {
         try {
-            const response = await axios.put(`${ChangeStatusStaff_API}`, data, {
+            const response = await axiosInstance.put(`${ChangeStatusStaff_API}`, data, {
                 headers: {
                     "Content-Type": "application/json",
                 }
@@ -73,7 +73,7 @@ class StaffAPI {
 
     async createPassword(data) {
         try {
-            const response = await axios.post(`${CreatePassword_API}`, data, {
+            const response = await axiosInstance.post(`${CreatePassword_API}`, data, {
                 headers: {
                     "Content-Type": "application/json",
                 }
