@@ -1,83 +1,60 @@
 import SizeModel from "../models/SizeModel";
 import SizeSampleModel from "../models/SizeSampleModel";
-import {API_BASE_URL, axiosInstance} from "../config/config";
+import { API_BASE_URL, axiosInstance } from "../config/config";
 
-const ShowSize_API = `${API_BASE_URL}/staff/api/sizes/`;
-const ShowSizeSample_API = `${API_BASE_URL}/staff/api/size-sample`;
-const UpdateSize_API = `${API_BASE_URL}/staff/api/sizes/update`;
-const CreateSize_API = `${API_BASE_URL}/staff/api/sizes/create`;
-
+const SizeEndpoints = {
+    SIZES: `${API_BASE_URL}/staff/api/sizes/`,
+    SIZE_SAMPLE: `${API_BASE_URL}/staff/api/size-sample`,
+    UPDATE_SIZE: `${API_BASE_URL}/staff/api/sizes/update`,
+    CREATE_SIZE: `${API_BASE_URL}/staff/api/sizes/create`
+};
 
 class SizeAPI {
-    async getAll(id) {
-        const sizes = await axiosInstance.get(ShowSize_API + id);
-        return sizes.data.map((size) => SizeModel.fromJson(size));
+    async getAll(productDetailId) {
+        return this.fetchData(`${SizeEndpoints.SIZES}${productDetailId}`, "Error fetching sizes", SizeModel);
     }
 
     async getAllSample() {
-        const sizes = await axiosInstance.get(ShowSizeSample_API);
-        return sizes.data.map((size) => SizeSampleModel.fromJson(size));
+        return this.fetchData(SizeEndpoints.SIZE_SAMPLE, "Error fetching size samples", SizeSampleModel);
     }
 
     async create(sizeData) {
-        try {
-            const response = await axiosInstance.post(
-                `${ShowSizeSample_API}-create`, sizeData,
-                {
-                    headers: {
-                        "Content-Type": "application/json",
-                    }
-                }
-            );
-            //console.log("Kết quả từ API:", response.data);
-            return response.data;
-        } catch (error) {
-            console.error("Lỗi khi tạo size:", error.response?.data || error.message);
-            throw error;
-        }
+        return this.sendData(`${SizeEndpoints.SIZE_SAMPLE}-create`, sizeData, "Error creating size", "POST");
     }
 
     async delete(id) {
-        try {
-            const response = await axiosInstance.delete(`${ShowSizeSample_API}-delete/${id}`, {
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                // timeout: 5000, // Giới hạn request trong 5 giây
-            });
-
-            //console.log("Xóa thành công:", response.data);
-            return response.data; // Trả về dữ liệu phản hồi từ API
-        } catch (error) {
-            console.error("Lỗi khi xóa size:", error.response?.data || error.message);
-            throw error; // Ném lỗi để xử lý trong component
-        }
+        return this.sendData(`${SizeEndpoints.SIZE_SAMPLE}-delete/${id}`, null, "Error deleting size", "DELETE");
     }
 
     async update(sizeData, productDetailId) {
-        try {
-            const response = await axiosInstance.put(`${UpdateSize_API}/${productDetailId}`, sizeData, {
-                headers: {
-                    "Content-Type": "application/json",
-                }
-            });
-            return response.data;
-        } catch (error) {
-            console.error("Lỗi", error.response?.data || error.message);
-            throw error;
-        }
+        return this.sendData(`${SizeEndpoints.UPDATE_SIZE}/${productDetailId}`, sizeData, "Error updating size", "PUT");
     }
 
     async createSizeList(sizeData, productDetailId) {
+        return this.sendData(`${SizeEndpoints.CREATE_SIZE}/${productDetailId}`, sizeData, "Error creating size list", "POST");
+    }
+
+    async fetchData(url, errorMessage, Model) {
         try {
-            const response = await axiosInstance.post(`${CreateSize_API}/${productDetailId}`, sizeData, {
-                headers: {
-                    "Content-Type": "application/json",
-                }
+            const response = await axiosInstance.get(url);
+            return response.data.map(item => Model.fromJson(item));
+        } catch (error) {
+            console.error(errorMessage, error);
+            return [];
+        }
+    }
+
+    async sendData(url, data, errorMessage, method) {
+        try {
+            const response = await axiosInstance({
+                method,
+                url,
+                data,
+                headers: { "Content-Type": "application/json" }
             });
             return response.data;
         } catch (error) {
-            console.error("Lỗi", error.response?.data || error.message);
+            console.error(errorMessage, error.response?.data || error.message);
             throw error;
         }
     }

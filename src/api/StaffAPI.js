@@ -1,90 +1,83 @@
 import StaffModel from "../models/StaffModel";
 import {API_BASE_URL, axiosInstance} from "../config/config";
 
-const ShowStaff_API = `${API_BASE_URL}/manager/api/show-employee`;
-const CheckPassword_API = `${API_BASE_URL}/manager/api/check-exists-password`;
-const CreateStaff_API = `${API_BASE_URL}/manager/api/create-employee`;
-const UpdateStaff_API = `${API_BASE_URL}/manager/api/update-employee`;
-const ChangeStatusStaff_API = `${API_BASE_URL}/manager/api/change-status-employee`;
-const CreatePassword_API = `${API_BASE_URL}/manager/api/create-password`;
+const StaffEndpoints = {
+    SHOW: `${API_BASE_URL}/manager/api/show-employee`,
+    CHECK_PASSWORD: `${API_BASE_URL}/manager/api/check-exists-password`,
+    CREATE: `${API_BASE_URL}/manager/api/create-employee`,
+    UPDATE: `${API_BASE_URL}/manager/api/update-employee`,
+    CHANGE_STATUS: `${API_BASE_URL}/manager/api/change-status-employee`,
+    CREATE_PASSWORD: `${API_BASE_URL}/manager/api/create-password`,
+    ROLES: `${API_BASE_URL}/manager/api/roles`
+};
 
 class StaffAPI {
     async getAll() {
-        const staffs = await axiosInstance.get(ShowStaff_API);
-        return staffs.data.map((staff) => StaffModel.fromJson(staff));
+        return this.fetchData(StaffEndpoints.SHOW, "Error fetching staff list", StaffModel);
+    }
+
+    async getRoles() {
+        return this.fetchData(StaffEndpoints.ROLES, "Error fetching roles");
     }
 
     async getById(id) {
-        const staff = await axiosInstance.get(`${ShowStaff_API}/${id}`);
-        return StaffModel.fromJson(staff.data);
+        return this.fetchDataSingle(`${StaffEndpoints.SHOW}/${id}`, "Error fetching staff", StaffModel);
     }
 
     async checkPasswordExists(id) {
-        try {
-            const response = await axiosInstance.get(`${CheckPassword_API}/${id}`);
-            return response.data;
-        } catch (error) {
-            console.error("Error fetching password existence:", error);
-            return false;
-        }
+        return this.fetchDataSingle(`${StaffEndpoints.CHECK_PASSWORD}/${id}`, "Error checking password existence");
     }
 
     async create(data) {
-        try {
-            const response = await axiosInstance.post(`${CreateStaff_API}`, data, {
-                headers: {
-                    "Content-Type": "application/json",
-                }
-            });
-            console.log("✅ create new staff:", response.data);
-            return response.data;
-        } catch (error) {
-            console.error("Lỗi khi thêm mới nhân viên:", error.response?.data || error.message);
-        }
+        return this.sendData(StaffEndpoints.CREATE, data, "Error creating staff", "POST");
     }
 
     async update(data) {
-        try {
-            const response = await axiosInstance.put(`${UpdateStaff_API}`, data, {
-                headers: {
-                    "Content-Type": "application/json",
-                }
-            })
-            console.log("✅ Phản hồi từ server:", response.data);
-            return response.data;
-        } catch (error) {
-            console.error("Lỗi khi cập nhập thông tin nhân viên:", error.response?.data || error.message);
-        }
+        return this.sendData(StaffEndpoints.UPDATE, data, "Error updating staff", "PUT");
     }
 
     async changeStatus(data) {
-        try {
-            const response = await axiosInstance.put(`${ChangeStatusStaff_API}`, data, {
-                headers: {
-                    "Content-Type": "application/json",
-                }
-            })
-            console.log("✅ Phản hồi từ server:", response.data);
-            return response.data;
-        } catch (error) {
-            console.error("Lỗi khi thay đổi trạng thái nhân viên:", error.response?.data || error.message);
-        }
+        return this.sendData(StaffEndpoints.CHANGE_STATUS, data, "Error changing staff status", "PUT");
     }
 
     async createPassword(data) {
+        return this.sendData(StaffEndpoints.CREATE_PASSWORD, data, "Error creating password", "POST");
+    }
+
+    async fetchData(url, errorMessage, Model = null) {
         try {
-            const response = await axiosInstance.post(`${CreatePassword_API}`, data, {
-                headers: {
-                    "Content-Type": "application/json",
-                }
-            })
-            console.log("✅ Phản hồi từ server:", response.data);
-            return response.data;
+            const response = await axiosInstance.get(url);
+            return Model ? response.data.map(item => Model.fromJson(item)) : response.data;
         } catch (error) {
-            console.error("Lỗi tạo password", error.response?.data || error.message);
+            console.error(errorMessage, error);
+            return Model ? [] : null;
         }
     }
 
+    async fetchDataSingle(url, errorMessage, Model = null) {
+        try {
+            const response = await axiosInstance.get(url);
+            return Model ? Model.fromJson(response.data) : response.data;
+        } catch (error) {
+            console.error(errorMessage, error);
+            return Model ? null : false;
+        }
+    }
+
+    async sendData(url, data, errorMessage, method) {
+        try {
+            const response = await axiosInstance({
+                method,
+                url,
+                data,
+                headers: {"Content-Type": "application/json"}
+            });
+            return response.data;
+        } catch (error) {
+            console.error(errorMessage, error.response?.data || error.message);
+            throw error;
+        }
+    }
 }
 
 export default new StaffAPI();

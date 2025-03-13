@@ -3,7 +3,7 @@ import {useEffect} from "react";
 
 function StaffDetail() {
     const {
-        staff, setStaff, password,
+        roles, staff, setStaff, password,
         provinces, setSelectedProvince,
         districts, setSelectedDistrict,
         wards, setSelectedWard,
@@ -96,9 +96,15 @@ function StaffDetail() {
                             onChange={(e) => setStaff(
                                 prev => ({...prev, role: e.target.value})
                             )}>
-                        <option value="Staff">Staff</option>
-                        <option value="Manager">Manager</option>
-                        <option value="Admin">Admin</option>
+                        {
+                            roles?.length > 0 ? (
+                                roles.map((role) => (
+                                    <option value={role}>{role}</option>
+                                ))
+                            ) : (
+                                <></>
+                            )
+                        }
                     </select>
                 </div>
                 <div className="col-12">

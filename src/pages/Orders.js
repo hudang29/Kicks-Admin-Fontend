@@ -6,7 +6,7 @@ import {getStatusClass} from "../utils/Util";
 const TableHeader = ["No.", "Customer Name", "Order Date", "Payment Method", "Status", "Amount", "Action"];
 
 function Orders() {
-    const {order, statuses, handleFetchDataByStatus, showAllOrder} = OrdersVM();
+    const {orderList, statuses, handleFetchDataByStatus, showAllOrder} = OrdersVM();
 
     return (
         <>
@@ -26,7 +26,7 @@ function Orders() {
             {/*-- component --*/}
             <List
                 items={TableHeader}
-                information={order}
+                information={orderList}
                 CardName={
                     <>
 

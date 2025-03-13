@@ -1,5 +1,5 @@
 import {useParams} from "react-router-dom";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import ProductDetailAPI from "../api/ProductDetailAPI";
 import ProductAPI from "../api/ProductAPI";
 import SupplierAPI from "../api/SupplierAPI";
@@ -36,73 +36,82 @@ function ProductFormVM() {
     const [gallery, setGallery] = useState("");
     const [file, setFile] = useState("");
 
-    // Fetch dữ liệu
+    const fetchData = useCallback(async (detailId) => {
+        try {
+            const productDetailData = await ProductDetailAPI.getDetailByID(detailId);
+            setShoesDetail(new ProductDetailModel(
+                productDetailData.id,
+                productDetailData.productId,
+                productDetailData.color,
+                productDetailData.discountId,
+                productDetailData.isDefault
+            ));
+
+            const productData = productDetailData?.productId
+                ? await ProductAPI.getProductById(productDetailData.productId) : null;
+            setShoes(new ProductModel(
+                productData.id,
+                productData.name,
+                productData.shoesCategoryID,
+                productData.brand,
+                productData.price,
+                productData.description,
+                productData.supplierID,
+                productData.genderCategoryID
+            ));
+
+            const [supplierData, genderData, discountData, sizeData] = await Promise.all([
+                SupplierAPI.getAll(),
+                CategoryAPI.getAllGenderCategory(),
+                DiscountAPI.getAll(),
+                SizeAPI.getAll(detailId),
+            ]);
+
+            setSupplier(supplierData);
+            setGenderCategory(genderData);
+            setDiscount(discountData);
+
+            const formattedSize = sizeData.map(item => ({
+                ...item,
+                stock: item.stock ?? 0
+            }));
+            setSize(formattedSize);
+        } catch (error) {
+            console.error("Error loading data:", error);
+        }
+
+    }, [setShoesDetail, setShoes, setSupplier, setGenderCategory, setDiscount, setSize]);
+
     useEffect(() => {
         document.title = "Shoes Form";
         if (!detailId) return;
-        const fetchData = async () => {
-            try {
-                const productDetailData = await ProductDetailAPI.getDetailByID(detailId);
-                setShoesDetail(new ProductDetailModel(productDetailData.id,
-                    productDetailData.productId,
-                    productDetailData.color,
-                    productDetailData.discountId,
-                    productDetailData.isDefault
-                ));
-                const productData = productDetailData?.productId
-                    ? await ProductAPI.getProductById(productDetailData.productId) : null;
-                setShoes(new ProductModel(productData.id,
-                    productData.name,
-                    productData.shoesCategoryID,
-                    productData.brand,
-                    productData.price,
-                    productData.description,
-                    productData.supplierID,
-                    productData.genderCategoryID));
-                const [supplierData, genderData,
-                    discountData, sizeData] = await Promise.all([
-                    SupplierAPI.getAll(),
-                    CategoryAPI.getAllGenderCategory(),
-                    DiscountAPI.getAll(),
-                    SizeAPI.getAll(detailId),
-                ]);
-                setSupplier(supplierData);
-                setGenderCategory(genderData);
-                setDiscount(discountData);
-                const formattedSize = sizeData.map(item => ({
-                    ...item,
-                    stock: item.stock ?? 0
-                }));
-                setSize(formattedSize);
-            } catch (error) {
-                console.error("Lỗi khi tải dữ liệu:", error);
-            }
-        };
-        fetchData();
-    }, [detailId, initialData]);
+        fetchData(detailId);
+    }, [detailId, initialData, fetchData]);
 
-    useEffect(() => {
-        const fetchGallery = async () => {
-            GalleryAPI.getProductDetailGallery(detailId)
-                .then((data) => setGallery(data))
-                .catch((error) => console.error("Lỗi lấy hình detail", error));
 
-            const galleries = await GalleryAPI.getAllProductDetailGallery(detailId)
+    const fetchGallery = useCallback(async (detailId) => {
+        try {
+            const data = await GalleryAPI.getProductDetailGallery(detailId);
+            setGallery(data);
+
+            const galleries = await GalleryAPI.getAllProductDetailGallery(detailId);
             setGalleryList(galleries);
+        } catch (error) {
+            console.error("Error fetching detail image:", error);
         }
-        fetchGallery();
-    }, [detailId])
+    }, []);
 
-    // Fetch category shoes khi selectedGender thay đổi
-    useEffect(() => {
-        if (!shoes.genderCategoryID) return;
-        CategoryAPI.getAllCategoryShoesByGenderId(shoes.genderCategoryID)
-            .then(setShoesCategory)
-            .catch(error => console.error("Lỗi khi lấy danh mục giày:", error));
-    }, [shoes.genderCategoryID]);
+    const fetchShoesCategory = useCallback(async (genderCategoryID) => {
+        if (!genderCategoryID) return;
+        try {
+            const categories = await CategoryAPI.getAllCategoryShoesByGenderId(genderCategoryID);
+            setShoesCategory(categories);
+        } catch (error) {
+            console.error("Error fetching shoe categories:", error);
+        }
+    }, []);
 
-    // Cập nhật giá khi product hoặc discount thay đổi
-    useEffect(() => {
+    const calculateSalePrice = useCallback(() => {
         const price = shoes.price || NaN;
         const discountId = Number(shoesDetail.discountId);
         const discountRate = discount.find(d => d.id === discountId)?.discountRate || 0;
@@ -110,12 +119,26 @@ function ProductFormVM() {
     }, [shoes.price, shoesDetail.discountId, discount]);
 
     useEffect(() => {
+        if (!detailId) return;
+        fetchGallery(detailId);
+    }, [detailId, fetchGallery]);
+
+    useEffect(() => {
+        fetchShoesCategory(shoes.genderCategoryID);
+    }, [shoes.genderCategoryID, fetchShoesCategory]);
+
+    useEffect(() => {
+        calculateSalePrice();
+    }, [calculateSalePrice]);
+
+
+    useEffect(() => {
         const loadSizes = async () => {
             try {
                 const data = await SizeAPI.getAllSample();
                 setSizeSample(data);
             } catch (error) {
-                console.error("Lỗi khi tải danh sách size:", error);
+                console.error("Error loading size list:", error);
             }
         };
         loadSizes();
@@ -153,7 +176,8 @@ function ProductFormVM() {
 
     const handleCreateSize = async () => {
         if (sizeModels.length === 0) {
-            console.warn("Không có dữ liệu size để gửi!");
+            console.warn("No size data to send!");
+
             return;
         }
         try {
@@ -163,15 +187,15 @@ function ProductFormVM() {
             }));
             const response = await SizeAPI.createSizeList(newSizeList, detailId);
             if (response.status === 200 || response.status === 201) {
-                console.log("Tạo danh sách size thành công!", response.data);
+                console.log("Successfully created size list!", response.data);
                 setSize(prevSizes => [...prevSizes, ...sizeModels]);
                 setSizeModels([]);
                 setInitialData((prevState) => !prevState);
             } else {
-                console.error("Có lỗi xảy ra khi Tạo danh sách size:", response);
+                console.error("An error occurred while creating the size list:", response);
             }
         } catch (error) {
-            console.error("Lỗi khi gọi sizeAPI:", error);
+            console.error("Error calling sizeAPI:", error);
         }
     };
 
@@ -188,36 +212,20 @@ function ProductFormVM() {
 
         try {
             if (!shoesDetail || !shoes) return;
-
-            const updatedProduct = {
-                ...shoes,
-                name: shoes.name,
-                genderCategoryID: shoes.genderCategoryID,
-                shoesCategoryID: shoes.shoesCategoryID,
-                supplierID: shoes.supplierID,
-                price: shoes.price,
-                brand: shoes.brand,
-                description: shoes.description,
-            };
-            const updatedProductDetail = {
-                ...shoesDetail,
-                color: shoesDetail.color,
-                discountId: shoesDetail.discountId === 'errors' ? 0 : shoesDetail.discountId
-            };
             const updatedSizes = size.map(item => ({
                 id: item.id,
                 size: item.size,
                 stock: item.stock,
             }));
             await Promise.allSettled([
-                ProductAPI.updateProduct(updatedProduct),
-                ProductDetailAPI.updateProductDetail(updatedProductDetail),
+                ProductAPI.updateProduct(shoes),
+                ProductDetailAPI.updateProductDetail(shoesDetail),
                 SizeAPI.update(updatedSizes, detailId),
             ]);
             alert("Successful!");
             setInitialData((prevState) => !prevState);
         } catch (error) {
-            console.error("Lỗi khi cập nhật sản phẩm:", error);
+            console.error("Error updating product:", error);
             alert("Failed to update!");
         }
     };
@@ -244,7 +252,7 @@ function ProductFormVM() {
         }
         console.log(newGallery);
         GalleryAPI.addGallery(newGallery)
-            .catch((error) => console.error("Lỗi thêm img", error.toJSON()))
+            .catch((error) => console.error("Error adding image", error.toJSON()));
         setGalleryList(prev => [...prev, newGallery]);
         alert("Save image successfully!");
     };

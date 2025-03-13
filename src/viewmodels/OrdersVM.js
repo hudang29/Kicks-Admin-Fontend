@@ -1,32 +1,71 @@
 import {useCallback, useEffect, useState} from "react";
+import {useParams} from "react-router-dom";
 import OrderAPI from "../api/OrderAPI";
+import OrderModel from "../models/OrderModel";
 
 function OrdersVM() {
-    const [order, setOrder] = useState([]);
+    const {orderId} = useParams();
+
+    const [orderList, setOrderList] = useState([]);
     const [orderStatus, setOrderStatus] = useState("");
     const [statuses, setStatuses] = useState([]);
+    const [order, setOrder] = useState(
+        new OrderModel(
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "")
+    );
 
-
+    // Fetch danh sách đơn hàng theo trạng thái
     const fetchOrders = useCallback(async () => {
         try {
             const data = await OrderAPI.getAllByStatus(orderStatus);
-            setOrder(data);
+            setOrderList(data);
         } catch (error) {
-            console.error("Lỗi khi lấy danh sách đơn hàng:", error);
+            console.error("Error fetching orders:", error);
         }
-    }, [orderStatus]); // useCallback giúp tránh render lại không cần thiết
+    }, [orderStatus]);
 
+    // Fetch danh sách trạng thái đơn hàng
     const fetchStatuses = useCallback(async () => {
         try {
             const response = await OrderAPI.getOrderStatuses();
-            console.log(response.data)
             setStatuses(response.data);
         } catch (error) {
-            console.error("Lỗi khi lấy danh sách đơn hàng:", error);
+            console.error("Error fetching order statuses:", error);
         }
     }, []);
+
+    // Fetch chi tiết đơn hàng theo orderId
+    const fetchOrder = useCallback(async () => {
+        if (!orderId) return;
+        try {
+            const response = await OrderAPI.getById(orderId);
+            setOrder(new OrderModel(
+                response.id,
+                response.couponId,
+                response.orderDate,
+                response.payment,
+                response.customer,
+                response.phone,
+                response.orderStatus,
+                response.totalAmount,
+                response.shippingAddress
+            ));
+        } catch (error) {
+            console.error("Error fetching order details:", error);
+        }
+    }, [orderId]);
+
+    // Gọi API khi component mount hoặc khi dependencies thay đổi
     useEffect(() => {
-        document.title = "Orders"; // Cập nhật tiêu đề
+        document.title = "Orders";
         fetchOrders();
     }, [fetchOrders]);
 
@@ -34,21 +73,26 @@ function OrdersVM() {
         fetchStatuses();
     }, [fetchStatuses]);
 
-    const handleFetchDataByStatus = async (status) => {
-        setOrderStatus(status);
-    }
+    useEffect(() => {
+        fetchOrder();
+    }, [fetchOrder]);
 
-    const showAllOrder = async() => {
+    // Lọc đơn hàng theo trạng thái
+    const handleFetchDataByStatus = (status) => {
+        setOrderStatus(status);
+    };
+
+    // Lấy tất cả đơn hàng
+    const showAllOrder = async () => {
         try {
             const data = await OrderAPI.getAll();
-            setOrder(data);
+            setOrderList(data);
         } catch (error) {
-            console.error("Lỗi khi lấy danh sách đơn hàng:", error);
+            console.error("Error fetching all orders:", error);
         }
-    }
+    };
 
-    return {order, statuses, handleFetchDataByStatus, showAllOrder};
-
+    return {orderList, order, statuses, handleFetchDataByStatus, showAllOrder};
 }
 
 export default OrdersVM;

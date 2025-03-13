@@ -4,7 +4,7 @@ import {useEffect} from "react";
 function StaffNew() {
 
     const {
-        staff, setStaff,
+        roles, staff, setStaff,
         provinces, setSelectedProvince,
         districts, setSelectedDistrict,
         wards,
@@ -42,14 +42,6 @@ function StaffNew() {
                                )}/>
                     </div>
                 </div>
-                {/*<div className="row mb-3">*/}
-                {/*    <label htmlFor="inputPassword3" className="col-sm-2 col-form-label">Password</label>*/}
-                {/*    <div className="col-sm-10">*/}
-                {/*        <input type="password" className="form-control" id="inputPassword3"*/}
-                {/*               value={staff.}*/}
-                {/*               onChange={(e) => setPassword(e.target.value)}/>*/}
-                {/*    </div>*/}
-                {/*</div>*/}
                 <div className="row mb-3">
                     <label htmlFor="inputEmail3" className="col-sm-2 col-form-label">Email</label>
                     <div className="col-sm-10">
@@ -78,9 +70,15 @@ function StaffNew() {
                                 onChange={(e) => setStaff(
                                     prev => ({...prev, role: e.target.value})
                                 )}>
-                            <option value="Staff">Staff</option>
-                            <option value="Manager">Manager</option>
-                            <option value="Admin">Admin</option>
+                            {
+                                roles?.length > 0 ? (
+                                    roles.map((role) => (
+                                        <option value={role}>{role}</option>
+                                    ))
+                                ) : (
+                                    <></>
+                                )
+                            }
                         </select>
                     </div>
                 </div>

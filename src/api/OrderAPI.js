@@ -1,28 +1,67 @@
 import OrderModel from "../models/OrderModel";
-import {API_BASE_URL, axiosInstance} from "../config/config";
+import { API_BASE_URL, axiosInstance } from "../config/config";
 
-const ShowOrder_API = `${API_BASE_URL}/staff/api/show-orders`;
-const ShowOrderByStatus_API = `${API_BASE_URL}/staff/api/orders-by-status`;
-const OrderStatuses_API = `${API_BASE_URL}/staff/api/statuses`;
+const OrderEndpoints = {
+    ALL_ORDERS: `${API_BASE_URL}/staff/api/show-orders`,
+    ORDER_BY_ID: `${API_BASE_URL}/staff/api/order/`,
+    ORDERS_BY_STATUS: `${API_BASE_URL}/staff/api/orders-by-status`,
+    ORDER_STATUSES: `${API_BASE_URL}/staff/api/statuses`
+};
 
 class OrderAPI {
     async getAll() {
-        const orders = await axiosInstance.get(ShowOrder_API);
-        return orders.data.map((order) => OrderModel.fromJson(order));
+        return this.fetchData(OrderEndpoints.ALL_ORDERS, "Error fetching all orders", OrderModel);
+    }
+
+    async getById(id) {
+        return this.fetchDataSingle(`${OrderEndpoints.ORDER_BY_ID}${id}`, "Error fetching order by ID", OrderModel);
     }
 
     async getOrderStatuses() {
-        return await axiosInstance.get(OrderStatuses_API);
+        return this.fetchRawData(OrderEndpoints.ORDER_STATUSES, "Error fetching order statuses");
     }
 
     async getAllByStatus(status) {
+        return this.fetchDataWithParams(OrderEndpoints.ORDERS_BY_STATUS, { status }, "Error fetching orders by status", OrderModel);
+    }
+
+    async fetchData(url, errorMessage, Model) {
         try {
-            const orders = await axiosInstance.get(ShowOrderByStatus_API, {
-                params: {status}
-            });
-            return orders.data.map((order) => OrderModel.fromJson(order));
+            const response = await axiosInstance.get(url);
+            return response.data.map(item => Model.fromJson(item));
         } catch (error) {
-            console.log(error);
+            console.error(errorMessage, error);
+            return [];
+        }
+    }
+
+    async fetchDataSingle(url, errorMessage, Model) {
+        try {
+            const response = await axiosInstance.get(url);
+            return Model.fromJson(response.data);
+        } catch (error) {
+            console.error(errorMessage, error);
+            return null;
+        }
+    }
+
+    async fetchRawData(url, errorMessage) {
+        try {
+            const response = await axiosInstance.get(url);
+            return response.data;
+        } catch (error) {
+            console.error(errorMessage, error);
+            return null;
+        }
+    }
+
+    async fetchDataWithParams(url, params, errorMessage, Model) {
+        try {
+            const response = await axiosInstance.get(url, { params });
+            return response.data.map(item => Model.fromJson(item));
+        } catch (error) {
+            console.error(errorMessage, error);
+            return [];
         }
     }
 }

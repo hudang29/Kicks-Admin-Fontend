@@ -7,6 +7,7 @@ import StaffModel from "../models/StaffModel";
 function StaffsVM() {
     const {id} = useParams();
     const employeeId = sessionStorage.getItem("employeeId");
+    const [roles, setRoles] = useState([]);
 
     const [staffList, setStaffList] = useState([]);
     const [staff, setStaff] = useState({
@@ -34,6 +35,15 @@ function StaffsVM() {
                 console.error("An error occurred while loading data:", error);
             }
         };
+        const fetchRoles = async () => {
+            try {
+                const response = await StaffAPI.getRoles();
+                setRoles(response);
+            } catch (error) {
+                //console.error("An error occurred while loading data:", error);
+            }
+        };
+        fetchRoles();
         fetchStaffs();
     }, []);
 
@@ -238,7 +248,7 @@ function StaffsVM() {
     }
 
     return {
-        id, profile, setProfile,
+        id, roles, profile, setProfile,
         staffList, staff, setStaff,
         password, setPassword,
         provinces, selectedProvince, setSelectedProvince,

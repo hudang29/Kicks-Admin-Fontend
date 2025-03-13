@@ -1,17 +1,37 @@
 import SupplierModel from "../models/SupplierModel";
-import {API_BASE_URL, axiosInstance} from "../config/config";
+import { API_BASE_URL, axiosInstance } from "../config/config";
 
-const ShowSupplier_API = `${API_BASE_URL}/staff/api/show-supplier`;
+const SupplierEndpoints = {
+    SHOW: `${API_BASE_URL}/staff/api/show-supplier`
+};
 
 class SupplierAPI {
     async getAll() {
-        const response = await axiosInstance.get(ShowSupplier_API);
-        return response.data.map((response) => SupplierModel.fromJson(response));
+        return this.fetchData(SupplierEndpoints.SHOW, "Lỗi khi lấy danh sách nhà cung cấp", SupplierModel);
     }
 
     async getById(id) {
-        const response = await axiosInstance.get(`${ShowSupplier_API}/${id}`);
-        return SupplierModel.fromJson(response.data);
+        return this.fetchDataSingle(`${SupplierEndpoints.SHOW}/${id}`, "Lỗi khi lấy thông tin nhà cung cấp", SupplierModel);
+    }
+
+    async fetchData(url, errorMessage, Model = null) {
+        try {
+            const response = await axiosInstance.get(url);
+            return Model ? response.data.map(item => Model.fromJson(item)) : response.data;
+        } catch (error) {
+            console.error(errorMessage, error);
+            return Model ? [] : null;
+        }
+    }
+
+    async fetchDataSingle(url, errorMessage, Model = null) {
+        try {
+            const response = await axiosInstance.get(url);
+            return Model ? Model.fromJson(response.data) : response.data;
+        } catch (error) {
+            console.error(errorMessage, error);
+            return Model ? null : false;
+        }
     }
 }
 

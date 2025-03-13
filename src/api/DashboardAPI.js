@@ -1,90 +1,65 @@
-
 import {API_BASE_URL, axiosInstance} from "../config/config";
 
-const BestSellers_API = `${API_BASE_URL}/admin/api/dashboard/get-top3-bestseller`;
-const LowStock_API = `${API_BASE_URL}/admin/api/dashboard/get-low-stock`;
-const TotalRevenueByStatus_API = `${API_BASE_URL}/admin/api/dashboard/total-revenue-by-status`;
-const LatestOrders_API = `${API_BASE_URL}/admin/api/dashboard/get-latest-orders`;
-const TotalRevenue_API = `${API_BASE_URL}/admin/api/dashboard/total-revenue`;
-const TotalRevenueOrders_API = `${API_BASE_URL}/admin/api/dashboard/total-revenue-orders`;
-const SaleGraph_API = `${API_BASE_URL}/admin/api/dashboard/`;
-
+const DashboardEndpoints = {
+    BEST_SELLERS: `${API_BASE_URL}/admin/api/dashboard/get-top3-bestseller`,
+    LOW_STOCK: `${API_BASE_URL}/admin/api/dashboard/get-low-stock`,
+    TOTAL_REVENUE_BY_STATUS: `${API_BASE_URL}/admin/api/dashboard/total-revenue-by-status`,
+    LATEST_ORDERS: `${API_BASE_URL}/admin/api/dashboard/get-latest-orders`,
+    TOTAL_REVENUE: `${API_BASE_URL}/admin/api/dashboard/total-revenue`,
+    TOTAL_REVENUE_ORDERS: `${API_BASE_URL}/admin/api/dashboard/total-revenue-orders`,
+    SALES_GRAPH: `${API_BASE_URL}/admin/api/dashboard/`
+};
 
 class DashboardAPI {
     async bestSellers() {
-        try {
-            const response = await axiosInstance.get(`${BestSellers_API}`);
-            return response.data;
-        } catch (error) {
-            console.error("Error fetching low stock data:", error);
-        }
+        return this.fetchData(DashboardEndpoints.BEST_SELLERS,
+            "Error fetching best sellers data");
     }
 
     async findLowStock(threshold) {
-        try {
-            const response = await axiosInstance.get(`${LowStock_API}`, {
-                params: {threshold}
-            });
-            console.log(response.data);
-            return response.data;
-        } catch (e) {
-            console.error("Error fetching low stock data:", e);
-        }
+        return this.fetchData(DashboardEndpoints.LOW_STOCK,
+            "Error fetching low stock data", {params: {threshold}});
     }
 
     async getLatestOrders() {
-        try {
-            const response = await axiosInstance.get(`${LatestOrders_API}`);
-            return response.data;
-        } catch (error) {
-            console.error("Error fetching low stock data:", error);
-        }
+        return this.fetchData(DashboardEndpoints.LATEST_ORDERS,
+            "Error fetching latest orders");
     }
 
     async getTotalRevenue() {
-        try {
-            const response = await axiosInstance.get(`${TotalRevenue_API}`);
-            return response.data;
-        } catch (error) {
-            console.error("Error fetching low stock data:", error);
-        }
+        return this.fetchData(DashboardEndpoints.TOTAL_REVENUE,
+            "Error fetching total revenue");
     }
 
     async getTotalRevenueOrders() {
-        try {
-            const response = await axiosInstance.get(`${TotalRevenueOrders_API}`);
-            return response.data;
-        } catch (error) {
-            console.error("Error fetching low stock data:", error);
-        }
+        return this.fetchData(DashboardEndpoints.TOTAL_REVENUE_ORDERS,
+            "Error fetching total revenue orders");
     }
 
     async getTotalRevenueByStatus() {
-        try {
-            const response = await axiosInstance.get(`${TotalRevenueByStatus_API}`);
-            return response.data;
-        } catch (error) {
-            console.error("Error fetching low stock data:", error);
-        }
+        return this.fetchData(DashboardEndpoints.TOTAL_REVENUE_BY_STATUS,
+            "Error fetching total revenue by status");
     }
 
     async getSalesGraphByMonth(year) {
-        try {
-            const response = await axiosInstance.get(`${SaleGraph_API}sales-graph/${year}`);
-            return response.data;
-        } catch (error) {
-            console.error("Error fetching data monthly: ", error);
-        }
+        return this.fetchData(`${DashboardEndpoints.SALES_GRAPH}sales-graph/${year}`,
+            "Error fetching sales graph by month");
     }
 
     async getSalesGraphByYear() {
-        try {
-            const response = await axiosInstance.get(`${SaleGraph_API}sales-graph-year`);
-            return response.data;
-        } catch (error) {
-            console.error("Error fetching data yearly: ", error);
-        }
+        return this.fetchData(`${DashboardEndpoints.SALES_GRAPH}sales-graph-year`,
+            "Error fetching sales graph by year");
     }
 
+    async fetchData(url, errorMessage, config = {}) {
+        try {
+            const response = await axiosInstance.get(url, config);
+            return response.data;
+        } catch (error) {
+            console.error(errorMessage, error);
+            return null;
+        }
+    }
 }
+
 export default new DashboardAPI();

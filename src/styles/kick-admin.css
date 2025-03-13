@@ -99,4 +99,20 @@ body {
     object-fit: cover; /* Giữ đúng tỷ lệ, cắt phần dư */
 }
 
+.img-table {
+    max-width: 10vh;
+    height: auto;
+    object-fit: cover;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    padding: 2px;
+    aspect-ratio: 1 / 1;
+    /*width: 50px;  !* Độ rộng ảnh *!*/
+    /*height: 50px; !* Chiều cao ảnh *!*/
+    /*object-fit: cover; !* Cắt ảnh để vừa khung *!*/
+    /*border-radius: 5px; !* Bo góc nhẹ *!*/
+    /*border: 1px solid #ddd; !* Viền nhẹ *!*/
+    /*padding: 2px; !* Khoảng cách viền *!*/
+}
+
 

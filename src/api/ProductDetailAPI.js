@@ -1,51 +1,64 @@
 import ProductDetailModel from "../models/ProductDetailModel";
 import {API_BASE_URL, axiosInstance} from "../config/config";
 
-const ShowProductDetail_API = `${API_BASE_URL}/staff/api/list-product-detail/`;
-const ShowProductDetailById_API = `${API_BASE_URL}/staff/api/product-detail/`;
-const UpdateProductDetail_API = `${API_BASE_URL}/staff/api/product-detail-update`;
-const CreateProductDetail_API = `${API_BASE_URL}/staff/api/product-detail-create`;
+const ProductDetailEndpoints = {
+    LIST: `${API_BASE_URL}/staff/api/list-product-detail/`,
+    DETAIL: `${API_BASE_URL}/staff/api/product-detail/`,
+    UPDATE: `${API_BASE_URL}/staff/api/product-detail-update`,
+    CREATE: `${API_BASE_URL}/staff/api/product-detail-create`
+};
 
-class ProductDetainAPI {
-    async getAll(id) {
-        const details = await axiosInstance.get(ShowProductDetail_API + id);
-        return details.data.map((detail) => ProductDetailModel.fromJson(detail));
+class ProductDetailAPI {
+    async getAll(productId) {
+        return this.fetchData(`${ProductDetailEndpoints.LIST}${productId}`, "Error fetching product details", ProductDetailModel);
     }
 
     async getDetailByID(id) {
-        const details = await axiosInstance.get(ShowProductDetailById_API + id);
-        return ProductDetailModel.fromJson(details.data);
+        return this.fetchDataSingle(`${ProductDetailEndpoints.DETAIL}${id}`, "Error fetching product detail by ID", ProductDetailModel);
     }
 
     async updateProductDetail(productDetail) {
-        try {
-            const response = await axiosInstance.put(`${UpdateProductDetail_API}`, productDetail, {
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            });
-            console.log("Phản hồi từ server:", response.data);
-            return response.data; // Trả về dữ liệu phản hồi từ API
-        } catch (error) {
-            console.error("Lỗi khi cập nhật chi tiết sản phẩm:", error);
-            throw error; // Ném lỗi để xử lý ở nơi gọi hàm
-        }
+        return this.sendData(ProductDetailEndpoints.UPDATE, productDetail, "Error updating product detail", "PUT");
     }
 
     async createProductDetail(productDetail) {
-        try{
-            const response = await axiosInstance.post(`${CreateProductDetail_API}`, productDetail, {
-                headers: {
-                    "Content-Type": "application/json"
-                }
+        return this.sendData(ProductDetailEndpoints.CREATE, productDetail, "Error creating product detail", "POST");
+    }
+
+    async fetchData(url, errorMessage, Model) {
+        try {
+            const response = await axiosInstance.get(url);
+            return response.data.map(item => Model.fromJson(item));
+        } catch (error) {
+            console.error(errorMessage, error);
+            return [];
+        }
+    }
+
+    async fetchDataSingle(url, errorMessage, Model) {
+        try {
+            const response = await axiosInstance.get(url);
+            return Model.fromJson(response.data);
+        } catch (error) {
+            console.error(errorMessage, error);
+            return null;
+        }
+    }
+
+    async sendData(url, data, errorMessage, method) {
+        try {
+            const response = await axiosInstance({
+                method,
+                url,
+                data,
+                headers: {"Content-Type": "application/json"}
             });
             return response.data;
-        }
-        catch (error) {
-            console.error("Lỗi khi thêm chi tiết sản phẩm:", error);
+        } catch (error) {
+            console.error(errorMessage, error);
             throw error;
         }
     }
 }
 
-export default new ProductDetainAPI();
+export default new ProductDetailAPI();

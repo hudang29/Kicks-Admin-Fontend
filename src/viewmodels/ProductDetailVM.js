@@ -1,5 +1,5 @@
 import {useParams} from "react-router-dom";
-import {useEffect, useState} from "react";
+import {useEffect, useState, useCallback} from "react";
 import ProductDetailAPI from "../api/ProductDetailAPI";
 import ProductAPI from "../api/ProductAPI";
 import CategoryAPI from "../api/CategoryAPI";
@@ -7,76 +7,76 @@ import CategoryAPI from "../api/CategoryAPI";
 function ProductDetailVM() {
     const {id} = useParams();
 
-    const [productDetail, setProductDetail,] = useState([]);
+    const [productDetail, setProductDetail] = useState([]);
     const [product, setProduct] = useState({});
-    const [newColor, setNewColor] = useState(null);
+    const [newColor, setNewColor] = useState("");
     const [gender, setGender] = useState({});
     const [type, setType] = useState({});
     const [reload, setReload] = useState(false);
 
-    useEffect(() => {
-        document.title = "Shoes Detail";
+    const fetchProductData = useCallback(async () => {
         if (!id) return;
+        try {
+            const productDetailData = await ProductDetailAPI.getAll(id);
+            setProductDetail(productDetailData);
 
-        const fetchProductData = async () => {
-            try {
-                const productDetailData = await ProductDetailAPI.getAll(id);
-                setProductDetail(productDetailData);
-
-                const productData = await ProductAPI.getProductById(id);
-                setProduct(productData);
-            } catch (error) {
-                console.error("Lỗi khi lấy dữ liệu sản phẩm:", error);
-            }
-        };
-
-        fetchProductData();
+            const productData = await ProductAPI.getProductById(id);
+            setProduct(productData);
+        } catch (error) {
+            console.error("Error fetching product data:", error);
+        }
     }, [id, reload]);
 
-    useEffect(() => {
-        if (product) {
+    const fetchCategoryData = useCallback(() => {
+        if (product?.shoesCategoryID) {
             CategoryAPI.getShoesCategoryById(product.shoesCategoryID)
-                .then((data) => setType(data))
-                .catch((error) => console.error("Lỗi", error));
+                .then(setType)
+                .catch((error) => console.error("Error fetching shoe category:", error));
+        }
+        if (product?.genderCategoryID) {
             CategoryAPI.getGenderCategoryById(product.genderCategoryID)
-                .then((data) => setGender(data))
-                .catch((error) => console.log("error", error));
+                .then(setGender)
+                .catch((error) => console.error("Error fetching gender category:", error));
         }
     }, [product]);
 
+    useEffect(() => {
+        document.title = "Shoes Detail";
+        fetchProductData();
+    }, [fetchProductData]);
+
+    useEffect(() => {
+        fetchCategoryData();
+    }, [fetchCategoryData]);
+
     const handleAddColor = async () => {
         if (!newColor.trim()) {
-            alert("Enter new color Please!");
+            alert("Please enter a new color!");
             return;
         }
 
         try {
-            const newProductDetail = {
-                color: newColor,
-                productId: id,
-            };
+            const newProductDetail = {color: newColor, productId: id};
             const response = await ProductDetailAPI.createProductDetail(newProductDetail);
-            console.log(newProductDetail);
-            console.log(response);
-            // Cập nhật danh sách `productDetail`
             setProductDetail((prev) => [...prev, response]);
-            // Đổi trạng thái reload để kích hoạt useEffect
-            setReload(prev => !prev);
-            // Reset input
+            setReload((prev) => !prev);
             setNewColor("");
-            alert("Successfully add color");
+            alert("Color added successfully!");
         } catch (error) {
-            console.error("Lỗi khi thêm màu mới:", error);
-            alert("Failed to add color");
+            console.error("Error adding new color:", error);
+            alert("Failed to add color!");
         }
     };
 
     return {
-        productDetail, product,
-        newColor, setNewColor,
-        gender, type,
+        productDetail,
+        product,
+        newColor,
+        setNewColor,
+        gender,
+        type,
         handleAddColor,
-    }
+    };
 }
 
 export default ProductDetailVM;

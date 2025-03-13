@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import { useEffect, useState, useCallback } from "react";
 import ProductAPI from "../api/ProductAPI";
 import ProductModel from "../models/ProductModel";
 
@@ -12,26 +12,34 @@ function ProductsVM() {
     useEffect(() => {
         document.title = "Shoes";
     }, []);
-    useEffect(() => {
+
+    const fetchData = useCallback(async (page) => {
         const controller = new AbortController();
-        const fetchData = async () => {
-            const response = await ProductAPI.getPageProducts(state.page, {signal: controller.signal})
+        try {
+            const response = await ProductAPI.getPageProducts(page, { signal: controller.signal });
             setState(prevState => ({
                 ...prevState,
                 totalPages: response?.totalPages ?? 0,
                 shoes: Array.isArray(response?.content) ? response?.content.map(ProductModel.fromJson) : []
             }));
+        } catch (error) {
+            console.error("Error fetching product data:", error);
         }
-        fetchData();
-    }, [state.page])
-    const handleChangePage = async (p) => {
-        setState(prevState => ({...prevState,
-            page: Number(p)}));
+    }, []);
+
+    useEffect(() => {
+        fetchData(state.page);
+    }, [state.page, fetchData]);
+
+    const handleChangePage = useCallback((p) => {
+        setState(prevState => ({ ...prevState, page: Number(p) }));
         window.scrollTo({ top: 0, behavior: "smooth" });
-    }
+    }, []);
+
     return {
         ...state,
         handleChangePage
     };
 }
+
 export default ProductsVM;

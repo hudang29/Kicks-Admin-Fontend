@@ -14,6 +14,7 @@ import StaffDetail from "../pages/StaffDetail";
 import StaffNew from "../pages/StaffNew";
 import Login from "../pages/Login";
 import Profile from "../pages/Profile";
+import OrderDetail from "../pages/OrderDetail";
 
 function RoutesApp() {
     return (
@@ -30,6 +31,7 @@ function RoutesApp() {
                     <Route path="newstaff" element={<StaffNew />} />
                     <Route path="staff-detail/:id" element={<StaffDetail />} />
                     <Route path="orderlist" element={<Orders />} />
+                    <Route path="order-detail/:orderId" element={<OrderDetail />} />
                     <Route path="other/" element={<SubLayout />} >
                         <Route path="category" element={<Categories />} />
                         <Route path="size" element={<Size />} />

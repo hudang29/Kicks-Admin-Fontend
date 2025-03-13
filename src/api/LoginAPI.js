@@ -1,33 +1,28 @@
+import { API_BASE_URL, axiosInstance } from "../config/config";
 
-import {API_BASE_URL, axiosInstance} from "../config/config";
-
-const CheckLogin_API = `${API_BASE_URL}/api/login`;
-const CheckLogout_API = `${API_BASE_URL}/api/logout`;
+const AuthEndpoints = {
+    LOGIN: `${API_BASE_URL}/api/login`,
+    LOGOUT: `${API_BASE_URL}/api/logout`
+};
 
 class LoginAPI {
     async login(account) {
-        try {
-            const response = await axiosInstance.post(CheckLogin_API, account, {
-                headers: {
-                    "Content-Type": "application/json",
-                }
-            });
-            return response.data;
-        } catch (e) {
-            console.error('Login failed', e);
-        }
+        return this.postData(AuthEndpoints.LOGIN, account, "Login failed");
     }
 
     async logout() {
+        return this.postData(AuthEndpoints.LOGOUT, null, "Logout failed");
+    }
+
+    async postData(url, data, errorMessage) {
         try {
-            const response = await axiosInstance.post(CheckLogout_API, null, {
-                headers: {
-                    "Content-Type": "application/json",
-                }
+            const response = await axiosInstance.post(url, data, {
+                headers: { "Content-Type": "application/json" }
             });
             return response.data;
-        } catch (e) {
-            console.error('Logout failed', e);
+        } catch (error) {
+            console.error(errorMessage, error.response?.data || error.message);
+            throw error;
         }
     }
 }

@@ -1,39 +1,62 @@
-
 import ShoesCategoryModel from "../models/ShoesCategoryModel";
 import GenderCategoryModel from "../models/GenderCategoryModel";
 import {API_BASE_URL, axiosInstance} from "../config/config";
 
-const ShoesCategory_API = `${API_BASE_URL}/staff/api/shoes-category/`;
-const ShoesCategoryByGenderCategoryId_API = `${API_BASE_URL}/staff/api/shoes-categories/`;
-const GenderCategory_API = `${API_BASE_URL}/staff/api/gender-category`;
+const CategoryEndpoints = {
+    SHOES_CATEGORY: `${API_BASE_URL}/staff/api/shoes-category/`,
+    SHOES_CATEGORY_BY_GENDER: `${API_BASE_URL}/staff/api/shoes-categories/`,
+    GENDER_CATEGORY: `${API_BASE_URL}/staff/api/gender-category`
+};
 
 class CategoryAPI {
     async getAllCategoryShoesByGenderId(id) {
-        const response = await axiosInstance.get(`${ShoesCategoryByGenderCategoryId_API}${id}`);
-        return response.data.map((response) => ShoesCategoryModel.fromJson(response));
+        return this.fetchData(
+            `${CategoryEndpoints.SHOES_CATEGORY_BY_GENDER}${id}`,
+            "Error fetching shoe categories by gender",
+            ShoesCategoryModel
+        );
     }
 
     async getAllGenderCategory() {
-        const response = await axiosInstance.get(`${GenderCategory_API}`);
-        return response.data.map((response) => GenderCategoryModel.fromJson(response));
+        return this.fetchData(
+            CategoryEndpoints.GENDER_CATEGORY,
+            "Error fetching gender categories",
+            GenderCategoryModel
+        );
     }
 
     async getShoesCategoryById(id) {
-        try {
-            const response = await axiosInstance.get(`${ShoesCategory_API}${id}`);
-            return ShoesCategoryModel.fromJson(response.data); // Chỉ cần một object, không cần `.map()`
-        } catch (error) {
-            console.error("Lỗi khi lấy danh mục giày:", error);
-            return null; // Tránh lỗi khi sử dụng dữ liệu
-        }
+        return this.fetchDataSingle(
+            `${CategoryEndpoints.SHOES_CATEGORY}${id}`,
+            "Error fetching shoe category",
+            ShoesCategoryModel
+        );
     }
 
     async getGenderCategoryById(id) {
+        return this.fetchDataSingle(
+            `${CategoryEndpoints.GENDER_CATEGORY}/${id}`,
+            "Error fetching gender category",
+            GenderCategoryModel
+        );
+    }
+
+    async fetchData(url, errorMessage, Model) {
         try {
-            const response = await axiosInstance.get(`${GenderCategory_API}/${id}`);
-            return GenderCategoryModel.fromJson(response.data) // Chỉ cần một object, không cần `.map()`
+            const response = await axiosInstance.get(url);
+            return response.data.map(item => Model.fromJson(item));
         } catch (error) {
-            console.error("Lỗi khi lấy danh mục giới tính:", error);
+            console.error(errorMessage, error);
+            return [];
+        }
+    }
+
+    async fetchDataSingle(url, errorMessage, Model) {
+        try {
+            const response = await axiosInstance.get(url);
+            return Model.fromJson(response.data);
+        } catch (error) {
+            console.error(errorMessage, error);
             return null;
         }
     }

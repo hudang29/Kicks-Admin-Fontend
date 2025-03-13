@@ -1,60 +1,76 @@
 import ProductModel from "../models/ProductModel";
 import {API_BASE_URL, axiosInstance} from "../config/config";
 
-const ShowProduct_API = `${API_BASE_URL}/staff/api/list-product`;
-const ShowPageProduct_API = `${API_BASE_URL}/staff/api/page-product`;
-const UpdateProduct_API = `${API_BASE_URL}/staff/api/product-update`;
-const CreateProduct_API = `${API_BASE_URL}/staff/api/product-create`;
+const ProductEndpoints = {
+    LIST: `${API_BASE_URL}/staff/api/list-product`,
+    PAGE: `${API_BASE_URL}/staff/api/page-product`,
+    UPDATE: `${API_BASE_URL}/staff/api/product-update`,
+    CREATE: `${API_BASE_URL}/staff/api/product-create`
+};
 
 class ProductAPI {
     async getAll() {
-        const response = await axiosInstance.get(ShowProduct_API);
-        return response.data.map((response) => ProductModel.fromJson(response));
+        return this.fetchData(ProductEndpoints.LIST, "Error fetching product list", ProductModel);
     }
+
     async getPageProducts(page) {
+        return this.fetchDataWithParams(ProductEndpoints.PAGE, {page}, "Error fetching paginated products");
+    }
+
+    async getProductById(id) {
+        return this.fetchDataSingle(`${ProductEndpoints.LIST}/${id}`, "Error fetching product by ID", ProductModel);
+    }
+
+    async updateProduct(product) {
+        return this.sendData(ProductEndpoints.UPDATE, product, "Error updating product", "PUT");
+    }
+
+    async createProduct(product) {
+        return this.sendData(ProductEndpoints.CREATE, product, "Error creating product", "POST");
+    }
+
+    async fetchData(url, errorMessage, Model) {
         try {
-            const response = await axiosInstance.get(ShowPageProduct_API,{
-                params: {page}
-            });
+            const response = await axiosInstance.get(url);
+            return response.data.map(item => Model.fromJson(item));
+        } catch (error) {
+            console.error(errorMessage, error);
+            return [];
+        }
+    }
+
+    async fetchDataWithParams(url, params, errorMessage) {
+        try {
+            const response = await axiosInstance.get(url, {params});
             return response.data;
         } catch (error) {
-            console.log(error);
+            console.error(errorMessage, error);
             return null;
         }
     }
 
-    async getProductById(id) {
-        const response = await axiosInstance.get(`${ShowProduct_API}/${id}`);
-        return ProductModel.fromJson(response.data);
-    }
-
-    async updateProduct(product) {
+    async fetchDataSingle(url, errorMessage, Model) {
         try {
-            const response = await axiosInstance.put(`${UpdateProduct_API}`, product, {
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            });
-            console.log("Phản hồi từ server:", response.data);
-            return response.data; // Trả về dữ liệu phản hồi từ API
+            const response = await axiosInstance.get(url);
+            return Model.fromJson(response.data);
         } catch (error) {
-            console.error("Lỗi khi cập nhật sản phẩm:", error);
-            throw error; // Ném lỗi để xử lý ở nơi gọi hàm
+            console.error(errorMessage, error);
+            return null;
         }
     }
 
-    async createProduct(product) {
+    async sendData(url, data, errorMessage, method) {
         try {
-            const response = await axiosInstance.post(`${CreateProduct_API}`, product, {
-                headers: {
-                    "Content-Type": "application/json"
-                }
+            const response = await axiosInstance({
+                method,
+                url,
+                data,
+                headers: {"Content-Type": "application/json"}
             });
-            console.log("Phản hồi từ server:", response.data);
-            return response.data; // Trả về dữ liệu phản hồi từ API
+            return response.data;
         } catch (error) {
-            console.error("Lỗi khi cập nhật sản phẩm:", error);
-            throw error; // Ném lỗi để xử lý ở nơi gọi hàm
+            console.error(errorMessage, error);
+            throw error;
         }
     }
 }

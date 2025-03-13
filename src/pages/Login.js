@@ -5,7 +5,7 @@ import {useEffect} from "react";
 
 function Login() {
     const navigate = useNavigate();
-    const {message, activeLogin, handleLogin} = LoginVM();
+    const {message, handleLogin} = LoginVM();
     useEffect(() => {
         document.title = "Login";
     }, []);
@@ -43,7 +43,6 @@ function Login() {
                                                placeholder="Password"/>
                                     </div>
                                     <button type="button" className="btn btn-dark form-control d-flex mb-3"
-                                            disabled={!activeLogin}
                                             onClick={() => handleLogin(navigate)}>
                                         <span className="me-auto">LOGIN</span>
                                         <span>→</span>

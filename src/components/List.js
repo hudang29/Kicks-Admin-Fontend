@@ -35,7 +35,7 @@ function List(props) {
                                         </span>
                                         </td>
                                         <td>{formatCurrency(information.totalAmount)}</td>
-                                        <td><Link to="#" className="btn btn-danger">View</Link></td>
+                                        <td><Link to={`/order-detail/${information.id}`} className="btn btn-danger">View</Link></td>
                                     </>
                                 )}
                                 {information.role && (
@@ -53,13 +53,25 @@ function List(props) {
                                 )}
                                 {information.totalStock && (
                                     <>
-                                        <td>{information.productName}</td>
-                                        <td>{information.productColor}</td>
-                                        <td>{information.productSize}</td>
-                                        <td>{information.totalStock}</td>
-                                        <td><Link to={`/product-detail/${information.productDetailId}`}
+                                        <td>{information?.productName}</td>
+                                        <td>{information?.productColor}</td>
+                                        <td>{information?.productSize}</td>
+                                        <td>{information?.totalStock}</td>
+                                        <td><Link to={`/product-detail/${information?.productDetailId}`}
                                                   className="btn btn-danger">View</Link>
                                         </td>
+                                    </>
+                                )}
+                                {information.quantity && (
+                                    <>
+                                        <td>
+                                            <img src={information.productImage} className="img-table"
+                                                 alt="..."/> {information?.productName}
+                                        </td>
+                                        <td>{information?.color}</td>
+                                        <td>{information?.size}</td>
+                                        <td>{information?.quantity}</td>
+                                        <td>{formatCurrency(Number(information?.quantity) * Number(information?.price))}</td>
                                     </>
                                 )}
                             </tr>
