@@ -225,8 +225,7 @@ function ProductNew() {
                                     disabled={!status.color || !status.shoes}>
                                 <span className="fw-semibold">
                                     <i className={`bi bi-check-circle-fill me-2 fs-4 ${status.img ? "text-success" : ""}`}></i>
-                                    Image {status.color ? "true" : "false"}  {status.shoes ? "true" : "false"}
-                                    {(!status.color || !status.shoes) ? "true" : "false"}
+                                    Image
                                 </span>
                             </button>
                         </h2>
