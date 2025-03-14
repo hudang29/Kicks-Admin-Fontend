@@ -1,16 +1,14 @@
 
-function CardData({information, titleData}) {
+function CardData({information, titleData, icon}) {
     return (
-        <div className="card">
+        <div className="card h-100 ">
             <div className="card-header bg-body mb-2 border border-0">
                 <span className="fw-semibold">{titleData}</span>
             </div>
             <div className="hstack mb-2 px-3">
                 <div>
                     <span className="">
-                        <i className="bi bi-backpack-fill p-2 px-3 rounded-1 me-3"
-                           style={{backgroundColor: "#4A69E2", color: "#FAFAFA;"}}></i>
-                        <span className="h5">{information}</span>
+                        {icon} <span className="h5 ms-2">{information}</span>
                     </span>
                 </div>
                 <div className="ms-auto visually-hidden">

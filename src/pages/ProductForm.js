@@ -19,10 +19,10 @@ function ProductForm() {
 
     return (
         <>
-            <div className="my-3">
-                <p className="fw-semibold fs-2">Shoes Form</p>
-                <div className="hstack">
-                    <div className="p-1">
+            <div className="my-2">
+                <p className="fw-semibold fs-2 mb-1">Shoes Form</p>
+                <div className="d-flex align-items-center mt-0">
+                    <div className="">
                         <nav style={{"--bs-breadcrumb-divider": "'>'"}} aria-label="breadcrumb">
                             <ol className="breadcrumb">
                                 <li className="breadcrumb-item"><Link to="#" className="nav-link">Home</Link></li>
@@ -39,18 +39,17 @@ function ProductForm() {
                             </ol>
                         </nav>
                     </div>
-
-                    <div className="ms-auto">select date</div>
                 </div>
+                <hr/>
             </div>
 
-            <div className="card mb-3">
-                <div className="card-body text-center">
-                    <h5># {detailId}</h5>
-                </div>
-            </div>
 
-            <div className="card mb-3 p-3 rounded rounded-0">
+            <div className="card mb-3 p-3 rounded rounded-0 w-75">
+                <div className="card mb-3">
+                    <div className="card-body text-center">
+                        <h5># {detailId}</h5>
+                    </div>
+                </div>
                 <div className="row g-3">
                     <div className="col-md-8">
                         <form className="row g-3">
@@ -88,7 +87,8 @@ function ProductForm() {
                                         onChange={(e) => setShoes(
                                             (prevShoes) => ({
                                                 ...prevShoes,
-                                                supplierID: e.target.value}))}>
+                                                supplierID: e.target.value
+                                            }))}>
                                     <option>Choose Supplier</option>
                                     {
                                         supplier.length > 0 ? (
@@ -133,7 +133,8 @@ function ProductForm() {
                                        onChange={(e) => setShoes(
                                            (prevShoes) => ({
                                                ...prevShoes,
-                                               brand: e.target.value}))}/>
+                                               brand: e.target.value
+                                           }))}/>
                             </div>
 
                             <div className="col-md-6">
@@ -146,7 +147,8 @@ function ProductForm() {
                                         onChange={(e) => setShoes(
                                             (prevShoes) => ({
                                                 ...prevShoes,
-                                                shoesCategoryID: e.target.value}))}>
+                                                shoesCategoryID: e.target.value
+                                            }))}>
                                     <option>Choose Type</option>
                                     {
                                         shoesCategory.length > 0 ? (
@@ -167,7 +169,8 @@ function ProductForm() {
                                        onChange={(e) => setShoesDetail(
                                            (prevShoes) => ({
                                                ...prevShoes,
-                                               color: e.target.value}))}/>
+                                               color: e.target.value
+                                           }))}/>
                             </div>
 
                             <div className="col-md-6">
@@ -177,7 +180,8 @@ function ProductForm() {
                                        onChange={(e) => setShoes(
                                            (prevShoes) => ({
                                                ...prevShoes,
-                                               price: e.target.value}))}/>
+                                               price: e.target.value
+                                           }))}/>
                             </div>
 
                             <div className="col-12">
@@ -189,7 +193,8 @@ function ProductForm() {
                                         onChange={(e) => setShoesDetail(
                                             (prevShoes) => ({
                                                 ...prevShoes,
-                                                discountId: e.target.value}))}>
+                                                discountId: e.target.value
+                                            }))}>
                                     <option value="errors">Choose Discount</option>
                                     {
                                         discount.length > 0 ? (

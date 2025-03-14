@@ -1,4 +1,4 @@
-import { API_BASE_URL, axiosInstance } from "../config/config";
+import {API_BASE_URL, axiosInstance} from "../config/config";
 import OrderDetailModel from "../models/OrderDetailModel";
 
 const OrderDetailEndpoints = {
@@ -7,12 +7,13 @@ const OrderDetailEndpoints = {
 
 class OrderDetailAPI {
     async getOrderDetails(id) {
-        return this.fetchDataWithParams(OrderDetailEndpoints.ORDER_DETAILS, { id }, "Error fetching order details", OrderDetailModel);
+        return this.fetchData(`${OrderDetailEndpoints.ORDER_DETAILS}/${id}`,
+            "Error fetching order details", OrderDetailModel);
     }
 
-    async fetchDataWithParams(url, params, errorMessage, Model) {
+    async fetchData(url, errorMessage, Model) {
         try {
-            const response = await axiosInstance.get(url, { params });
+            const response = await axiosInstance.get(url);
             return response.data.map(item => Model.fromJson(item));
         } catch (error) {
             console.error(errorMessage, error);

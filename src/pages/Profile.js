@@ -40,10 +40,10 @@ function Profile() {
 
     return (
         <>
-            <div className="my-3">
-                <p className="fw-semibold fs-2">Welcome</p>
-                <div className="hstack">
-                    <div className="p-1">
+            <div className="my-2">
+                <p className="fw-semibold fs-2 mb-1">Welcome</p>
+                <div className="d-flex align-items-center mt-0">
+                    <div className="">
                         <nav style={{"--bs-breadcrumb-divider": "'>'"}} aria-label="breadcrumb">
                             <ol className="breadcrumb">
                                 <li className="breadcrumb-item"><a href="#" className="nav-link">Home</a></li>
@@ -51,12 +51,12 @@ function Profile() {
                             </ol>
                         </nav>
                     </div>
-
-                    <div className="ms-auto">select date</div>
                 </div>
+                <hr/>
             </div>
 
-            <div className="row g-3">
+
+            <div className="row g-3 w-75 mx-auto">
                 <div className="col-md-12">
                     <label htmlFor="name" className="form-label">Name</label>
                     <input type="text" className="form-control" id="name"

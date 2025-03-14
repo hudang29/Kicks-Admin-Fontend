@@ -36,21 +36,30 @@ function Dashboard() {
                     <div className="ms-auto">select date</div>
                 </div>
             </div>
-            <div className="row row-cols-md-3 g-3 mb-3">
+            <div className="row row-cols-md-4 g-3 mb-3">
                 <div className="col">
                     <CardData
-                        information = {formatCurrency(totalRevenue)}
-                        titleData="Revenue this month"/>
+                        information={formatCurrency(totalRevenue)}
+                        titleData="Revenue this month"
+                        icon={<i className="bi bi-wallet fs-4"></i>}/>
                 </div>
                 <div className="col">
                     <CardData
-                        information = {formatCurrency(totalOrders)}
-                        titleData="Total order amount"/>
+                        information={formatCurrency(totalOrders)}
+                        titleData="Total order amount"
+                        icon={<i className="bi bi-wallet fs-4"></i>}/>
                 </div>
                 <div className="col">
                     <CardData
-                        information = "???"
-                        titleData="???"/>
+                        information="0"
+                        titleData="Order ancelled"
+                        icon={<i className="bi bi-wallet fs-4"></i>}/>
+                </div>
+                <div className="col">
+                    <CardData
+                        information="0"
+                        titleData="Monthly shoe sales"
+                        icon={<i className="bi bi-receipt-cutoff fs-4"></i>}/>
                 </div>
             </div>
             <List items={TableLowStock}
@@ -63,7 +72,7 @@ function Dashboard() {
                                      min={0}
                                      value={stock}
                                      onChange={(e) => setStock(Number(e.target.value))}/>
-                              <button type="button" className="btn btn-secondary"
+                              <button type="button" className="btn btn-light border border-1"
                                       onClick={() => handleFindLowStock(Number(stock))}>Find
                               </button>
                               <div className="vr"></div>

@@ -33,7 +33,7 @@ function Staffs() {
             {/*-- component --*/}
             <List items={TableHeader}
                   information={staffList}
-                  CardName={CardName}/>
+                  CardName=""/>
             {/*<Pagination/>*/}
         </>
     );

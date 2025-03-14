@@ -16,9 +16,9 @@ class DashboardAPI {
             "Error fetching best sellers data");
     }
 
-    async findLowStock(threshold) {
+    async findLowStock(stock) {
         return this.fetchData(DashboardEndpoints.LOW_STOCK,
-            "Error fetching low stock data", {params: {threshold}});
+            "Error fetching low stock data", {params: {stock}});
     }
 
     async getLatestOrders() {

@@ -3,14 +3,15 @@ import {Link} from "react-router-dom";
 import {getStatusClass} from "../utils/Util";
 
 function List(props) {
+
     return (
-        <div className="card rounded p-2 mb-3">
+        <div className="card rounded rounded-0 p-2 mb-3">
             <div className="card-header bg-body">
-                <div>{props.CardName}</div>
+                <div>{props?.CardName}</div>
             </div>
             <div className="table-responsive">
                 <table className="table table-hover">
-                    <thead className="table-dark">
+                    <thead className="table-light ">
                     <tr>
                         {
                             props.items.map((item) => (
@@ -35,7 +36,8 @@ function List(props) {
                                         </span>
                                         </td>
                                         <td>{formatCurrency(information.totalAmount)}</td>
-                                        <td><Link to={`/order-detail/${information.id}`} className="btn btn-danger">View</Link></td>
+                                        <td><Link to={`/order-detail/${information.id}`}
+                                                  className="btn btn-danger">View</Link></td>
                                     </>
                                 )}
                                 {information.role && (
@@ -83,9 +85,7 @@ function List(props) {
                 </table>
             </div>
         </div>
-    )
-        ;
+    );
 }
-
 export default List;
 

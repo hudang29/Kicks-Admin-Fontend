@@ -5,12 +5,23 @@ const ProductDetailEndpoints = {
     LIST: `${API_BASE_URL}/staff/api/list-product-detail/`,
     DETAIL: `${API_BASE_URL}/staff/api/product-detail/`,
     UPDATE: `${API_BASE_URL}/staff/api/product-detail-update`,
-    CREATE: `${API_BASE_URL}/staff/api/product-detail-create`
+    CREATE: `${API_BASE_URL}/staff/api/product-detail-create`,
+    COLOR: `${API_BASE_URL}/staff/api/list-color/`,
 };
 
 class ProductDetailAPI {
     async getAll(productId) {
-        return this.fetchData(`${ProductDetailEndpoints.LIST}${productId}`, "Error fetching product details", ProductDetailModel);
+        return this.fetchData(`${ProductDetailEndpoints.LIST}${productId}`, "Error fetching details", ProductDetailModel);
+    }
+
+    async getColorProductId(productId) {
+        try {
+            const response = await axiosInstance.get(`${ProductDetailEndpoints.COLOR}${productId}`)
+            return response.data;
+        } catch (error) {
+            console.error("Error fetching color", error);
+            return [];
+        }
     }
 
     async getDetailByID(id) {

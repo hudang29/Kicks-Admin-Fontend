@@ -10,7 +10,7 @@ function MainLayout() {
                 {/*<!-- Slide bar -->*/}
                 <Sidebar/>
                 {/*<!-- body -->*/}
-                <div className="vstack" style={{width: "80vw"}}>
+                <div className="vstack" style={{maxWidth: "80vw"}}>
                     {/*<!-- menu -->*/}
                     <div className="position-sticky top-0 w-100 bg-white z-3">
                         <Menu/>
