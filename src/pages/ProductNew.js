@@ -6,9 +6,12 @@ function ProductNew() {
     //const navigate = useNavigate();
 
     const {
-        shoes, setShoes, status,
+        detailId, setDetailId,
+        shoes, setShoes, status, listDetail, image, setImage,
         supplier, shoesCategory, genderCategory, color, setColor, colorList,
-        handleCreateProduct, handleCreateDetail,
+        setPicture, galleryList, sizeSample, stockData, shoesSize,
+        handleCreateProduct, handleCreateDetail, handleUpload, handleChangeStockSample,
+        handleCreateSize,
     } = ProductNewVM();
 
     return (
@@ -231,18 +234,57 @@ function ProductNew() {
                         </h2>
                         <div id="shoeImg" className="accordion-collapse collapse">
                             <div className="accordion-body bg-body">
-                                <div className="hstack gap-3 w-75 mx-auto">
-                                    <input className="form-control" type="file" id="formFile"/>
-                                    <button type="button" className="btn btn-secondary">Upload</button>
-                                    <div className="vr"></div>
-                                    <button type="button" className="btn btn-outline-danger">Next</button>
+                                <div className="w-75 mx-auto">
+                                    <div className="hstack gap-3">
+                                        <select className="form-select w-auto" aria-label="Default select example"
+                                                value={image.productDetailID}
+                                                onChange={(e) => setImage(
+                                                    (prevState) => ({
+                                                        ...prevState,
+                                                        productDetailID: e.target.value,
+                                                    }))}>
+                                            <option value="Notfound">Choose color</option>
+                                            {
+                                                listDetail?.map((item) => (
+                                                    <option value={item.id}>{item?.color}</option>
+                                                ))
+                                            }
+                                        </select>
+                                        <input className="form-control" type="file" id="formFile"
+                                               onChange={(e) => setPicture(e.target.files[0])}
+                                               disabled={!image.productDetailID || image.productDetailID === "Notfound"}/>
+                                        <button type="button" className="btn btn-secondary"
+                                                disabled={!image.productDetailID || image.productDetailID === "Notfound"}
+                                                onClick={handleUpload}>Upload
+                                        </button>
+                                        <div className="vr"></div>
+                                        <button type="button" className="btn btn-outline-danger">Next</button>
+                                        <hr/>
+                                    </div>
+                                    <div className="my-3 row row-cols-5 g-1">
+                                        {
+                                            galleryList?.length > 0 ? (
+                                                galleryList?.map((g) => (
+                                                    <div className="col-md-3 col-lg-3 p-1"
+                                                         key={g.id}>
+                                                        <img src={g.image} className="img-fluid square-img"
+                                                             alt="..."/>
+                                                    </div>
+                                                ))
+                                            ) : (
+                                                <></>
+                                            )
+                                        }
+
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div className="accordion-item">
                         <h2 className="accordion-header">
-                            <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            <button className="accordion-button collapsed bg-body" type="button"
+                                    data-bs-toggle="collapse"
                                     data-bs-target="#shoeSize" aria-expanded="false"
                                     aria-controls="shoeSize"
                                     disabled={!status.color || !status.shoes}>
@@ -252,7 +294,68 @@ function ProductNew() {
                             </button>
                         </h2>
                         <div id="shoeSize" className="accordion-collapse collapse">
-                            <div className="accordion-body">
+                            <div className="accordion-body bg-body">
+                                <div className="w-75 mx-auto">
+                                    <select className="form-select w-auto mb-2" aria-label="Default select example"
+                                            value={detailId}
+                                            onChange={(e) => setDetailId(e.target.value)}>
+                                        <option value="Notfound">Choose color</option>
+                                        {
+                                            listDetail?.map((item) => (
+                                                <option value={item.id}>{item?.color}</option>
+                                            ))
+                                        }
+                                    </select>
+                                    <>
+                                        {
+                                            shoesSize?.map((item) => (
+                                                <div className="col-md-3" key={item?.id}>
+                                                    <div className="input-group mb-3">
+                                                                <span className="input-group-text"
+                                                                      ># {item.size}
+                                                                </span>
+                                                        <input type="number"
+                                                               className="form-control"
+                                                               aria-describedby="basic-addon1"
+                                                               defaultValue={item.stock} readOnly={true}/>
+                                                    </div>
+                                                </div>
+                                            ))
+                                        }
+                                    </>
+                                    {(detailId && detailId !== "Notfound") &&
+                                    shoesSize?.length > 0 ? (
+                                        <div className="row row-cols-4 g-2">
+                                            {sizeSample?.map((sample) => (
+                                                <div className="col-md-3">
+                                                    <div className="input-group mb-3">
+                                                                <span className="input-group-text"
+                                                                      key={sample.id}># {sample.size}
+                                                                </span>
+                                                        <input type="number"
+                                                               className="form-control"
+                                                               aria-describedby="basic-addon1"
+                                                               value={stockData[sample.id] || 0} // Giá trị riêng cho từng size
+                                                               min={0}
+                                                               onChange={
+                                                                   (e) =>
+                                                                       handleChangeStockSample(e, sample.id)
+                                                               }/>
+                                                    </div>
+                                                </div>
+                                            ))}
+
+                                            <div className="col-md-3">
+                                                <button className="btn btn-dark"
+                                                        type="button"
+                                                        onClick={handleCreateSize}>Add shoes size
+                                                </button>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <></>
+                                    )}
+                                </div>
 
                             </div>
                         </div>

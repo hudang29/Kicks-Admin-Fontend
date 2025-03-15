@@ -13,7 +13,7 @@ function Login() {
         <div className="bg-body-secondary">
             {message && (
                 <div
-                    className={`alert ${message.includes("Successful!") ? "alert-success" : "alert-danger alert-dismissible"} 
+                    className={`alert ${message.includes("successful!") ? "alert-success" : "alert-danger"} 
                     position-absolute top-0 start-50 translate-middle-x`}
                     style={{zIndex: 2909, minWidth: "300px", marginTop: "20px"}}
                 >

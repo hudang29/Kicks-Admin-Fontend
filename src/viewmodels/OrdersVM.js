@@ -36,7 +36,8 @@ function OrdersVM() {
     const fetchStatuses = useCallback(async () => {
         try {
             const response = await OrderAPI.getOrderStatuses();
-            setStatuses(response.data);
+            console.log(response);
+            setStatuses(response);
         } catch (error) {
             console.error("Error fetching order statuses:", error);
         }
