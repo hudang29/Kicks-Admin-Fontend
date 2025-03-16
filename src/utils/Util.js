@@ -1,7 +1,4 @@
 import axios from "axios";
-
-
-
 export const getStatusClass = (status) => {
     switch (status) {
         case "PENDING":
@@ -19,4 +16,10 @@ export const getStatusClass = (status) => {
         default:
             return "btn-secondary";
     }
+};
+
+export const stopLoadingWithDelay = (setLoading, delay = 400) => {
+    setTimeout(() => {
+        setLoading(false);
+    }, delay);
 };

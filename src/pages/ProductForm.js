@@ -1,10 +1,12 @@
 import {Link} from "react-router-dom";
 import ProductFormVM from "../viewmodels/ProductFormVM";
 import {formatCurrency} from "../utils/Format";
+import LoadingPage from "../components/LoadingPage";
 
 function ProductForm() {
 
     const {
+        loading,
         detailId, shoes, setShoes, shoesDetail, setShoesDetail,
         supplier, genderCategory, shoesCategory, discount,
         size,
@@ -19,6 +21,8 @@ function ProductForm() {
 
     return (
         <>
+            <LoadingPage
+            props={loading}/>
             <div className="my-2">
                 <p className="fw-semibold fs-2 mb-1">Shoes Form</p>
                 <div className="d-flex align-items-center mt-0">

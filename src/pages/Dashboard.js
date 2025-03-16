@@ -5,6 +5,7 @@ import {useEffect} from "react";
 import DashboardVM from "../viewmodels/DashboardVM";
 import {formatCurrency} from "../utils/Format";
 import CardData from "../components/CardData";
+import LoadingPage from "../components/LoadingPage";
 
 const TableHeader = ["No.", "Product", "Date", "Payment Method", "Customer", "Status", "Amount"];
 const TableLowStock = ["No.", "Product", "Color", "Size", "Stock", "Action"];
@@ -15,19 +16,24 @@ function Dashboard() {
         document.title = "Dashboard";
     }, []);
     const {
+        loading,
         handleFindLowStock,
         lowStock, stock, setStock,
         totalRevenue, totalOrders, latestOrders
     } = DashboardVM();
     return (
         <>
+            <LoadingPage
+                props={loading}
+            />
             <div className="my-3">
                 <p className="fw-semibold fs-2">Dashboard</p>
                 <div className="hstack">
                     <div className="p-1">
                         <nav style={{"--bs-breadcrumb-divider": "'>'"}} aria-label="breadcrumb">
                             <ol className="breadcrumb">
-                                <li className="breadcrumb-item"><a href="#" className="nav-link">Home</a></li>
+                                <li className="breadcrumb-item"><a href="#" className="nav-link">Home</a>
+                                </li>
                                 <li className="breadcrumb-item active" aria-current="page">Dashboard</li>
                             </ol>
                         </nav>

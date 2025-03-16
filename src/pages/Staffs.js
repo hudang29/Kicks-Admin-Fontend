@@ -1,17 +1,18 @@
 import List from "../components/List";
-import Pagination from "../components/Pagination";
 import StaffsVM from "../viewmodels/StaffsVM";
 import {Link} from "react-router-dom";
+import LoadingPage from "../components/LoadingPage";
 
 const TableHeader = ["No.", "Name", "Phone", "Email", "Role", "Status", "Create at", "Action"];
-const CardName = "Staffs"
 
 function Staffs() {
 
-    const {staffList} = StaffsVM();
+    const {staffList, loading} = StaffsVM();
 
     return (
         <>
+            <LoadingPage
+                props={loading}/>
             <div className="my-3">
                 <p className="fw-semibold fs-2">Staff</p>
                 <div className="hstack">
@@ -30,11 +31,9 @@ function Staffs() {
                     </div>
                 </div>
             </div>
-            {/*-- component --*/}
             <List items={TableHeader}
                   information={staffList}
                   CardName=""/>
-            {/*<Pagination/>*/}
         </>
     );
 }

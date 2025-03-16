@@ -11,10 +11,13 @@ import GalleryAPI from "../api/GalleryAPI";
 import UploadImgAPI from "../api/UploadImgAPI";
 import ProductDetailModel from "../models/ProductDetailModel";
 import ProductModel from "../models/ProductModel";
+import {stopLoadingWithDelay} from "../utils/Util";
 
 function ProductFormVM() {
 
     const {detailId} = useParams();
+    const [loading, setLoading] = useState(false);
+
     const [initialData, setInitialData] = useState(false);
     // State
     const [shoesDetail, setShoesDetail] = useState(new ProductDetailModel(
@@ -37,6 +40,7 @@ function ProductFormVM() {
     const [file, setFile] = useState("");
 
     const fetchData = useCallback(async (detailId) => {
+        setLoading(true);
         try {
             const productDetailData = await ProductDetailAPI.getDetailByID(detailId);
             setShoesDetail(new ProductDetailModel(
@@ -78,6 +82,8 @@ function ProductFormVM() {
             setSize(formattedSize);
         } catch (error) {
             console.error("Error loading data:", error);
+        } finally {
+            stopLoadingWithDelay(setLoading)
         }
 
     }, [setShoesDetail, setShoes, setSupplier, setGenderCategory, setDiscount, setSize]);
@@ -90,6 +96,7 @@ function ProductFormVM() {
 
 
     const fetchGallery = useCallback(async (detailId) => {
+        setLoading(true);
         try {
             const data = await GalleryAPI.getProductDetailGallery(detailId);
             setGallery(data);
@@ -98,6 +105,8 @@ function ProductFormVM() {
             setGalleryList(galleries);
         } catch (error) {
             console.error("Error fetching detail image:", error);
+        } finally {
+            stopLoadingWithDelay(setLoading)
         }
     }, []);
 
@@ -258,6 +267,7 @@ function ProductFormVM() {
     };
 
     return {
+        loading,
         detailId,
         shoes, setShoes, shoesDetail, setShoesDetail,
         genderCategory, shoesCategory, supplier, discount,

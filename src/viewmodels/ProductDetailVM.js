@@ -3,9 +3,12 @@ import {useEffect, useState, useCallback} from "react";
 import ProductDetailAPI from "../api/ProductDetailAPI";
 import ProductAPI from "../api/ProductAPI";
 import CategoryAPI from "../api/CategoryAPI";
+import {stopLoadingWithDelay} from "../utils/Util";
 
 function ProductDetailVM() {
     const {id} = useParams();
+
+    const [loading, setLoading] = useState(false);
 
     const [productDetail, setProductDetail] = useState([]);
     const [product, setProduct] = useState({});
@@ -15,6 +18,7 @@ function ProductDetailVM() {
     const [reload, setReload] = useState(false);
 
     const fetchProductData = useCallback(async () => {
+        setLoading(true);
         if (!id) return;
         try {
             const productDetailData = await ProductDetailAPI.getAll(id);
@@ -24,19 +28,28 @@ function ProductDetailVM() {
             setProduct(productData);
         } catch (error) {
             console.error("Error fetching product data:", error);
+        } finally {
+            stopLoadingWithDelay(setLoading);
         }
     }, [id, reload]);
 
     const fetchCategoryData = useCallback(() => {
+        setLoading(true);
         if (product?.shoesCategoryID) {
             CategoryAPI.getShoesCategoryById(product.shoesCategoryID)
                 .then(setType)
-                .catch((error) => console.error("Error fetching shoe category:", error));
+                .catch((error) => console.error("Error fetching shoe category:", error))
+                .finally(() => {
+                    stopLoadingWithDelay(setLoading);
+                });
         }
         if (product?.genderCategoryID) {
             CategoryAPI.getGenderCategoryById(product.genderCategoryID)
                 .then(setGender)
-                .catch((error) => console.error("Error fetching gender category:", error));
+                .catch((error) => console.error("Error fetching gender category:", error))
+                .finally(() => {
+                    stopLoadingWithDelay(setLoading);
+                });
         }
     }, [product]);
 
@@ -69,6 +82,7 @@ function ProductDetailVM() {
     };
 
     return {
+        loading,
         productDetail,
         product,
         newColor,

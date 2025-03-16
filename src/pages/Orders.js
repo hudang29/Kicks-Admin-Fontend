@@ -3,21 +3,29 @@ import Pagination from "../components/Pagination";
 import OrdersVM from "../viewmodels/OrdersVM";
 import {getStatusClass} from "../utils/Util";
 import {Link} from "react-router-dom";
+import LoadingPage from "../components/LoadingPage";
 
 const TableHeader = ["No.", "Customer Name", "Order Date", "Payment Method", "Status", "Amount", "Action"];
 
 function Orders() {
-    const {orderList, statuses, handleFetchDataByStatus, showAllOrder} = OrdersVM();
+    const {
+        orderList, statuses, loading,
+        handleFetchDataByStatus, showAllOrder
+    } = OrdersVM();
 
     return (
         <>
+            <LoadingPage
+                props={loading}/>
+
             <div className="my-2">
                 <p className="fw-semibold fs-2 mb-1">Order List</p>
                 <div className="d-flex align-items-center mt-0">
                     <div className="">
                         <nav style={{"--bs-breadcrumb-divider": "'>'"}} aria-label="breadcrumb">
                             <ol className="breadcrumb">
-                                <li className="breadcrumb-item"><Link to="#" className="nav-link">Home</Link></li>
+                                <li className="breadcrumb-item"><Link to="#"
+                                                                      className="nav-link">Home</Link></li>
                                 <li className="breadcrumb-item active" aria-current="page">Order List</li>
                             </ol>
                         </nav>
@@ -53,7 +61,7 @@ function Orders() {
                     </>
                 }/>
 
-            <Pagination/>
+            {/*<Pagination/>*/}
         </>
     );
 }

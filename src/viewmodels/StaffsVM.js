@@ -2,11 +2,11 @@ import {useEffect, useState} from "react";
 import StaffAPI from "../api/StaffAPI";
 import {useParams} from "react-router-dom";
 import axios from "axios";
-import StaffModel from "../models/StaffModel";
+import {stopLoadingWithDelay} from "../utils/Util";
 
 function StaffsVM() {
     const {id} = useParams();
-    const employeeId = sessionStorage.getItem("employeeId");
+    const [loading, setLoading] = useState(true);
     const [roles, setRoles] = useState([]);
 
     const [staffList, setStaffList] = useState([]);
@@ -33,6 +33,8 @@ function StaffsVM() {
                 setStaffList(data);
             } catch (error) {
                 console.error("An error occurred while loading data:", error);
+            } finally {
+                stopLoadingWithDelay(setLoading)
             }
         };
         const fetchRoles = async () => {
@@ -49,6 +51,7 @@ function StaffsVM() {
 
     useEffect(() => {
         document.title = "Staff Detail";
+        setLoading(true);
         if (!id) return;
         const fetchStaff = async () => {
             try {
@@ -61,28 +64,12 @@ function StaffsVM() {
                 setPassword(response);
             } catch (error) {
                 console.error("An error occurred while loading data:", error);
+            } finally {
+                stopLoadingWithDelay(setLoading)
             }
         }
         fetchStaff();
     }, [id, staff.status]);
-
-    const [profile, setProfile] = useState(new StaffModel(
-        "", "", "", "", "", "", "", "", "", "", "",
-    ));
-
-    useEffect(() => {
-        const fetchProfile = async () => {
-            if (!employeeId) return;
-            const response = await StaffAPI.getById(employeeId);
-            console.log(response);
-            setProfile(new StaffModel(
-                response.id, response.name, response.email, response.phone,
-                response.address, response.role, response.status, response.createAt,
-                response.city, response.district, response.ward
-            ));
-        }
-        fetchProfile();
-    }, [employeeId])
 
     const [provinces, setProvinces] = useState([]);
     const [selectedProvince, setSelectedProvince] = useState("");
@@ -140,24 +127,25 @@ function StaffsVM() {
         const isConfirmed = window.confirm("Are you sure you want to update?");
         if (!isConfirmed) return;
         const updateStaff = {
-            id: id ?? employeeId,
-            name: staff.name ?? profile.name,
-            email: staff.email ?? profile.email,
-            phone: staff.phone ?? profile.phone,
-            role: staff.role ?? profile.role,
-            address: staff.address ?? profile.address,
-            city: staff.city ?? profile.city,
-            district: staff.district ?? profile.district,
-            ward: staff.ward ?? profile.ward,
+            id: id,
+            name: staff.name,
+            email: staff.email,
+            phone: staff.phone,
+            role: staff.role,
+            address: staff.address,
+            city: staff.city,
+            district: staff.district,
+            ward: staff.ward,
         };
-        await StaffAPI.update(updateStaff);
-        let updatedStaff;
-        if (id) {
-            updatedStaff = await StaffAPI.getById(id);
-        } else
-            updatedStaff = await StaffAPI.getById(employeeId);
-        setStaff(updatedStaff);
-        alert("Successful");
+        try {
+            await StaffAPI.update(updateStaff);
+            const response = await StaffAPI.getById(id);
+            setStaff(response);
+            alert("Successful");
+        } catch (error) {
+            console.error("An error occurred while updating data:", error);
+        }
+
     }
 
     const handleResetData = async () => {
@@ -169,6 +157,8 @@ function StaffsVM() {
             }));
         } catch (error) {
             console.error("An error occurred while reset data:", error);
+        } finally {
+
         }
     }
 
@@ -248,7 +238,7 @@ function StaffsVM() {
     }
 
     return {
-        id, roles, profile, setProfile,
+        id, roles, loading,
         staffList, staff, setStaff,
         password, setPassword,
         provinces, selectedProvince, setSelectedProvince,

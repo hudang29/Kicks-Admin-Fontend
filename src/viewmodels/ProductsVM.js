@@ -1,8 +1,12 @@
 import { useEffect, useState, useCallback } from "react";
 import ProductAPI from "../api/ProductAPI";
 import ProductModel from "../models/ProductModel";
+import {stopLoadingWithDelay} from "../utils/Util";
 
 function ProductsVM() {
+
+    const [loading, setLoading] = useState(false);
+
     const [state, setState] = useState({
         page: 0,
         totalPages: 0,
@@ -14,6 +18,7 @@ function ProductsVM() {
     }, []);
 
     const fetchData = useCallback(async (page) => {
+        setLoading(true);
         const controller = new AbortController();
         try {
             const response = await ProductAPI.getPageProducts(page, { signal: controller.signal });
@@ -24,6 +29,8 @@ function ProductsVM() {
             }));
         } catch (error) {
             console.error("Error fetching product data:", error);
+        } finally {
+            stopLoadingWithDelay(setLoading)
         }
     }, []);
 
@@ -37,7 +44,7 @@ function ProductsVM() {
     }, []);
 
     return {
-        ...state,
+        ...state, loading,
         handleChangePage
     };
 }

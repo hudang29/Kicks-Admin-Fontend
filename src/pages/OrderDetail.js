@@ -4,15 +4,18 @@ import OrderDetailVM from "../viewmodels/OrderDetailVM";
 import OrdersVM from "../viewmodels/OrdersVM";
 import {getStatusClass} from "../utils/Util";
 import {Link} from "react-router-dom";
+import LoadingPage from "../components/LoadingPage";
 
 const TableHeader = ["No.", "Shoes", "Color", "Size", "Quantity", "Total"];
 
 function OrderDetail() {
-    const {orderDetail} = OrderDetailVM();
+    const {orderDetail, loading,} = OrderDetailVM();
     const {order, statuses} = OrdersVM();
 
     return (
         <>
+            <LoadingPage
+            props={loading}/>
             <div className="my-2">
                 <p className="fw-semibold fs-2 mb-1">Order Detail</p>
                 <div className="d-flex align-items-center mt-0">

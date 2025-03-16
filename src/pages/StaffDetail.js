@@ -1,8 +1,10 @@
 import StaffsVM from "../viewmodels/StaffsVM";
 import {useEffect} from "react";
+import LoadingPage from "../components/LoadingPage";
 
 function StaffDetail() {
     const {
+        loading,
         roles, staff, setStaff, password,
         provinces, setSelectedProvince,
         districts, setSelectedDistrict,
@@ -36,7 +38,10 @@ function StaffDetail() {
     }, [districts, provinces, setSelectedDistrict, setSelectedProvince, setSelectedWard,
         staff.city, staff.district, staff.ward, wards]);
 
-    return (<>
+    return (
+        <>
+            <LoadingPage
+            props={loading}/>
             <div className="mb-3">
                 <p className="fw-semibold fs-2">Staff Detail</p>
                 <div className="hstack">

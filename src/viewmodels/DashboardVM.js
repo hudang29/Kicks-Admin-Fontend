@@ -1,7 +1,11 @@
 import {useCallback, useEffect, useState} from "react";
 import DashboardAPI from "../api/DashboardAPI";
+import {stopLoadingWithDelay} from "../utils/Util";
 
 function DashboardVM() {
+
+    const [loading, setLoading] = useState(false);
+
     const [bestSellers, setBestSellers] = useState([]);
     const [lowStock, setLowStock] = useState([]);
     const [latestOrders, setLatestOrders] = useState([]);
@@ -24,6 +28,7 @@ function DashboardVM() {
     // 🛠️ Tối ưu hóa việc gọi API
     useEffect(() => {
         const fetchDashboardData = async () => {
+            setLoading(true);
             try {
                 // Gọi API song song để tăng tốc
                 const [
@@ -49,6 +54,8 @@ function DashboardVM() {
 
             } catch (error) {
                 console.error("Lỗi khi tải dữ liệu bảng điều khiển:", error);
+            } finally {
+                stopLoadingWithDelay(setLoading)
             }
         };
 
@@ -56,6 +63,7 @@ function DashboardVM() {
     }, []);
 
     return {
+        loading,
         setStock, stock, totalRevenue, totalOrders, latestOrders,
         bestSellers, lowStock, handleFindLowStock,
     }

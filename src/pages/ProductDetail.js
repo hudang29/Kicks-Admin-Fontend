@@ -1,12 +1,14 @@
 import CardDetail from "../components/CardDetail";
 import ProductDetailVM from "../viewmodels/ProductDetailVM";
 import {Link, useSearchParams} from "react-router-dom";
+import LoadingPage from "../components/LoadingPage";
 
 function ProductDetail() {
     const [searchParams] = useSearchParams();
     const page = searchParams.get("page") || 0;
 
     const {
+        loading,
         productDetail, product,
         newColor, setNewColor, gender, type,
         handleAddColor,
@@ -14,6 +16,8 @@ function ProductDetail() {
 
     return (
         <>
+            <LoadingPage
+            props={loading}/>
             <div className="my-3">
                 <p className="fw-semibold fs-2">Shoes Detail</p>
                 <div className="hstack">

@@ -2,12 +2,15 @@ import {useCallback, useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import OrderDetailModel from "../models/OrderDetailModel";
 import OrderDetailAPI from "../api/OrderDetailAPI";
+import {stopLoadingWithDelay} from "../utils/Util";
 
 function OrderDetailVM() {
+    const [loading, setLoading] = useState(false);
     const {orderId} = useParams();
     const [orderDetail, setOrderDetail] = useState([]);
 
     const fetchOrderDetail = useCallback(async () => {
+        setLoading(true);
         try {
             const response = await OrderDetailAPI.getOrderDetails(orderId);
             const orderDetails = response.map(
@@ -28,6 +31,8 @@ function OrderDetailVM() {
             setOrderDetail(orderDetails);
         } catch (e) {
             console.error("Error fetching order details:", e);
+        } finally {
+            stopLoadingWithDelay(setLoading);
         }
     }, [orderId]);
 
@@ -35,7 +40,9 @@ function OrderDetailVM() {
         fetchOrderDetail();
     }, [fetchOrderDetail]);
 
-    return {orderDetail};
+    return {
+        loading, orderDetail
+    };
 }
 
 export default OrderDetailVM;

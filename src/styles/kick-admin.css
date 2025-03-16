@@ -108,5 +108,17 @@ body {
     padding: 2px;
     aspect-ratio: 1 / 1;
 }
+.loading-container {
+    display: flex;
+    justify-content: center;  /* Căn giữa theo chiều ngang */
+    align-items: center;      /* Căn giữa theo chiều dọc */
+    height: 100vh;            /* Chiều cao toàn màn hình */
+    width: 100vw;             /* Chiều rộng toàn màn hình */
+    position: fixed;          /* Giữ cố định trên màn hình */
+    top: 0;
+    left: 0;
+    background: rgba(255, 255, 255, 0.8); /* Làm mờ nền */
+    z-index: 9999;            /* Đảm bảo hiển thị trên cùng */
+}
 
 

@@ -2,21 +2,27 @@ import Product from "../components/Product";
 import {Link} from "react-router-dom";
 import ProductsVM from "../viewmodels/ProductsVM";
 import {useEffect} from "react";
+import LoadingPage from "../components/LoadingPage";
 
 function Products() {
-    const {shoes, page, totalPages, handleChangePage} = ProductsVM();
-    useEffect(() => {
-
-    }, [])
+    const {
+        loading,
+        shoes, page, totalPages,
+        handleChangePage
+    } = ProductsVM();
     return (
         <>
+            <LoadingPage
+                props={loading}
+            />
             <div className="my-3">
                 <p className="fw-semibold fs-2">All Shoes</p>
                 <div className="hstack">
                     <div className="">
                         <nav style={{"--bs-breadcrumb-divider": "'>'"}} aria-label="breadcrumb">
                             <ol className="breadcrumb">
-                                <li className="breadcrumb-item"><Link to="#" className="nav-link">Home</Link></li>
+                                <li className="breadcrumb-item"><Link to="#"
+                                                                      className="nav-link">Home</Link></li>
                                 <li className="breadcrumb-item active" aria-current="page">All Shoes Page
                                     #{page + 1}</li>
                             </ol>
@@ -24,7 +30,8 @@ function Products() {
                     </div>
 
                     <div className="ms-auto">
-                        <Link to="/newproduct" className="nav-link rounded rounded-2 px-5 py-2 btn-kicks-dark">
+                        <Link to="/newproduct"
+                              className="nav-link rounded rounded-2 px-5 py-2 btn-kicks-dark">
                             ADD NEW SHOES
                         </Link>
                     </div>
