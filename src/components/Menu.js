@@ -4,7 +4,7 @@ import StaffsVM from "../viewmodels/StaffsVM";
 
 function Menu() {
     const {handleLogout} = LoginVM();
-    const {staff} = StaffsVM();
+    //const {staff} = StaffsVM();
     return (
         <div className="pe-5 d-flex align-items-center justify-content-end"
              style={{height: "10vh"}}>
@@ -17,7 +17,7 @@ function Menu() {
                     </div>
                 </div>
                 <div className="border border-dark border-1 rounded">
-                    <input className="form-control me-auto" type="text" value={staff.role} readOnly={true}/>
+                    <input className="form-control me-auto" type="text" readOnly={true}/>
                 </div>
                 <Link to="/login" onClick={handleLogout} className="btn btn-light nav-link border border-1 border-dark"><i
                     className="bi bi-box-arrow-in-right p-2 fs-4"></i></Link>

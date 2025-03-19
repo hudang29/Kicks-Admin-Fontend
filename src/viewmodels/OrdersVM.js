@@ -6,6 +6,7 @@ import {stopLoadingWithDelay} from "../utils/Util";
 
 function OrdersVM() {
     const {orderId} = useParams();
+    const employeeId = sessionStorage.getItem("employeeId");
     const [loading, setLoading] = useState(false);
 
 
@@ -89,7 +90,7 @@ function OrdersVM() {
 
     // Lọc đơn hàng theo trạng thái
     const handleFetchDataByStatus = (status) => {
-            setOrderStatus(status);
+        setOrderStatus(status);
     };
 
     // Lấy tất cả đơn hàng
@@ -105,8 +106,37 @@ function OrdersVM() {
         }
     };
 
-    return {orderList, order, statuses, loading,
-        handleFetchDataByStatus, showAllOrder};
+    const handleChangeStatus = async (event) => {
+        const value = event.target.value;
+
+        const confirm = window.confirm(`Are you sure to change to ${value}`);
+        if (!confirm) return;
+        if (!employeeId) return;
+
+        const changeStatus = {
+            id: order.id,
+            employeeId: employeeId,
+            orderStatus: value,
+            totalAmount: order.totalAmount,
+        }
+        try {
+            const response = await OrderAPI.updateStatus(changeStatus);
+            setOrder(prevState => ({
+                ...prevState,
+                orderStatus: response.orderStatus
+            }));
+            alert("Successfully updated order");
+        } catch (error) {
+            console.error("Error updating status:", error);
+            alert("Failed to update status");
+        }
+    }
+
+    return {
+        employeeId,
+        orderList, order, statuses, loading, handleChangeStatus,
+        handleFetchDataByStatus, showAllOrder
+    };
 }
 
 export default OrdersVM;

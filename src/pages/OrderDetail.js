@@ -10,12 +10,12 @@ const TableHeader = ["No.", "Shoes", "Color", "Size", "Quantity", "Total"];
 
 function OrderDetail() {
     const {orderDetail, loading,} = OrderDetailVM();
-    const {order, statuses} = OrdersVM();
+    const {employeeId, order, statuses, handleChangeStatus} = OrdersVM();
 
     return (
         <>
             <LoadingPage
-            props={loading}/>
+                props={loading}/>
             <div className="my-2">
                 <p className="fw-semibold fs-2 mb-1">Order Detail</p>
                 <div className="d-flex align-items-center mt-0">
@@ -23,7 +23,9 @@ function OrderDetail() {
                         <nav style={{"--bs-breadcrumb-divider": "'>'"}} aria-label="breadcrumb">
                             <ol className="breadcrumb">
                                 <li className="breadcrumb-item"><Link to="#" className="nav-link">Home</Link></li>
-                                <li className="breadcrumb-item"><Link to="#" className="nav-link d-inline-block">Orders</Link></li>
+                                <li className="breadcrumb-item"><Link to="#"
+                                                                      className="nav-link d-inline-block">Orders</Link>
+                                </li>
                                 <li className="breadcrumb-item active" aria-current="page">Order Detail</li>
                             </ol>
                         </nav>
@@ -41,7 +43,11 @@ function OrderDetail() {
                                 {order?.orderStatus}
                             </span>
 
-                            <select className="form-select w-auto ms-auto" value={order?.orderStatus}>
+                            <select className="form-select w-auto ms-auto" value={order?.orderStatus}
+                                    onChange={(e) => {
+                                        handleChangeStatus(e)
+                                    }}
+                            disabled={!employeeId}>
                                 {statuses?.length > 0 &&
                                     statuses.map((item) => (
                                         <option key={item} value={item}>{item}</option>

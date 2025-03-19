@@ -3,7 +3,7 @@ class GalleryModel {
         this.id = id;
         this.image = image;
         this.productDetailID = productDetailID;
-        this.endDate = isDefault;
+        this.isDefault = isDefault;
     }
     static fromJson(json) {
         return new GalleryModel(

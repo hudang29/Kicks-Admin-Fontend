@@ -3,11 +3,15 @@ import {useParams} from "react-router-dom";
 import OrderDetailModel from "../models/OrderDetailModel";
 import OrderDetailAPI from "../api/OrderDetailAPI";
 import {stopLoadingWithDelay} from "../utils/Util";
+import OrderModel from "../models/OrderModel";
 
 function OrderDetailVM() {
     const [loading, setLoading] = useState(false);
     const {orderId} = useParams();
     const [orderDetail, setOrderDetail] = useState([]);
+    const [orders, setOrders] = useState(new OrderModel(
+        "","","", "","","","","","",
+    ));
 
     const fetchOrderDetail = useCallback(async () => {
         setLoading(true);
@@ -39,6 +43,8 @@ function OrderDetailVM() {
     useEffect(() => {
         fetchOrderDetail();
     }, [fetchOrderDetail]);
+
+
 
     return {
         loading, orderDetail

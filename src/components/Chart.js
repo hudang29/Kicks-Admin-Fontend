@@ -45,11 +45,11 @@ function Chart() {
 
     // Dữ liệu biểu đồ theo năm
     const chartDataMonthly = {
-        labels: salesData?.map((data) => `Year ${data.period}`),
+        labels: salesData ? (salesData?.map((data) => `Year ${data.period}`)) : "",
         datasets: [
             {
                 label: "Revenue (VND)",
-                data: salesData.map((data) => data.totalRevenue),
+                data: salesData ? (salesData?.map((data) => data.totalRevenue) ) : "",
                 backgroundColor: "rgba(75, 192, 192, 0.6)",
                 borderColor: "rgba(75, 192, 192, 1)",
                 borderWidth: 1,
@@ -59,11 +59,11 @@ function Chart() {
 
     // Dữ liệu biểu đồ theo Tháng
     const chartDataYearly = {
-        labels: salesDataYearly?.map((data) => `Month ${data.period}`),
+        labels: salesDataYearly ? (salesDataYearly.map((data) => `Month ${data.period}`)) : "",
         datasets: [
             {
                 label: "Revenue (VND)",
-                data: salesDataYearly.map((data) => data.totalRevenue),
+                data: salesDataYearly ? (salesDataYearly.map((data) => data.totalRevenue)) : "",
                 backgroundColor: "rgba(255, 99, 132, 0.6)",
                 borderColor: "rgba(255, 99, 132, 1)",
                 borderWidth: 1,
