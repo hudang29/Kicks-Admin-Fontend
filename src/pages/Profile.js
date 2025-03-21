@@ -1,5 +1,5 @@
 import StaffsVM from "../viewmodels/StaffsVM";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import ProfileVM from "../viewmodels/ProfileVM";
 import {Link} from "react-router-dom";
 import LoadingPage from "../components/LoadingPage";
@@ -17,6 +17,12 @@ function Profile() {
         handleUpdate, handleChangePassword, handleChange, handleConfirm,
         isDisabled,
     } = ProfileVM();
+
+    const [showPassword, setShowPassword] = useState({
+        old: false,
+        newPass: false,
+        confirm: false
+    });
 
     useEffect(() => {
         document.title = "Home";
@@ -50,7 +56,7 @@ function Profile() {
     return (
         <>
             <LoadingPage
-            props={loading}/>
+                props={loading}/>
             <div className="my-2">
                 <p className="fw-semibold fs-2 mb-1">Welcome</p>
                 <div className="d-flex align-items-center mt-0">
@@ -203,61 +209,77 @@ function Profile() {
                         <div className="accordion-body bg-body">
                             <div className="w-75 mx-auto">
                                 <div className="mb-3 row">
-                                    <label htmlFor="oldPassword" className="col-sm-2 col-form-label">Old
+                                    <label htmlFor="oldPassword" className="col-sm-4 col-form-label">Old
                                         Password</label>
-                                    <div className="col-sm-10">
-                                        <input type="password" className="form-control" id="oldPassword"
-                                               value={password.oldPassword}
-                                               onChange={(e) => setPassword(
-                                                   prevState => ({
-                                                       ...prevState,
-                                                       oldPassword: e.target.value
-                                                   }))}/>
+                                    <div className="col-sm-8">
+                                        <div className="input-group flex-nowrap">
+                                            <input type={showPassword.old ? "text" : "password"}
+                                                   className="form-control"
+                                                   value={password.oldPassword}
+                                                   aria-label="Username" aria-describedby="addon-wrapping"
+                                                   onChange={(e) => setPassword(
+                                                       prevState => ({
+                                                           ...prevState,
+                                                           oldPassword: e.target.value
+                                                       }))}/>
+                                            <button className="input-group-text px-2" id="addon-wrapping"
+                                                    onClick={() => setShowPassword(prevState => ({
+                                                        ...prevState,
+                                                        old: !prevState.old,
+                                                    }))}>
+                                                {showPassword.old ? "👁️" : "🙈"}
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="mb-3 row">
-                                    <label htmlFor="newPassword" className="col-sm-2 col-form-label">New
+                                    <label htmlFor="newPassword" className="col-sm-4 col-form-label">New
                                         Password
                                     </label>
-                                    <div className="col-sm-10">
+                                    <div className="col-sm-8">
                                         <div className="input-group mb-3">
-                                            {/*    <span className="input-group-text" id="basic-addon1">*/}
-                                            {/*        <button type="button" className="btn btn-secondary" data-bs-container="body"*/}
-                                            {/*           data-bs-toggle="popover" data-bs-placement="left"*/}
-                                            {/*           data-bs-content={`Password must be at least 8 characters long!\n*/}
-                                            {/*      Password must contain at least one uppercase letter!\n*/}
-                                            {/*      Password must contain at least one number!\n*/}
-                                            {/*      Password must contain at least one special character!\n*/}
-                                            {/*      (!@#$%^&*()_+\\-=\\[\\]{};':"\\\\|,.<>\\/?)!*/}
-                                            {/*      `}>*/}
-                                            {/*    <i className="bi bi-info-circle"></i>*/}
-                                            {/*</button>*/}
-                                            {/*    </span>*/}
-                                            <input type="password" className="form-control" id="newPassword"
+                                            <input type={showPassword.newPass ? "text" : "password"}
+                                                   className="form-control" id="newPassword"
                                                    value={password.newPassword}
                                                    onChange={(e) => handleChange(e)}/>
                                             <span
-                                                className={`input-group-text ${!errorMessage.newPasswordMessage ? "" : "invisible"}`}>
+                                                className={`input-group-text ${!errorMessage.newPasswordMessage ? "" : "visually-hidden"}`}>
                                                 <i className={`bi bi-check-circle-fill 
                                                 ${!errorMessage.newPasswordMessage ? "text-success" : ""}`}></i>
                                             </span>
+                                            <button className="input-group-text px-2" id="addon-wrapping"
+                                                    onClick={() => setShowPassword(prevState => ({
+                                                        ...prevState,
+                                                        newPass: !prevState.newPass,
+                                                    }))}>
+                                                {showPassword.newPass ? "👁️" : "🙈"}
+                                            </button>
                                         </div>
                                         <p className="text-danger"><small>{errorMessage.newPasswordMessage}</small></p>
                                     </div>
 
                                 </div>
                                 <div className="mb-3 row">
-                                    <label htmlFor="confirmedPassword" className="col-sm-2 col-form-label">Confirmed New
-                                        Password</label>
-                                    <div className="col-sm-10">
+                                    <label htmlFor="confirmedPassword" className="col-sm-4 col-form-label">
+                                        Confirmed New Password</label>
+                                    <div className="col-sm-8">
                                         <div className="input-group mb-3">
-                                            <input type="password" className="form-control" id="newPassword"
+                                            <input type={showPassword.confirm ? "text" : "password"}
+                                                   className="form-control" id="newPassword"
                                                    value={confirmPassword}
                                                    onChange={(e) => handleConfirm(e)}/>
-                                            <span className="input-group-text">
+                                            <span
+                                                className={`input-group-text ${errorMessage.confirmPasswordMessage ? "" : "visually-hidden"}`}>
                                                 <i className={`bi bi-check-circle-fill 
-                                                ${errorMessage.confirmPasswordMessage ? "text-success" : "invisible"}`}></i>
+                                                ${errorMessage.confirmPasswordMessage ? "text-success" : "visually-hidden"}`}></i>
                                             </span>
+                                            <button className="input-group-text px-2" id="addon-wrapping"
+                                                    onClick={() => setShowPassword(prevState => ({
+                                                        ...prevState,
+                                                        confirm: !prevState.confirm,
+                                                    }))}>
+                                                {showPassword.confirm ? "👁️" : "🙈"}
+                                            </button>
                                         </div>
 
 

@@ -47,7 +47,7 @@ function OrderDetail() {
                                     onChange={(e) => {
                                         handleChangeStatus(e)
                                     }}
-                            disabled={!employeeId}>
+                            disabled={!employeeId || order?.orderStatus === `CANCELLED` || order?.orderStatus === `COMPLETED`}>
                                 {statuses?.length > 0 &&
                                     statuses.map((item) => (
                                         <option key={item} value={item}>{item}</option>

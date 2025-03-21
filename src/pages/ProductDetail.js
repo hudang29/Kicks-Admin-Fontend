@@ -9,14 +9,17 @@ function ProductDetail() {
     const page = searchParams.get("page") || 0;
 
     const {
-        loading, picture, size, discount,
-        productDetail, shoesColor, product, setProduct,
-        newColor, setNewColor, gender, type,
-        handleAddColor, handleColorChange, handleDiscountChange, handleStockChange,
+        loading, errorMessage, salePrice,
+        product, setProduct, productDetail,
+        gender, type, supplier, discount,
+        picture, size,
+        shoesColor,
+        newColor, setNewColor,
+        handleAddColor, handleColorChange, handleDiscountChange, handleStockChange, handlePriceChange,
+        handleFileChange, handleUpload, handleUpdateDetail, handleUpdateProduct, handleUpdateSize,
+        handleReset,
     } = ProductDetailVM();
 
-    console.log(size);
-    console.log(picture);
     return (
         <>
             <LoadingPage
@@ -47,149 +50,144 @@ function ProductDetail() {
 
             <div className="row mb-3">
                 <div className="col-md-6">
-                    <div className="card mb-3 h-100 rounded rounded-0">
-                        <div className="card-body">
-                            <form className="row g-3">
-                                <div className="col-12">
-                                    <label htmlFor="name" className="form-label">Product Name</label>
-                                    <input type="text" className="form-control" id="name"
-                                           value={product?.name}
-                                           onChange={(e) => setProduct(
-                                               (prevShoes) => ({
-                                                   ...prevShoes,
-                                                   name: e.target.value,
-                                               }))}/>
-                                </div>
+                    <div className="card mb-3 rounded rounded-0 p-3">
+                        <form className="row g-4">
+                            <div className="col-12">
+                                <label htmlFor="name" className="form-label">Product Name</label>
+                                <input type="text" className="form-control" id="name"
+                                       value={product?.name}
+                                       onChange={(e) => setProduct(
+                                           (prevShoes) => ({
+                                               ...prevShoes,
+                                               name: e.target.value,
+                                           }))}/>
+                            </div>
 
-                                <div className="col-12">
-                                    <label htmlFor="exampleFormControlTextarea1" className="form-label">
-                                        Description
-                                    </label>
-                                    <textarea className="form-control" id="exampleFormControlTextarea1" rows="7"
-                                              value={product?.description}
-                                              onChange={(e) => setProduct(
-                                                  (prevShoes) => ({
-                                                      ...prevShoes,
-                                                      description: e.target.value,
-                                                  }))}/>
-                                </div>
+                            <div className="col-12">
+                                <label htmlFor="exampleFormControlTextarea1" className="form-label">
+                                    Description
+                                </label>
+                                <textarea className="form-control" id="exampleFormControlTextarea1" rows="7"
+                                          value={product?.description}
+                                          onChange={(e) => setProduct(
+                                              (prevShoes) => ({
+                                                  ...prevShoes,
+                                                  description: e.target.value,
+                                              }))}/>
+                            </div>
 
-                                <div className="col-md-6">
-                                    <label htmlFor="supplier" className="form-label">Supplier</label>
-                                    <select className="form-select"
-                                            aria-label="Default select example"
-                                            id="supplier"
-                                            value={product?.supplierID}
-                                            onChange={(e) => setProduct(
-                                                (prevShoes) => ({
-                                                    ...prevShoes,
-                                                    supplierID: e.target.value
-                                                }))}>
-                                        <option>Choose Supplier</option>
-                                        {/*{*/}
-                                        {/*    supplier?.length > 0 ? (*/}
-                                        {/*        supplier?.map((item) => (*/}
-                                        {/*            <option key={item.id} value={item.id}>{item.name}</option>*/}
-                                        {/*        ))*/}
-                                        {/*    ) : (*/}
-                                        {/*        <option>Errors</option>*/}
-                                        {/*    )*/}
-                                        {/*}*/}
-                                    </select>
-                                </div>
+                            <div className="col-md-6">
+                                <label htmlFor="supplier" className="form-label">Supplier</label>
+                                <select className="form-select"
+                                        aria-label="Default select example"
+                                        id="supplier"
+                                        value={product?.supplierID}
+                                        onChange={(e) => setProduct(
+                                            (prevShoes) => ({
+                                                ...prevShoes,
+                                                supplierID: e.target.value
+                                            }))}>
+                                    <option>Choose Supplier</option>
+                                    {
+                                        supplier?.length > 0 ? (
+                                            supplier?.map((item) => (
+                                                <option key={item.id} value={item.id}>{item.name}</option>
+                                            ))
+                                        ) : (
+                                            <option>Errors</option>
+                                        )
+                                    }
+                                </select>
+                            </div>
 
-                                <div className="col-md-6">
-                                    <label htmlFor="gender" className="form-label">Gender</label>
-                                    <select className="form-select"
-                                            aria-label="Default select example"
-                                            id="gender"
-                                            value={product?.genderCategoryID}
-                                            onChange={(e) => setProduct(
-                                                (prevShoes) => ({
-                                                    ...prevShoes,
-                                                    genderCategoryID: e.target.value,
-                                                }))}>
-                                        <option value="errors">Choose Gender</option>
-                                        {/*{*/}
-                                        {/*    genderCategory.length > 0 ? (*/}
-                                        {/*        genderCategory.map((gender) => (*/}
-                                        {/*            <option key={gender.id} value={gender.id}>{gender.name}</option>*/}
-                                        {/*        ))*/}
-                                        {/*    ) : (*/}
-                                        {/*        <option>Errors</option>*/}
-                                        {/*    )*/}
-                                        {/*}*/}
-                                    </select>
-                                </div>
+                            <div className="col-md-6">
+                                <label htmlFor="gender" className="form-label">Gender</label>
+                                <select className="form-select"
+                                        aria-label="Default select example"
+                                        id="gender"
+                                        value={product?.genderCategoryID}
+                                        onChange={(e) => setProduct(
+                                            (prevShoes) => ({
+                                                ...prevShoes,
+                                                genderCategoryID: e.target.value,
+                                            }))}>
+                                    <option value="errors">Choose Gender</option>
+                                    {
+                                        gender?.length > 0 ? (
+                                            gender?.map((gender) => (
+                                                <option key={gender.id} value={gender.id}>{gender.name}</option>
+                                            ))
+                                        ) : (
+                                            <option>Errors</option>
+                                        )
+                                    }
+                                </select>
+                            </div>
 
-                                <div className="col-md-6">
-                                    <label htmlFor="brand" className="form-label">Brand</label>
-                                    <input type="text" className="form-control" id="brand"
-                                           value={product?.brand}
-                                           onChange={(e) => setProduct(
-                                               (prevShoes) => ({
-                                                   ...prevShoes,
-                                                   brand: e.target.value
-                                               }))}/>
-                                </div>
+                            <div className="col-md-6">
+                                <label htmlFor="brand" className="form-label">Brand</label>
+                                <input type="text" className="form-control" id="brand"
+                                       value={product?.brand}
+                                       onChange={(e) => setProduct(
+                                           (prevShoes) => ({
+                                               ...prevShoes,
+                                               brand: e.target.value
+                                           }))}/>
+                            </div>
 
-                                <div className="col-md-6">
-                                    <label htmlFor="shoeType" className="form-label">Shoe type</label>
-                                    <select className="form-select"
-                                            aria-label="Default select example"
-                                            id="shoeType"
-                                        // disabled={shoes.genderCategoryID === "errors"}
-                                            value={product?.shoesCategoryID}
-                                            onChange={(e) => setProduct(
-                                                (prevShoes) => ({
-                                                    ...prevShoes,
-                                                    shoesCategoryID: e.target.value
-                                                }))}>
-                                        <option>Choose Type</option>
-                                        {/*{*/}
-                                        {/*    shoesCategory.length > 0 ? (*/}
-                                        {/*        shoesCategory.map((shoe) => (*/}
-                                        {/*            <option key={shoe.id} value={shoe.id}>{shoe.name}</option>*/}
-                                        {/*        ))*/}
-                                        {/*    ) : (*/}
-                                        {/*        <option>Errors</option>*/}
-                                        {/*    )*/}
-                                        {/*}*/}
-                                    </select>
-                                </div>
+                            <div className="col-md-6">
+                                <label htmlFor="shoeType" className="form-label">Shoe type</label>
+                                <select className="form-select"
+                                        aria-label="Default select example"
+                                        id="shoeType"
+                                        disabled={product?.genderCategoryID === "errors"}
+                                        value={product?.shoesCategoryID}
+                                        onChange={(e) => setProduct(
+                                            (prevShoes) => ({
+                                                ...prevShoes,
+                                                shoesCategoryID: e.target.value
+                                            }))}>
+                                    <option>Choose Type</option>
+                                    {
+                                        type.length > 0 ? (
+                                            type.map((shoe) => (
+                                                <option key={shoe.id} value={shoe.id}>{shoe.name}</option>
+                                            ))
+                                        ) : (
+                                            <option>Errors</option>
+                                        )
+                                    }
+                                </select>
+                            </div>
 
-                                <div className="col-md-12">
-                                    <label htmlFor="price" className="form-label">Regular Price</label>
-                                    <input type="number" className="form-control" id="price"
-                                           value={product.price}
-                                           onChange={(e) => setProduct(
-                                               (prevShoes) => ({
-                                                   ...prevShoes,
-                                                   price: e.target.value
-                                               }))}/>
+                            <div className="col-md-12">
+                                <label htmlFor="price" className="form-label">Regular Price</label>
+                                <div className="input-group">
+                                    <input type="text" className="form-control"
+                                           value={product?.price}
+                                           onChange={(e) => handlePriceChange(e)}/>
+                                    <span className="input-group-text">VNĐ</span>
                                 </div>
+                                <span className={`mt-2 text-danger`}>
+                                    {errorMessage.price}</span>
+                            </div>
 
-                                {/*<div className="col-12">*/}
-                                {/*    <label htmlFor="price" className="form-label">Sale Price</label>*/}
-                                {/*    <input type="text" className="form-control" id="price" readOnly*/}
-                                {/*           value={formatCurrency(salePrice)}*/}
-                                {/*        // value={salePrice}*/}
-                                {/*    />*/}
-                                {/*</div>*/}
-
-                                <div className="col-12">
-                                    <div className="d-grid gap-2 d-md-flex justify-content-md-end">
-                                        <button className="btn btn-dark"
-                                                type="button">Update
-                                        </button>
-                                        <button className="btn btn-danger" type="button">Delete</button>
-                                        <button className="btn btn-light border border-dark"
-                                                type="button">Reset
-                                        </button>
-                                    </div>
+                            <div className="col-12">
+                                <div className="d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <button className="btn btn-dark"
+                                            type="button"
+                                            onClick={handleUpdateProduct}>Update
+                                    </button>
+                                    <button className="btn btn-danger" type="button"
+                                            disabled={true}>Delete
+                                    </button>
+                                    <button className="btn btn-light border border-dark"
+                                            type="button"
+                                            onClick={handleReset}>Reset
+                                    </button>
                                 </div>
-                            </form>
-                        </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
 
@@ -211,12 +209,21 @@ function ProductDetail() {
                                                         c.id === item.id ? c?.color : "")
                                                 }
                                             </p>
-
                                         </>
                                     }
                                     body={
                                         <>
                                             <div className="row row-cols-2 row-cols-lg-5 g-2 g-lg-3 mb-4">
+                                                <div className="input-group">
+                                                    <input type="file" className="form-control" id="inputGroupFile04"
+                                                           aria-describedby="inputGroupFileAddon04"
+                                                           aria-label="Upload"
+                                                           onChange={(e) => handleFileChange(e)}/>
+                                                    <button className="btn btn-kicks" type="button"
+                                                            id="inputGroupFileAddon04"
+                                                            onClick={() => handleUpload(item.id)}>Button
+                                                    </button>
+                                                </div>
                                                 {
                                                     picture?.find(
                                                         p => p?.detail === item.id)
@@ -244,9 +251,8 @@ function ProductDetail() {
                                                             aria-label="Default select example"
                                                             id="discount"
                                                             value={item.discountId}
-                                                            onChange={(e) => handleDiscountChange(
-                                                                item.id, e.target.value
-                                                            )}>
+                                                            onChange={(e) =>
+                                                                handleDiscountChange(item.id, e.target.value)}>
                                                         {
                                                             discount?.length > 0 ? (
                                                                 discount?.map((discount) => (
@@ -259,6 +265,16 @@ function ProductDetail() {
                                                         }
                                                     </select>
                                                 </div>
+                                                <div className="col-12">
+                                                    <label htmlFor="price" className="form-label">Sale Price</label>
+                                                    <input type="text" className="form-control" id="price" readOnly
+                                                           value={formatCurrency(
+                                                               product?.price - (product?.price * Number(discount?.find(d =>
+                                                                   d.id === item.discountId)?.discountRate) / 100) ? product?.price - (product?.price * Number(discount?.find(d =>
+                                                                   d.id === item.discountId)?.discountRate) / 100) : salePrice
+                                                           )}
+                                                    />
+                                                </div>
                                             </form>
                                             <div className="row row-cols-2 row-cols-lg-4 g-2 g-lg-3">
                                                 {
@@ -268,9 +284,8 @@ function ProductDetail() {
                                                                 <div className="col">
                                                                     <div className="input-group mb-3 w-auto"
                                                                          key={size.id}>
-                                                                <span className="input-group-text"
-                                                                ># {size.size}
-                                                                </span>
+                                                                        <span className="input-group-text"># {size.size}
+                                                                        </span>
                                                                         <input type="number"
                                                                                className="form-control"
                                                                                aria-describedby="basic-addon1"
@@ -290,11 +305,17 @@ function ProductDetail() {
                                                         )
                                                     ))
                                                 }
+                                                <div className="col">
+                                                    <button type="button"
+                                                            className="btn btn-dark w-100"
+                                                            onClick={() => handleUpdateSize(item.id)}>Update Size
+                                                    </button>
+                                                </div>
                                             </div>
-
                                             <div className="col-auto">
-                                                <button type="submit"
-                                                        className="btn btn-primary">Submit
+                                                <button type="button"
+                                                        className="btn btn-kicks"
+                                                        onClick={() => handleUpdateDetail(item.id)}>Update Detail
                                                 </button>
                                             </div>
                                         </>
@@ -304,8 +325,7 @@ function ProductDetail() {
                             )
                         ) : (
                             <></>
-                        )
-                        }
+                        )}
 
                     </div>
                     {/*{*/}

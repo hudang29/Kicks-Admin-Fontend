@@ -12,7 +12,7 @@ function MainLayout() {
                 {/*<!-- body -->*/}
                 <div className="vstack" style={{maxWidth: "80vw"}}>
                     {/*<!-- menu -->*/}
-                    <div className="position-sticky top-0 w-100 bg-white z-3">
+                    <div className="position-sticky top-0 w-100 bg-white z-2">
                         <Menu/>
                     </div>
                     {/*----main---*/}

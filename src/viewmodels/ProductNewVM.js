@@ -1,9 +1,7 @@
 import {useEffect, useState} from "react";
 import CategoryAPI from "../api/CategoryAPI";
 import SupplierAPI from "../api/SupplierAPI";
-import categoryAPI from "../api/CategoryAPI";
 import ProductAPI from "../api/ProductAPI";
-import {validateForm} from "../utils/Validate";
 import ProductModel from "../models/ProductModel";
 import ProductDetailModel from "../models/ProductDetailModel";
 import ProductDetailAPI from "../api/ProductDetailAPI";
@@ -39,7 +37,6 @@ function ProductNewVM() {
     const [colorList, setColorList] = useState([]);
     const [picture, setPicture] = useState("");
     const [galleryList, setGalleryList] = useState([]);
-    //const [gallery, setGallery] = useState("");
     const [status, setStatus] = useState({
         shoes: false,
         color: false,

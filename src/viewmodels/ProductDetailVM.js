@@ -7,13 +7,18 @@ import {stopLoadingWithDelay} from "../utils/Util";
 import GalleryAPI from "../api/GalleryAPI";
 import SizeAPI from "../api/SizeAPI";
 import DiscountAPI from "../api/DiscountAPI";
-import SizeModel from "../models/SizeModel";
-import sizeModel from "../models/SizeModel";
+import SupplierAPI from "../api/SupplierAPI";
+import UploadImgAPI from "../api/UploadImgAPI";
+import {validateNumber} from "../utils/ValidationForm";
 
 function ProductDetailVM() {
     const {id} = useParams();
-
+    const [selectDetailId, setSelectDetailId] = useState("");
     const [loading, setLoading] = useState(false);
+    const [initialData, setInitialData] = useState({
+        productData: false,
+        sizeData: false,
+    });
 
     const [productDetail, setProductDetail] = useState([]);
     const [discount, setDiscount] = useState([]);
@@ -31,150 +36,110 @@ function ProductDetailVM() {
             sizeDetail: []
         }
     ]);
-
+    const [gender, setGender] = useState([]);
+    const [type, setType] = useState([]);
+    const [supplier, setSupplier] = useState([]);
+    const [file, setFile] = useState("");
     const [newColor, setNewColor] = useState("");
-    const [gender, setGender] = useState({});
-    const [type, setType] = useState({});
-    const [reload, setReload] = useState(false);
     const [shoesColor, setShoesColor] = useState([]);
+
+    const [errorMessage, setErrorMessage] = useState({
+        name: "",
+        price: "",
+    });
+    const [salePrice, setSalePrice] = useState(0);
 
 
     useEffect(() => {
         document.title = "Shoes Detail";
-        const fetchProductData = async () => {
+        const fetchData = async () => {
             setLoading(true);
             if (!id) return;
             try {
-                const [productDetailData, productData, discountData] = await Promise.all([
+                const [productDetailData, productData, discountData, genderData, supplierData] = await Promise.all([
                     ProductDetailAPI.getAll(id),
                     ProductAPI.getProductById(id),
-                    DiscountAPI.getAll()
+                    DiscountAPI.getAll(),
+                    CategoryAPI.getAllGenderCategory(),
+                    SupplierAPI.getAll(),
                 ]);
 
                 setProductDetail(productDetailData);
                 setShoesColor(productDetailData.map(({id, color}) => ({id, color})));
                 setProduct(productData);
                 setDiscount(discountData);
+                setGender(genderData);
+                setSupplier(supplierData);
+
+                setErrorMessage({
+                    name: "",
+                    price: "",
+                });
             } catch (error) {
                 console.error("Error fetching product data:", error);
             } finally {
                 stopLoadingWithDelay(setLoading);
             }
         }
-        fetchProductData();
-    }, [id]);
+        fetchData();
+    }, [id, initialData.productData]);
 
-    const fetchCategoryData = useCallback(() => {
-        if (product?.shoesCategoryID) {
-            CategoryAPI.getShoesCategoryById(product.shoesCategoryID)
-                .then(setType)
-                .catch((error) => console.error("Error fetching shoe category:", error));
-        }
-        if (product?.genderCategoryID) {
-            CategoryAPI.getGenderCategoryById(product.genderCategoryID)
-                .then(setGender)
-                .catch((error) => console.error("Error fetching gender category:", error));
-        }
-    }, [product?.shoesCategoryID, product?.genderCategoryID]);
+    useEffect(() => {
+        if (!product?.genderCategoryID) return;
+        const fetchShoeCategories = async () => {
+            try {
+                const type = await CategoryAPI.getAllCategoryShoesByGenderId(product.genderCategoryID);
+                setType(type);
+            } catch (error) {
+                console.error("Error fetching shoe categories:", error);
+            }
+        };
+        fetchShoeCategories();
+    }, [product?.genderCategoryID]);
 
-    // const fetchGallery = useCallback(async (detailId) => {
-    //     try {
-    //         const data = await GalleryAPI.getProductDetailGallery(detailId);
-    //         const galleries = await GalleryAPI.getAllProductDetailGallery(detailId);
-    //
-    //         setPicture(prevState => ([
-    //                 ...prevState,
-    //                 {
-    //                     detail: detailId,
-    //                     pictureUrl: data,
-    //                     listImg: galleries,
-    //                 }
-    //             ]));
-    //     } catch (error) {
-    //         console.error("Error fetching detail image:", error);
-    //     }
-    // }, []);
-
-    const fetchGallery = useCallback(async (detailId) => {
+    const fetchGalleryAndSize = useCallback(async (detailId) => {
         try {
-            const data = await GalleryAPI.getProductDetailGallery(detailId);
-            const galleries = await GalleryAPI.getAllProductDetailGallery(detailId);
+            const [galleryData, galleryList, sizeData] = await Promise.all([
+                GalleryAPI.getProductDetailGallery(detailId),
+                GalleryAPI.getAllProductDetailGallery(detailId),
+                SizeAPI.getAll(detailId)
+            ]);
 
             setPicture(prevState => {
                 const existingIndex = prevState.findIndex(item => item.detail === detailId);
-
                 if (existingIndex !== -1) {
-                    // Nếu tồn tại, cập nhật phần tử cũ
                     return prevState.map((item, index) =>
-                        index === existingIndex ? { detail: detailId, pictureUrl: data, listImg: galleries } : item
+                        index === existingIndex ? {
+                            detail: detailId,
+                            pictureUrl: galleryData,
+                            listImg: galleryList
+                        } : item
                     );
                 } else {
-                    // Nếu chưa có, thêm mới vào mảng
-                    return [...prevState, { detail: detailId, pictureUrl: data, listImg: galleries }];
+                    return [...prevState, {detail: detailId, pictureUrl: galleryData, listImg: galleryList}];
                 }
             });
-        } catch (error) {
-            console.error("Error fetching detail image:", error);
-        }
-    }, []);
-
-    // const fetchSize = useCallback(async (detailId) => {
-    //     try {
-    //         const response = await SizeAPI.getAll(detailId)
-    //         //console.log(response)
-    //         setSize(prevState => {
-    //             const updatedState = new Map(prevState);
-    //             updatedState.set(detailId, {
-    //                 detail: detailId,
-    //                 sizeDetail: response,
-    //             });
-    //             return updatedState;
-    //         });
-    //     } catch (error) {
-    //         console.error("Error fetching detail image:", error);
-    //     }
-    // }, []);
-
-    const fetchSize = useCallback(async (detailId) => {
-        try {
-            const response = await SizeAPI.getAll(detailId);
 
             setSize(prevState => {
                 const existingIndex = prevState.findIndex(item => item.detail === detailId);
-
                 if (existingIndex !== -1) {
-                    // Nếu tồn tại, cập nhật phần tử cũ
                     return prevState.map((item, index) =>
-                        index === existingIndex ? { detail: detailId, sizeDetail: response } : item
+                        index === existingIndex ? {detail: detailId, sizeDetail: sizeData} : item
                     );
                 } else {
-                    // Nếu chưa có, thêm mới vào mảng
-                    return [...prevState, { detail: detailId, sizeDetail: response }];
+                    return [...prevState, {detail: detailId, sizeDetail: sizeData}];
                 }
             });
         } catch (error) {
-            console.error("Error fetching size data:", error);
+            console.error("Error fetching gallery and size data:", error);
         }
     }, []);
 
-
-
-    useEffect(() => {
-        fetchCategoryData();
-    }, [fetchCategoryData]);
-
     useEffect(() => {
         productDetail.forEach(({id}) => {
-            fetchGallery(id);
+            fetchGalleryAndSize(id);
         });
-    }, [fetchGallery, productDetail]);
-
-    useEffect(() => {
-        productDetail.forEach(({id}) => {
-            fetchSize(id);
-        });
-    }, [fetchSize, productDetail]);
-
+    }, [fetchGalleryAndSize, productDetail, initialData.sizeData]);
 
     const handleAddColor = async () => {
         if (!newColor.trim()) {
@@ -186,7 +151,6 @@ function ProductDetailVM() {
             const newProductDetail = {color: newColor, productId: id};
             const response = await ProductDetailAPI.createProductDetail(newProductDetail);
             setProductDetail((prev) => [...prev, response]);
-            setReload((prev) => !prev);
             setNewColor("");
             alert("Color added successfully!");
         } catch (error) {
@@ -194,6 +158,30 @@ function ProductDetailVM() {
             alert("Failed to add color!");
         }
     };
+
+    const handleSalePriceChange = useCallback(() => {
+        const price = product?.price || NaN;
+        const discountId = Number(productDetail.find(d => d.id === selectDetailId)?.discountId);
+        const discountRate = discount.find(d => d.id === discountId)?.discountRate || 0;
+        setSalePrice(discountRate > 0 ? price - (price * discountRate / 100) : price);
+    }, [discount, product?.price, productDetail, selectDetailId]); // Thêm `selectedId`
+
+
+    useEffect(() => {
+        if (selectDetailId) handleSalePriceChange();
+    }, [selectDetailId, productDetail, discount, handleSalePriceChange]);
+
+    const handlePriceChange = (e) => {
+        const value = e.target.value;
+        setProduct((prevShoes) => ({
+            ...prevShoes,
+            price: e.target.value
+        }));
+        setErrorMessage(prevState => ({
+            ...prevState,
+            price: (!value) ? "must not be empty" : validateNumber(value)
+        }));
+    }
 
     const handleColorChange = (id, newColor) => {
         setProductDetail((prevDetails) =>
@@ -204,6 +192,7 @@ function ProductDetailVM() {
     };
 
     const handleDiscountChange = (id, discount) => {
+        setSelectDetailId(id);
         setProductDetail((prevDetails) =>
             prevDetails.map((item) =>
                 item.id === id ? {...item, discountId: discount} : item
@@ -211,31 +200,119 @@ function ProductDetailVM() {
         );
     };
 
+    const handleFileChange = (event) => {
+        setFile(event.target.files[0]);
+    };
+
     const handleStockChange = (id, detailId, stock) => {
         setSize((prevSize) => (
             prevSize.map((item) => (
-                (item?.detail === detailId) ? {...item, sizeDetail: item?.sizeDetail?.map( size =>
-                        size?.id === id ? { ...size, stock: stock } : size
-                    )} : item
+                (item?.detail === detailId) ? {
+                    ...item, sizeDetail: item?.sizeDetail?.map(size =>
+                        size?.id === id ? {...size, stock: stock} : size
+                    )
+                } : item
             ))
         ));
     };
 
-    const handleActiveBody = () => {
+    const handleUpdateProduct = async () => {
+        const isConfirmed = window.confirm(`Update ${product.name}?`);
+        if (!isConfirmed) return;
+        if (!product) return;
 
+        try {
+            const response = await ProductAPI.updateProduct(product);
+            setProduct(prevState => ({
+                ...prevState,
+                response,
+            }))
+            alert("Successful!");
+        } catch (error) {
+            console.error("Error updating product:", error);
+            alert("Failed to update!");
+        }
+    };
+
+    const handleUpdateDetail = async (id) => {
+        const productToUpdate = productDetail.find((item) => item.id === id);
+        if (!productToUpdate) {
+            alert("Product detail not found!");
+            return;
+        }
+        const isConfirmed = window.confirm(`Update detail of ${product.name}?`);
+        if (!isConfirmed) return;
+
+        try {
+            const response = await ProductDetailAPI.updateProductDetail(productToUpdate);
+            setProductDetail(prevDetails =>
+                prevDetails.map(item => (item.id === id ? {...item, ...response} : item))
+            );
+            alert("Successful!");
+        } catch (error) {
+            console.error("Error updating detail:", error);
+            alert("Failed to update!");
+        }
+    };
+
+    const handleUpload = async (id) => {
+        if (!file) return alert("Choose file please!");
+        try {
+            const url = await UploadImgAPI.uploadFile(file);
+            if (!url) return alert("No found image");
+            const newGallery = {
+                image: url,
+                productDetailID: id,
+            }
+            const response = await GalleryAPI.addGallery(newGallery);
+            setPicture(prevState =>
+                prevState.map(item => (
+                    item.detail === id ? {...item, listImg: [...item.listImg, response]} : item
+                ))
+            );
+            alert("Save image successfully!");
+        } catch (error) {
+            console.error("Error add new image:", error);
+            alert("Failed to add!");
+        }
+    };
+
+    const handleUpdateSize = async (id) => {
+        const isConfirmed = window.confirm(`Update size for ${product.name} ?`);
+        if (!isConfirmed) return;
+        if (!id) return alert("Not found detail!");
+        try {
+            const updatedSizes = size.find(size => size.detail === id).sizeDetail;
+            await SizeAPI.update(updatedSizes, id);
+            setInitialData((prevState) => ({
+                ...prevState,
+                productData: !prevState.productData,
+            }));
+            alert("Successfully!");
+        } catch (error) {
+            console.error("Error updating size:", error);
+            alert("Failed to updating!");
+        }
     }
 
+    const handleReset = () => {
+        setInitialData((prevState) => ({
+            ...prevState,
+            productData: !prevState.productData,
+        }));
+    };
+
     return {
-        loading, picture, size, discount,
-        productDetail, setProductDetail,
+        loading, errorMessage, salePrice,
+        product, setProduct, productDetail,
+        type, gender, supplier, discount,
+        picture, size,
         shoesColor,
-        product, setProduct,
-        newColor,
-        setNewColor,
-        gender,
-        type,
-        handleColorChange, handleDiscountChange, handleStockChange,
+        newColor, setNewColor,
+        handleColorChange, handleDiscountChange, handleStockChange, handleFileChange, handlePriceChange,
         handleAddColor,
+        handleUpdateProduct, handleUpdateDetail, handleUpload, handleUpdateSize,
+        handleReset,
     };
 }
 

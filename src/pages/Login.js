@@ -1,11 +1,13 @@
 import logo from "../assets/KICKS.png";
 import {Link, useNavigate} from "react-router-dom";
 import LoginVM from "../viewmodels/LoginVM";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 
 function Login() {
     const navigate = useNavigate();
     const {message, handleLogin} = LoginVM();
+    const [showPassword, setShowPassword] = useState(false);
+
     useEffect(() => {
         document.title = "Login";
     }, []);
@@ -35,12 +37,28 @@ function Login() {
                                 <Link to="#" className="text-dark">Forgot your password?</Link>
                                 <form className="mt-4 d-flex flex-column h-75">
                                     <div className="mb-3">
-                                        <input type="email" className="form-control border border-dark" id="email"
-                                               placeholder="Email"/>
+                                        <div className="input-group flex-nowrap">
+                                            <input type="text"
+                                                   id="email"
+                                                   className="form-control border border-dark" placeholder="Email"/>
+                                            <Link to={`#`} className="input-group-text nav-link px-3 invisible"
+                                                  id="addon-wrapping">
+                                                <i className={`bi ${showPassword ? "bi-eye" : "bi-eye-slash"} fs-4`}></i>
+                                            </Link>
+                                        </div>
                                     </div>
                                     <div className="mb-3">
-                                        <input type="password" className="form-control border border-dark" id="password"
-                                               placeholder="Password"/>
+                                        <div className="input-group flex-nowrap">
+                                            <input type={showPassword ? "text" : "password"}
+                                                   id="password"
+                                                   className="form-control border border-dark" placeholder="Password"
+                                                   aria-label="Username" aria-describedby="addon-wrapping"/>
+                                            <Link to={`#`} className="input-group-text nav-link px-3"
+                                                  id="addon-wrapping"
+                                                  onClick={() => setShowPassword(!showPassword)}>
+                                                <i className={`bi ${showPassword ? "bi-eye" : "bi-eye-slash"} fs-4`}></i>
+                                            </Link>
+                                        </div>
                                     </div>
                                     <div className="mt-auto">
                                         <button type="button" className="btn btn-dark form-control d-flex mb-3"

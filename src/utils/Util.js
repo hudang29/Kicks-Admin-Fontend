@@ -1,4 +1,3 @@
-import axios from "axios";
 export const getStatusClass = (status) => {
     switch (status) {
         case "PENDING":
