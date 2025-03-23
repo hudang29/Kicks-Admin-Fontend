@@ -1,10 +1,10 @@
 import {Link} from "react-router-dom";
 import LoginVM from "../viewmodels/LoginVM";
 import StaffsVM from "../viewmodels/StaffsVM";
+import ProductsVM from "../viewmodels/ProductsVM";
 
 function Menu() {
     const {handleLogout} = LoginVM();
-    //const {staff} = StaffsVM();
     return (
         <div className="pe-5 d-flex align-items-center justify-content-end"
              style={{height: "10vh"}}>
@@ -12,7 +12,8 @@ function Menu() {
                 <div className="border border-dark border-1 rounded">
                     <div className="hstack gap-1">
                         <input className="form-control me-auto" type="text" placeholder="Search"
-                               aria-label="Search"/>
+                               aria-label="Search"
+                            />
                         <button type="button" className="btn"><i className="bi bi-search"></i></button>
                     </div>
                 </div>

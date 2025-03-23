@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min';
+import "bootstrap/dist/js/bootstrap.bundle.min";
 import App from './App';
 import './styles/kick-button.css'
 import './styles/kick-admin.css'

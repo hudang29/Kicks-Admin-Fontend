@@ -1,5 +1,5 @@
 import ProductModel from "../models/ProductModel";
-import {API_BASE_URL, axiosInstance} from "../config/config";
+import {API_BASE_URL} from "../config/config";
 import {fetchDataSingle, fetchDataWithParams, sendData} from "../utils/DataAPI";
 
 const ProductEndpoints = {
@@ -7,6 +7,7 @@ const ProductEndpoints = {
     UPDATE: `${API_BASE_URL}/staff/api/product-update`,
     CREATE: `${API_BASE_URL}/staff/api/product-create`,
     SHOW: `${API_BASE_URL}/staff/api/list-product`,
+    SEARCH: `${API_BASE_URL}/staff/api/page-product/search`,
 };
 
 class ProductAPI {
@@ -16,6 +17,12 @@ class ProductAPI {
 
     async getProductById(id) {
         return fetchDataSingle(`${ProductEndpoints.SHOW}/${id}`, "Error fetching product by ID", ProductModel);
+    }
+
+    async findProduct(page, name, brand, sortBy, minPrice, maxPrice) {
+        return fetchDataWithParams(`${ProductEndpoints.SEARCH}`,
+            {page, name, brand, sortBy, minPrice, maxPrice},
+            "Error fetching product by name");
     }
 
     async updateProduct(product) {

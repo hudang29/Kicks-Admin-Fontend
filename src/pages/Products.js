@@ -7,8 +7,8 @@ import LoadingPage from "../components/LoadingPage";
 function Products() {
     const {
         loading,
-        shoes, page, totalPages,
-        handleChangePage
+        shoes, page, totalPages, filteredData, setFilteredData,
+        handleChangePage, handleFindProduct,
     } = ProductsVM();
     return (
         <>
@@ -36,6 +36,56 @@ function Products() {
                         </Link>
                     </div>
                 </div>
+            </div>
+            <div className="hstack gap-3 mb-3">
+                <div className="btn-group">
+                    <button type="button" className="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                        Price
+                    </button>
+                    <ul className="dropdown-menu">
+                        <li></li>
+                        <li><a className="dropdown-item" href="#">Another action</a></li>
+                        <li><a className="dropdown-item" href="#">Something else here</a></li>
+                        <li>
+                            <hr className="dropdown-divider"/>
+                        </li>
+                        <li><a className="dropdown-item" href="#">Separated link</a></li>
+                    </ul>
+                </div>
+                <div className="vr"></div>
+                <div className="btn-group">
+                    <button type="button" className="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                        Sort
+                    </button>
+                    <ul className="dropdown-menu">
+                        <li></li>
+                        <li>
+                            <button className="dropdown-item"
+                                    onClick={() => setFilteredData(prevState => ({
+                                        ...prevState,
+                                        sortBy: "newest",
+                                    }))}>Newest
+                            </button>
+                        </li>
+                        <li>
+                            <button className="dropdown-item"
+                                    onClick={() => setFilteredData(prevState => ({
+                                        ...prevState,
+                                        sortBy: "oldest",
+                                    }))}
+                            >Oldest</button>
+                        </li>
+                    </ul>
+                </div>
+                <input className="form-control ms-auto w-25" type="text"
+                       value={filteredData.name}
+                       onChange={(e) => setFilteredData(prevState => ({
+                           ...prevState,
+                           name: e.target.value,
+                       }))}/>
+
             </div>
             <div className="row row-cols-1 row-cols-md-3 g-3 mb-3">
                 {

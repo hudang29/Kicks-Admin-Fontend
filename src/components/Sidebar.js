@@ -38,10 +38,21 @@ function Sidebar() {
                         <span className="me-auto">
                             <i className="bi bi-file-earmark-bar-graph-fill"></i> ORDER LIST</span>
                     </Link>
-                    <Link to="/other"
-                          className={`btn p-3 hstack ${active === "categories" ? "btn-kicks" : "btnhover-4A69E2"}`}
-                          onClick={() => handleClick("categories")}>
-                        <span className="me-auto"><i className="bi bi-boxes"></i> OTHER</span></Link>
+                    <div
+                        className={`btn-group`}>
+                        <button type="button"
+                                className={`btn p-3 hstack ${active === "categories" ? "btn-kicks" : "btnhover-4A69E2"} dropdown-toggle`}
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                                onClick={() => handleClick("categories")}>
+                            <span className="me-auto"><i className="bi bi-boxes"></i> OTHER</span>
+                        </button>
+                        <ul className="dropdown-menu w-100">
+                            <li><Link className="dropdown-item" to="#">Supplier</Link></li>
+                            <li><Link className="dropdown-item" to="/coupon">Coupon</Link></li>
+                            <li><Link className="dropdown-item" to="#">Categories</Link></li>
+                        </ul>
+                    </div>
                     <hr/>
                     <Link to="/profile"
                           className={`btn p-3 hstack ${active === "profile" ? "btn-kicks" : "btnhover-4A69E2"}`}

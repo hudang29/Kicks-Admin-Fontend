@@ -61,19 +61,15 @@ function Product({name, price, page, shoesCategoryID, genderCategoryID, brand, i
                                 <p><small className="text-body-secondary">{brand}</small></p>
                             </div>
                         </div>
-                        {/*<div>*/}
-                        {/*    <p>{formatCurrency(price)}</p>*/}
-                        {/*</div>*/}
                     </div>
                 </div>
             </div>
             <div className="card-body">
                 <h5 className="card-title">{formatCurrency(price)}</h5>
-                {/*<p className="card-text">{description}</p>*/}
             </div>
             <div className="card">
                 <ul className="list-group list-group-flush">
-                    <li className="list-group-item">{genderCategory?.name || "erros"}</li>
+                    <li className="list-group-item">{genderCategory?.name || "errors"}</li>
                 </ul>
             </div>
         </div>

@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import {useEffect, useState, useCallback} from "react";
 import ProductAPI from "../api/ProductAPI";
 import ProductModel from "../models/ProductModel";
 import {stopLoadingWithDelay} from "../utils/Util";
@@ -12,16 +12,23 @@ function ProductsVM() {
         totalPages: 0,
         shoes: [],
     });
+    const [filteredData, setFilteredData] = useState({
+        name: "",
+        brand: "",
+        sortBy: "",
+        minPrice: "",
+        maxPrice: "",
+    });
 
     useEffect(() => {
         document.title = "Shoes";
     }, []);
 
-    const fetchData = useCallback(async (page) => {
+    const fetchData = useCallback(async () => {
         setLoading(true);
         const controller = new AbortController();
         try {
-            const response = await ProductAPI.getPageProducts(page, { signal: controller.signal });
+            const response = await ProductAPI.getPageProducts(0, {signal: controller.signal});
             setState(prevState => ({
                 ...prevState,
                 totalPages: response?.totalPages ?? 0,
@@ -35,17 +42,42 @@ function ProductsVM() {
     }, []);
 
     useEffect(() => {
-        fetchData(state.page);
-    }, [state.page, fetchData]);
+        fetchData();
+    }, [fetchData]);
+
+    const handleFindProduct = useCallback(async () => {
+        setLoading(true);
+        try {
+            const response = await ProductAPI.findProduct(state.page, filteredData.name, filteredData.brand,
+                filteredData.sortBy, filteredData.minPrice, filteredData.maxPrice);
+
+            //console.log(response.content);
+
+            setState(prevState => ({
+                ...prevState,
+                totalPages: response?.totalPages ?? 0,
+                shoes: Array.isArray(response?.content) ? response?.content.map(ProductModel.fromJson) : []
+            }));
+        } catch (error) {
+            console.error("Error finding product data:", error);
+        } finally {
+            stopLoadingWithDelay(setLoading, 600);
+        }
+    }, [filteredData.brand, filteredData.maxPrice, filteredData.minPrice, filteredData.name, filteredData.sortBy, state.page]);
+
+    useEffect(() => {
+        handleFindProduct();
+    }, [handleFindProduct]);
+
 
     const handleChangePage = useCallback((p) => {
-        setState(prevState => ({ ...prevState, page: Number(p) }));
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        setState(prevState => ({...prevState, page: Number(p)}));
+        window.scrollTo({top: 0, behavior: "smooth"});
     }, []);
 
     return {
-        ...state, loading,
-        handleChangePage
+        ...state, loading, filteredData, setFilteredData,
+        handleChangePage, handleFindProduct,
     };
 }
 
