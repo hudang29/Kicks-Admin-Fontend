@@ -18,7 +18,7 @@ function Dashboard() {
     const {
         loading,
         handleFindLowStock,
-        lowStock, stock, setStock,
+        lowStock, stock, setStock, totalCancelled,
         totalRevenue, totalOrders, latestOrders
     } = DashboardVM();
     return (
@@ -57,7 +57,7 @@ function Dashboard() {
                 </div>
                 <div className="col">
                     <CardData
-                        information="0"
+                        information={formatCurrency(totalCancelled)}
                         titleData="Order ancelled"
                         icon={<i className="bi bi-wallet fs-4"></i>}/>
                 </div>

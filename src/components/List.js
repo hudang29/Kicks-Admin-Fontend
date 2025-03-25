@@ -73,8 +73,34 @@ function List(props) {
                                         <td>{information?.color}</td>
                                         <td>{information?.size}</td>
                                         <td>{information?.quantity}</td>
-                                        <td>{formatCurrency(Number(information?.quantity) * Number(information?.price))}</td>
+                                        <td>{formatCurrency(
+                                            Number(information?.quantity) * Number(information?.price)
+                                        )}
+                                        </td>
                                     </>
+                                )}
+                                {information.contactInfo && (
+                                    <>
+                                        <td>{information?.name}</td>
+                                        <td>{information?.contactInfo}</td>
+                                        <td>{information?.address}</td>
+                                        <td>
+                                            <button className="btn btn-danger">
+                                                Update
+                                            </button>
+                                        </td>
+                                    </>
+                                )}
+                                {information.genderCategoryID && (
+                                    <>
+                                        <td>{information.name}</td>
+                                        <td>
+                                        <button className="btn btn-danger">
+                                                Update {information.genderCategoryID}
+                                            </button>
+                                        </td>
+                                    </>
+
                                 )}
                             </tr>
                         ))
@@ -87,5 +113,6 @@ function List(props) {
         </div>
     );
 }
+
 export default List;
 

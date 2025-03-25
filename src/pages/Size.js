@@ -1,24 +1,31 @@
 import SizeVM from "../viewmodels/SizeVM";
+import LoadingPage from "../components/LoadingPage";
+import {Link} from "react-router-dom";
 
 function Size() {
-    const {size, newSize, setNewSize, handleSizeSubmit, handleSizeDelete} = SizeVM();
+    const {
+        size, loading,
+        newSize, setNewSize,
+        handleSizeSubmit, handleSizeDelete
+    } = SizeVM();
 
     return (
         <>
-            <div className="my-3">
-                <p className="fw-semibold fs-2">Sizes</p>
-                <div className="hstack">
-                    <div className="p-1">
+            <LoadingPage props={loading}/>
+            <div className="my-2">
+                <p className="fw-semibold fs-2 mb-1">Size</p>
+                <div className="d-flex align-items-center mt-0">
+                    <div className="">
                         <nav style={{"--bs-breadcrumb-divider": "'>'"}} aria-label="breadcrumb">
                             <ol className="breadcrumb">
-                                <li className="breadcrumb-item"><a href="#" className="nav-link">Home</a></li>
+                                <li className="breadcrumb-item"><Link to="/profile" className="nav-link">Home</Link>
+                                </li>
                                 <li className="breadcrumb-item active" aria-current="page">Size</li>
                             </ol>
                         </nav>
                     </div>
-
-                    <div className="ms-auto">select date</div>
                 </div>
+                <hr/>
             </div>
 
             <form className="row row-cols-lg-auto g-3 align-items-center mb-3"
@@ -38,7 +45,7 @@ function Size() {
                     <button type="submit" className="btn btn-primary">Create</button>
                 </div>
             </form>
-            <div className="table-responsive">
+            <div className="table-responsive border border-1 w-75 mx-auto">
                 <table className="table table-hover object-fit-contain">
                     <thead>
                     <tr>

@@ -1,37 +1,35 @@
 import SupplierModel from "../models/SupplierModel";
-import { API_BASE_URL, axiosInstance } from "../config/config";
+import { API_BASE_URL } from "../config/config";
+import {fetchData, fetchDataSingle, sendData} from "../utils/DataAPI";
 
 const SupplierEndpoints = {
-    SHOW: `${API_BASE_URL}/staff/api/show-supplier`
+    SHOW: `${API_BASE_URL}/staff/api/show-supplier`,
+    CREATE: `${API_BASE_URL}/staff/api/create-supplier`,
+    UPDATE: `${API_BASE_URL}/staff/api/update-supplier`,
 };
 
 class SupplierAPI {
     async getAll() {
-        return this.fetchData(SupplierEndpoints.SHOW, "Lỗi khi lấy danh sách nhà cung cấp", SupplierModel);
+        return fetchData(SupplierEndpoints.SHOW,
+            "Error loading Supplier list",
+            SupplierModel);
     }
 
     async getById(id) {
-        return this.fetchDataSingle(`${SupplierEndpoints.SHOW}/${id}`, "Lỗi khi lấy thông tin nhà cung cấp", SupplierModel);
+        return fetchDataSingle(`${SupplierEndpoints.SHOW}/${id}`,
+            "Error loading Supplier",
+            SupplierModel);
     }
 
-    async fetchData(url, errorMessage, Model = null) {
-        try {
-            const response = await axiosInstance.get(url);
-            return Model ? response.data.map(item => Model.fromJson(item)) : response.data;
-        } catch (error) {
-            console.error(errorMessage, error);
-            return Model ? [] : null;
-        }
+    async create(data) {
+        return sendData(SupplierEndpoints.CREATE, data,
+            "Error creating Supplier",
+            "POST");
     }
-
-    async fetchDataSingle(url, errorMessage, Model = null) {
-        try {
-            const response = await axiosInstance.get(url);
-            return Model ? Model.fromJson(response.data) : response.data;
-        } catch (error) {
-            console.error(errorMessage, error);
-            return Model ? null : false;
-        }
+    async update(data) {
+        return sendData(SupplierEndpoints.UPDATE, data,
+            "Error updating Supplier",
+            "PUT");
     }
 }
 

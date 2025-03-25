@@ -4,6 +4,9 @@ import {stopLoadingWithDelay} from "../utils/Util";
 
 function DashboardVM() {
 
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth() + 1;
     const [loading, setLoading] = useState(false);
 
     const [bestSellers, setBestSellers] = useState([]);
@@ -12,6 +15,7 @@ function DashboardVM() {
     const [stock, setStock] = useState();
     const [totalRevenue, setTotalRevenue] = useState(0);
     const [totalOrders, setTotalOrders] = useState(0);
+    const [totalCancelled, setTotalCancelled] = useState(0);
 
 
     // 🛠️ Hàm fetch dữ liệu sản phẩm tồn kho thấp
@@ -34,24 +38,26 @@ function DashboardVM() {
                 const [
                     bestSellersRes,
                     lowStockRes,
-                    totalRevenueRes,
+                    totalAmountCompleted,
                     totalOrdersRes,
-                    latestOrdersRes
+                    latestOrdersRes,
+                    totalAmountCancelled,
                 ] = await Promise.all([
                     DashboardAPI.bestSellers(),
                     DashboardAPI.findLowStock(),
-                    DashboardAPI.getTotalRevenue(),
+                    DashboardAPI.getTotalAmount("COMPLETED", currentYear, currentMonth),
                     DashboardAPI.getTotalRevenueOrders(),
-                    DashboardAPI.getLatestOrders()
+                    DashboardAPI.getLatestOrders(),
+                    DashboardAPI.getTotalAmount("CANCELLED", currentYear, currentMonth)
                 ]);
 
                 // Cập nhật state
                 setBestSellers(Array.isArray(bestSellersRes) ? bestSellersRes : []);
                 setLowStock(Array.isArray(lowStockRes) ? lowStockRes : []);
-                setTotalRevenue(totalRevenueRes ?? 0);
+                setTotalRevenue(totalAmountCompleted ?? 0);
                 setTotalOrders(totalOrdersRes ?? 0);
                 setLatestOrders(Array.isArray(latestOrdersRes) ? latestOrdersRes : []);
-
+                setTotalCancelled(totalAmountCancelled ?? 0);
             } catch (error) {
                 console.error("Lỗi khi tải dữ liệu bảng điều khiển:", error);
             } finally {
@@ -60,11 +66,11 @@ function DashboardVM() {
         };
 
         fetchDashboardData();
-    }, []);
+    }, [currentMonth, currentYear]);
 
     return {
         loading,
-        setStock, stock, totalRevenue, totalOrders, latestOrders,
+        setStock, stock, totalRevenue, totalOrders, latestOrders, totalCancelled,
         bestSellers, lowStock, handleFindLowStock,
     }
 }

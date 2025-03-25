@@ -48,9 +48,10 @@ function Sidebar() {
                             <span className="me-auto"><i className="bi bi-boxes"></i> OTHER</span>
                         </button>
                         <ul className="dropdown-menu w-100">
-                            <li><Link className="dropdown-item" to="#">Supplier</Link></li>
+                            <li><Link className="dropdown-item" to="/supplier">Supplier</Link></li>
                             <li><Link className="dropdown-item" to="/coupon">Coupon</Link></li>
-                            <li><Link className="dropdown-item" to="#">Categories</Link></li>
+                            <li><Link className="dropdown-item" to="/categories">Categories</Link></li>
+                            <li><Link className="dropdown-item" to="/size">Size</Link></li>
                         </ul>
                     </div>
                     <hr/>

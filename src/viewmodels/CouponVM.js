@@ -46,7 +46,8 @@ function CouponVM() {
     }
 
 
-    return {allCoupon, loading, handleCreate};
+    return {allCoupon, loading, coupon, setCoupon,
+        handleCreate};
 }
 
 export default CouponVM;

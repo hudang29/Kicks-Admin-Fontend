@@ -1,19 +1,24 @@
 import {useState, useEffect, useCallback} from "react";
 import SizeAPI from "../api/SizeAPI";
+import {stopLoadingWithDelay} from "../utils/Util";
 
 function SizeVM() {
     const [size, setSize] = useState([]);
     const [newSize, setNewSize] = useState("");
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         document.title = "Size";
 
         const loadSizes = async () => {
+            setLoading(true);
             try {
                 const data = await SizeAPI.getAllSample();
                 setSize(data);
             } catch (error) {
                 console.error("Error loading size list:", error);
+            } finally {
+                stopLoadingWithDelay(setLoading);
             }
         };
         loadSizes();
@@ -47,7 +52,7 @@ function SizeVM() {
     }, []);
 
     return {
-        size,
+        size, loading,
         newSize,
         setNewSize,
         handleSizeSubmit,

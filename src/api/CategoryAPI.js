@@ -1,6 +1,7 @@
 import ShoesCategoryModel from "../models/ShoesCategoryModel";
 import GenderCategoryModel from "../models/GenderCategoryModel";
-import {API_BASE_URL, axiosInstance} from "../config/config";
+import {API_BASE_URL} from "../config/config";
+import {fetchData, fetchDataSingle} from "../utils/DataAPI";
 
 const CategoryEndpoints = {
     SHOES_CATEGORY: `${API_BASE_URL}/staff/api/shoes-category/`,
@@ -10,7 +11,7 @@ const CategoryEndpoints = {
 
 class CategoryAPI {
     async getAllCategoryShoesByGenderId(id) {
-        return this.fetchData(
+        return fetchData(
             `${CategoryEndpoints.SHOES_CATEGORY_BY_GENDER}${id}`,
             "Error fetching shoe categories by gender",
             ShoesCategoryModel
@@ -18,7 +19,7 @@ class CategoryAPI {
     }
 
     async getAllGenderCategory() {
-        return this.fetchData(
+        return fetchData(
             CategoryEndpoints.GENDER_CATEGORY,
             "Error fetching gender categories",
             GenderCategoryModel
@@ -26,7 +27,7 @@ class CategoryAPI {
     }
 
     async getShoesCategoryById(id) {
-        return this.fetchDataSingle(
+        return fetchDataSingle(
             `${CategoryEndpoints.SHOES_CATEGORY}${id}`,
             "Error fetching shoe category",
             ShoesCategoryModel
@@ -34,31 +35,11 @@ class CategoryAPI {
     }
 
     async getGenderCategoryById(id) {
-        return this.fetchDataSingle(
+        return fetchDataSingle(
             `${CategoryEndpoints.GENDER_CATEGORY}/${id}`,
             "Error fetching gender category",
             GenderCategoryModel
         );
-    }
-
-    async fetchData(url, errorMessage, Model) {
-        try {
-            const response = await axiosInstance.get(url);
-            return response.data.map(item => Model.fromJson(item));
-        } catch (error) {
-            console.error(errorMessage, error);
-            return [];
-        }
-    }
-
-    async fetchDataSingle(url, errorMessage, Model) {
-        try {
-            const response = await axiosInstance.get(url);
-            return Model.fromJson(response.data);
-        } catch (error) {
-            console.error(errorMessage, error);
-            return null;
-        }
     }
 }
 

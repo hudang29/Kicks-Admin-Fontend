@@ -1,6 +1,5 @@
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import Layout from "../layouts/MainLayout";
-import SubLayout from "../layouts/SubLayout";
 import Dashboard from "../pages/Dashboard";
 import Products from "../pages/Products";
 import Staffs from "../pages/Staffs";
@@ -16,6 +15,7 @@ import Login from "../pages/Login";
 import Profile from "../pages/Profile";
 import OrderDetail from "../pages/OrderDetail";
 import Coupon from "../pages/Coupon";
+import Supplier from "../pages/Supplier";
 
 function RoutesApp() {
     return (
@@ -34,6 +34,9 @@ function RoutesApp() {
                     <Route path="orderlist" element={<Orders/>}/>
                     <Route path="order-detail/:orderId" element={<OrderDetail/>}/>
                     <Route path="coupon" element={<Coupon/>}/>
+                    <Route path="supplier" element={<Supplier/>}/>
+                    <Route path="categories" element={<Categories/>}/>
+                    <Route path="size" element={<Size/>}/>
                     <Route path="newproduct" element={<ProductNew/>}/>
                     <Route path="product/:id" element={<ProductDetail/>}/>
                     <Route path="product-detail/:detailId" element={<ProductForm/>}/>

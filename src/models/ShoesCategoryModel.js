@@ -1,15 +1,15 @@
 class ShoesCategoryModel {
-    constructor(id, name, GenderCategoryID) {
+    constructor(id, name, genderCategoryID) {
         this.id = id;
         this.name = name;
-        this.GenderCategoryID = GenderCategoryID;
+        this.genderCategoryID = genderCategoryID;
     }
 
     static fromJson(json) {
         return new ShoesCategoryModel(
             json.id,
             json.name,
-            json.GenderCategoryID,
+            json.genderCategoryID,
         );
     }
 }
