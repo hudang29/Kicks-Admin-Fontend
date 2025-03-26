@@ -79,18 +79,6 @@ function List(props) {
                                         </td>
                                     </>
                                 )}
-                                {information.contactInfo && (
-                                    <>
-                                        <td>{information?.name}</td>
-                                        <td>{information?.contactInfo}</td>
-                                        <td>{information?.address}</td>
-                                        <td>
-                                            <button className="btn btn-danger">
-                                                Update
-                                            </button>
-                                        </td>
-                                    </>
-                                )}
                                 {information.genderCategoryID && (
                                     <>
                                         <td>{information.name}</td>

@@ -1,17 +1,18 @@
 import {Link} from "react-router-dom";
-import List from "../components/List";
 import SupplierVM from "../viewmodels/SupplierVM";
 import LoadingPage from "../components/LoadingPage";
+import SupplierModel from "../models/SupplierModel";
 
-const TableSupplier = ["No.", "Name", "Address", "Contact info", "Action"];
 
 function Supplier() {
 
     const {
         supplierList, loading, supplier, setSupplier,
-        handleCreate
+        setSupplierId, supplierId,
+        handleCreate, handleUpdate,
     } = SupplierVM();
 
+    console.log(supplierList);
     return (
         <>
             <LoadingPage props={loading}/>
@@ -31,19 +32,22 @@ function Supplier() {
 
                     <button type="button" className="btn btn-kicks-dark w-auto ms-auto"
                             data-bs-toggle="modal"
-                            data-bs-target="#staticBackdrop">
+                            data-bs-target="#staticBackdrop"
+                            onClick={() => (
+                                    setSupplier(new SupplierModel("", "", "", "")))}>
                         Create Supplier
                     </button>
 
                     <div className="modal fade" id="staticBackdrop"
                          data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1"
                          aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                        <div className="modal-dialog">
+                        <div className="modal-dialog modal-dialog-centered">
                             <div className="modal-content">
                                 <div className="modal-header">
-                                    <h1 className="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+                                    <h1 className="modal-title fs-5" id="staticBackdropLabel">New supplier</h1>
                                     <button type="button" className="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
+                                            aria-label="Close"
+                                            onClick={() => setSupplierId("")}></button>
                                 </div>
                                 <div className="modal-body">
                                     <div className="row g-3">
@@ -83,10 +87,18 @@ function Supplier() {
                                     </div>
                                 </div>
                                 <div className="modal-footer">
-                                    <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close
+                                    <button type="button" className="btn btn-secondary" data-bs-dismiss="modal"
+                                            onClick={() => setSupplierId("")}>Close
                                     </button>
                                     <button type="button" className="btn btn-primary"
+                                            disabled={supplierId}
+                                            hidden={supplierId}
                                             onClick={handleCreate}>Create
+                                    </button>
+                                    <button type="button" className="btn btn-primary"
+                                            disabled={!supplierId}
+                                            hidden={!supplierId}
+                                            onClick={handleUpdate}>Update
                                     </button>
                                 </div>
                             </div>
@@ -96,12 +108,37 @@ function Supplier() {
                 <hr/>
             </div>
 
-
-            <List
-                items={TableSupplier}
-                information={supplierList}
-                CardName={""}
-            />
+            <div className="table-responsive">
+                <table className="table table-hover">
+                    <thead>
+                    <tr>
+                        <th scope="col">No</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Address</th>
+                        <th scope="col">Contact info</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {supplierList?.map((sup, index) => (
+                        <tr>
+                            <th scope="row">{index + 1}</th>
+                            <td>{sup.name}</td>
+                            <td>{sup.address}</td>
+                            <td>{sup.contactInfo}</td>
+                            <td>
+                                <button type="button" className="btn btn-kicks-dark w-auto ms-auto"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#staticBackdrop"
+                                        onClick={() => setSupplierId(sup.id)}>
+                                    Update
+                                </button>
+                            </td>
+                        </tr>
+                    ))}
+                    </tbody>
+                </table>
+            </div>
         </>
     );
 }
