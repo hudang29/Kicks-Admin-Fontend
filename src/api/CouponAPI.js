@@ -15,5 +15,9 @@ class CouponAPI {
     async createCoupon(coupon) {
         return sendData(CouponEndpoints.CREATE, coupon, "Error creating coupon", "POST");
     }
+
+    async updateCoupon(coupon) {
+        return sendData(CouponEndpoints.UPDATE, coupon, "Error creating coupon", "PUT");
+    }
 }
 export default new CouponAPI();

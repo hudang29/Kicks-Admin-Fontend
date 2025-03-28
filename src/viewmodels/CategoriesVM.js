@@ -56,14 +56,31 @@ function CategoriesVM() {
         }
         handleGetType();
     }, [typeId]);
-    
+
     const handleCreateGender = async () => {
-        const  confirm = window.confirm("Are you sure you want to create gender?");
+        const confirm = window.confirm("Are you sure you want to create gender?");
+        if (!confirm) return;
+        if (!genderId) return;
+        try {
+            const response = await CategoryAPI.createGenderCategory(gender);
+            setGenderList(prevState => ([
+                ...prevState,
+                response,
+            ]));
+            alert("Successfully created gender category");
+        } catch (error) {
+            console.error("Error creating gender category", error);
+            alert("Error creating gender category");
+        }
+    }
+
+    const handleUpdateGender = async () => {
+        const confirm = window.confirm("Are you sure you want to create gender?");
         if (!confirm) return;
         if (!gender) return;
         try {
-            const response = await CategoryAPI.createGenderCategory(gender);
-            setGenderList( prevState => ([
+            const response = await CategoryAPI.updateGenderCategory(gender);
+            setGenderList(prevState => ([
                 ...prevState,
                 response,
             ]));
@@ -75,15 +92,30 @@ function CategoriesVM() {
     }
 
     const handleCreateType = async () => {
-        const  confirm = window.confirm("Are you sure you want to create gender?");
+        const confirm = window.confirm("Are you sure you want to create gender?");
         if (!confirm) return;
         if (!gender) return;
         try {
             const response = await CategoryAPI.createShoesCategory(shoesType);
-            setGenderList( prevState => ([
+            setGenderList(prevState => ([
                 ...prevState,
                 response,
             ]));
+            alert("Successfully created gender category");
+        } catch (error) {
+            console.error("Error creating gender category", error);
+            alert("Error creating gender category");
+        }
+    }
+
+    const handleUpdateType = async () => {
+        const confirm = window.confirm("Are you sure you want to create gender?");
+        if (!confirm) return;
+        //if (!genderId) return;
+        try {
+            const response = await CategoryAPI.updateShoesCategory(shoesType);
+            setType(prevState =>
+                prevState.map(type => type.id === typeId ? response : type));
             alert("Successfully created gender category");
         } catch (error) {
             console.error("Error creating gender category", error);
@@ -96,7 +128,7 @@ function CategoriesVM() {
         loading, genderList, type,
         genderId, setGenderId,
         gender, setGender, typeId, setTypeId, shoesType, setShoesType,
-        handleCreateType, handleCreateGender,
+        handleCreateType, handleCreateGender, handleUpdateType, handleUpdateGender,
     };
 }
 

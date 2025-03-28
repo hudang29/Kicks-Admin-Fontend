@@ -1,9 +1,6 @@
 import CategoriesVM from "../viewmodels/CategoriesVM";
 import LoadingPage from "../components/LoadingPage";
-import List from "../components/List";
 import {Link} from "react-router-dom";
-
-const TableCategory = ["No.", "Name", "Action"];
 
 function Categories() {
 
@@ -11,7 +8,7 @@ function Categories() {
         type, loading,
         genderId, setGenderId, genderList,
         gender, setGender, typeId, setTypeId, shoesType, setShoesType,
-        handleCreateGender, handleCreateType,
+        handleCreateGender, handleCreateType, handleUpdateGender, handleUpdateType,
     } = CategoriesVM();
 
     return (
@@ -107,7 +104,8 @@ function Categories() {
                                     </button>
                                     <button type="button" className="btn btn-primary"
                                             disabled={!typeId}
-                                            hidden={!typeId}>Update
+                                            hidden={!typeId}
+                                            onClick={handleUpdateType}>Update
                                     </button>
                                 </div>
                             </div>
@@ -129,7 +127,9 @@ function Categories() {
                     </div>
                 </div>
                 <div className="col-12">
-                    <button type="button" className="btn btn-kicks-dark">Create Gender</button>
+                    <button type="button" className="btn btn-kicks-dark"
+                            onClick={handleCreateType}>Create Gender
+                    </button>
                 </div>
             </form>
 
@@ -162,15 +162,6 @@ function Categories() {
                 </table>
             </div>
 
-            {/*<div className="w-75 mx-auto">*/}
-            {/*    {genderId && (*/}
-            {/*        <List*/}
-            {/*            items={TableCategory}*/}
-            {/*            information={type}*/}
-            {/*            CardName={""}*/}
-            {/*        />*/}
-            {/*    )}*/}
-            {/*</div>*/}
         </>
     );
 }

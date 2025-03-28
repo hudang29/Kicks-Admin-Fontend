@@ -16,6 +16,12 @@ import Profile from "../pages/Profile";
 import OrderDetail from "../pages/OrderDetail";
 import Coupon from "../pages/Coupon";
 import Supplier from "../pages/Supplier";
+import Unauthorized from "../pages/Unauthorized";
+import PrivateRoute from "./PrivateRoute";
+
+const Admin = ["ADMIN"];
+const notStaff = ["ADMIN", "MANAGER"];
+const All = ["ADMIN", "STAFF", "MANAGER"];
 
 function RoutesApp() {
     return (
@@ -25,21 +31,69 @@ function RoutesApp() {
                 <Route path="/login" element={<Login/>}/>
 
                 <Route path="/" element={<Layout/>}>
+                    <Route path="/unauthorized" element={<Unauthorized/>}/>
                     <Route path="profile" element={<Profile/>}/>
-                    <Route path="dashboard" element={<Dashboard/>}/>
-                    <Route path="allproducts" element={<Products/>}/>
-                    <Route path="staffs" element={<Staffs/>}/>
-                    <Route path="newstaff" element={<StaffNew/>}/>
-                    <Route path="staff-detail/:id" element={<StaffDetail/>}/>
-                    <Route path="orderlist" element={<Orders/>}/>
-                    <Route path="order-detail/:orderId" element={<OrderDetail/>}/>
-                    <Route path="coupon" element={<Coupon/>}/>
-                    <Route path="supplier" element={<Supplier/>}/>
-                    <Route path="categories" element={<Categories/>}/>
-                    <Route path="size" element={<Size/>}/>
-                    <Route path="newproduct" element={<ProductNew/>}/>
-                    <Route path="product/:id" element={<ProductDetail/>}/>
-                    <Route path="product-detail/:detailId" element={<ProductForm/>}/>
+
+                    <Route path="dashboard" element={
+                        <PrivateRoute roles={Admin}>
+                            <Dashboard/>
+                        </PrivateRoute>}/>
+
+                    <Route path="staffs" element={
+                        <PrivateRoute roles={notStaff}>
+                            <Staffs/>
+                        </PrivateRoute>}/>
+                    <Route path="newstaff" element={
+                        <PrivateRoute roles={notStaff}>
+                            <StaffNew/>
+                        </PrivateRoute>
+                    }/>
+                    <Route path="staff-detail/:id" element={
+                        <PrivateRoute roles={notStaff}>
+                            <StaffDetail/>
+                        </PrivateRoute>
+                    }/>
+
+                    <Route path="allproducts" element={
+                        <PrivateRoute roles={All}>
+                            <Products/>
+                        </PrivateRoute>}/>
+                    <Route path="orderlist" element={
+                        <PrivateRoute roles={All}>
+                            <Orders/>
+                        </PrivateRoute>}/>
+                    <Route path="order-detail/:orderId" element={
+                        <PrivateRoute roles={All}>
+                            <OrderDetail/>
+                        </PrivateRoute>}/>
+                    <Route path="coupon" element={
+                        <PrivateRoute roles={All}>
+                            <Coupon/>
+                        </PrivateRoute>}/>
+                    <Route path="supplier" element={
+                        <PrivateRoute roles={All}>
+                            <Supplier/>
+                        </PrivateRoute>}/>
+                    <Route path="categories" element={
+                        <PrivateRoute roles={All}>
+                            <Categories/>
+                        </PrivateRoute>}/>
+                    <Route path="size" element={
+                        <PrivateRoute roles={All}>
+                            <Size/>
+                        </PrivateRoute>}/>
+                    <Route path="newproduct" element={
+                        <PrivateRoute roles={All}>
+                            <ProductNew/>
+                        </PrivateRoute>}/>
+                    <Route path="product/:id" element={
+                        <PrivateRoute roles={All}>
+                            <ProductDetail/>
+                        </PrivateRoute>}/>
+                    <Route path="product-detail/:detailId" element={
+                        <PrivateRoute roles={All}>
+                            <ProductForm/>
+                        </PrivateRoute>}/>
                 </Route>
             </Routes>
         </Router>

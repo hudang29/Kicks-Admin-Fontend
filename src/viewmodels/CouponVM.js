@@ -41,8 +41,21 @@ function CouponVM() {
           alert("Successfully created coupon!");
       } catch (error) {
           console.error("Error creating Coupon", error);
-          alert(error.message);
+          alert("Error creating Coupon");
       }
+    }
+
+    const handleUpdate = async () => {
+        const Confirm = window.confirm("Are you sure?");
+        if (!Confirm) return;
+        try {
+            const response = await CouponAPI.updateCoupon(coupon);
+            setAllCoupon( prevState => ([...prevState, response]) );
+            alert("Successfully created coupon!");
+        } catch (error) {
+            console.error("Error creating Coupon", error);
+            alert("Error creating Coupon");
+        }
     }
 
 

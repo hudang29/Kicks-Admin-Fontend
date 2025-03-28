@@ -51,7 +51,7 @@ class CategoryAPI {
     }
 
     async updateShoesCategory(data) {
-        return sendData(CategoryEndpoints.CREATE_TYPE, data, "Error updating shoe category", "PUT");
+        return sendData(CategoryEndpoints.UPDATE_TYPE, data, "Error updating shoe category", "PUT");
     }
 
     async createGenderCategory(data) {

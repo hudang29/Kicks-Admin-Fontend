@@ -39,6 +39,7 @@ function LoginVM() {
     const handleLogout = async () => {
         try {
             await LoginAPI.logout();
+            sessionStorage.clear();
         } catch (error) {
             console.error("Logout error", error);
         }
