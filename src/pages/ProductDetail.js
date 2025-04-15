@@ -281,13 +281,14 @@ function ProductDetail() {
                                                     size?.map(s => (
                                                         s?.detail === item.id ? (
                                                             s?.sizeDetail?.map((size) => (
-                                                                <div className="col">
+                                                                 <div className="col">
                                                                     <div className="input-group mb-3 w-auto"
                                                                          key={size.id}>
                                                                         <span className="input-group-text"># {size.size}
                                                                         </span>
                                                                         <input type="number"
-                                                                               className="form-control"
+                                                                               className={`form-control 
+                                                                               ${size?.stock <= 5 ? "border border-danger" : ""}`}
                                                                                aria-describedby="basic-addon1"
                                                                                value={size.stock || 0} // Giá trị riêng cho từng size
                                                                                min={0}

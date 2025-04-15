@@ -82,12 +82,12 @@ function Chart() {
                         <button
                             className={`btn me-2 btnhover-232321 ${viewType === "year" ? "" : "btn-kicks-dark"}`}
                             onClick={() => setViewType("month")}>
-                            Monthly Revenue
+                            Annual Revenue
                         </button>
                         <button
                             className={`btn me-2 btnhover-232321 ${viewType === "year" ? "btn-kicks-dark" : ""}`}
                             onClick={() => setViewType("year")}>
-                            Annual revenue
+                            Monthly revenue
                         </button>
                     </div>
                     {viewType === "year" && (
@@ -104,7 +104,7 @@ function Chart() {
 
                 {/* Biểu đồ tổng doanh thu */}
                 <div className="mb-4 p-3">
-                    <h4>{viewType === "month" ? "Monthly Revenue" : `Annual revenue ${selectedYear}`}</h4>
+                    <h4>{viewType === "month" ? "Annual revenue" : `Monthly Revenue ${selectedYear}`}</h4>
                     <Bar data={viewType === "month" ? chartDataMonthly : chartDataYearly}/>
                 </div>
 

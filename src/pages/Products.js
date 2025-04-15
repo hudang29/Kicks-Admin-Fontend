@@ -79,7 +79,7 @@ function Products() {
                         </li>
                     </ul>
                 </div>
-                <input className="form-control ms-auto w-25" type="text"
+                <input className="form-control ms-auto w-25" type="text" placeholder="Search"
                        value={filteredData.name}
                        onChange={(e) => setFilteredData(prevState => ({
                            ...prevState,

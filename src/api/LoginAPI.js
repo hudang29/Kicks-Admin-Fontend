@@ -1,29 +1,23 @@
-import { API_BASE_URL, axiosInstance } from "../config/config";
+import {API_BASE_URL} from "../config/config";
+import {sendData} from "../utils/DataAPI";
 
 const AuthEndpoints = {
     LOGIN: `${API_BASE_URL}/api/login`,
-    LOGOUT: `${API_BASE_URL}/api/logout`
+    LOGOUT: `${API_BASE_URL}/api/logout`,
+    FORGOT: `${API_BASE_URL}/api/forgot-password`,
 };
 
 class LoginAPI {
     async login(account) {
-        return this.postData(AuthEndpoints.LOGIN, account, "Login failed");
+        return sendData(AuthEndpoints.LOGIN, account, "Login failed", "POST");
     }
 
     async logout() {
-        return this.postData(AuthEndpoints.LOGOUT, null, "Logout failed");
+        return sendData(AuthEndpoints.LOGOUT, null, "Logout failed", "POST");
     }
 
-    async postData(url, data, errorMessage) {
-        try {
-            const response = await axiosInstance.post(url, data, {
-                headers: { "Content-Type": "application/json" }
-            });
-            return response.data;
-        } catch (error) {
-            console.error(errorMessage, error.response?.data || error.message);
-            throw error;
-        }
+    async forgotPassword(email) {
+        return sendData(AuthEndpoints.FORGOT, email, "Forgot password", "PUT");
     }
 }
 

@@ -7,7 +7,7 @@ import {formatCurrency} from "../utils/Format";
 import CardData from "../components/CardData";
 import LoadingPage from "../components/LoadingPage";
 
-const TableHeader = ["No.", "Product", "Date", "Payment Method", "Customer", "Status", "Amount"];
+const TableHeader = ["No.", "Customer", "Date", "Payment Method", "Status", "Amount", "Action"];
 const TableLowStock = ["No.", "Product", "Color", "Size", "Stock", "Action"];
 
 function Dashboard() {
@@ -42,7 +42,7 @@ function Dashboard() {
                     <div className="ms-auto">select date</div>
                 </div>
             </div>
-            <div className="row row-cols-md-4 g-3 mb-3">
+            <div className="row row-cols-md-3 g-3 mb-3">
                 <div className="col">
                     <CardData
                         information={formatCurrency(totalRevenue)}
@@ -61,12 +61,12 @@ function Dashboard() {
                         titleData="Order ancelled"
                         icon={<i className="bi bi-wallet fs-4"></i>}/>
                 </div>
-                <div className="col">
-                    <CardData
-                        information="0"
-                        titleData="Monthly shoe sales"
-                        icon={<i className="bi bi-receipt-cutoff fs-4"></i>}/>
-                </div>
+                {/*<div className="col">*/}
+                {/*    <CardData*/}
+                {/*        information="0"*/}
+                {/*        titleData="Monthly shoe sales"*/}
+                {/*        icon={<i className="bi bi-receipt-cutoff fs-4"></i>}/>*/}
+                {/*</div>*/}
             </div>
             <List items={TableLowStock}
                   information={lowStock}

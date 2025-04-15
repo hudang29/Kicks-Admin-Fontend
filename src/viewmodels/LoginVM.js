@@ -1,8 +1,10 @@
 import LoginAPI from "../api/LoginAPI";
 import {useState} from "react";
+import loginAPI from "../api/LoginAPI";
 
 function LoginVM() {
     const [message, setMessage] = useState("");
+    const [email, setEmail] = useState("");
 
     const handleLogin = async (navigate) => {
         const email = document.getElementById("email")?.value.trim();
@@ -45,10 +47,29 @@ function LoginVM() {
         }
     };
 
+    const handleResetPassword = async () => {
+        try {
+            const response = await loginAPI.forgotPassword(email);
+            console.log(response);
+            if(response){
+                setMessage("successful! Check your email");
+                setTimeout(() => setMessage(""), 1300);
+            } else {
+                setMessage("Failed to reset your password! Please try again");
+                setTimeout(() => setMessage(""), 1300);
+            }
+        } catch (error) {
+            setMessage("Failed to reset your password! Please try again");
+            setTimeout(() => setMessage(""), 1300);
+            console.error("Reset error", error);
+        }
+    }
+
     return {
-        message,
+        message, email, setEmail,
         handleLogin,
-        handleLogout
+        handleLogout,
+        handleResetPassword,
     };
 }
 

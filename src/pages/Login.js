@@ -5,7 +5,7 @@ import {useEffect, useState} from "react";
 
 function Login() {
     const navigate = useNavigate();
-    const {message, handleLogin} = LoginVM();
+    const {message, email, setEmail, handleResetPassword, handleLogin} = LoginVM();
     const [showPassword, setShowPassword] = useState(false);
 
     useEffect(() => {
@@ -17,8 +17,7 @@ function Login() {
                 <div
                     className={`alert ${message.includes("successful!") ? "alert-success" : "alert-danger"} 
                     position-absolute top-0 start-50 translate-middle-x`}
-                    style={{zIndex: 2909, minWidth: "300px", marginTop: "20px"}}
-                >
+                    style={{zIndex: 2909, minWidth: "300px", marginTop: "20px"}}>
                     {message}
                 </div>
             )}
@@ -34,7 +33,40 @@ function Login() {
                         <div className="card w-100 border border-0 h-75">
                             <div className="card-body">
                                 <h2>Login</h2>
-                                <Link to="#" className="text-dark">Forgot your password?</Link>
+                                {/*<Link to="#" className="text-dark">Forgot your password?</Link>*/}
+
+                                <Link to="#" className="text-dark" data-bs-toggle="modal"
+                                      data-bs-target="#exampleModal">
+                                    Forgot your password?
+                                </Link>
+
+                                <div className="modal fade" id="exampleModal" tabIndex="-1"
+                                     aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div className="modal-dialog">
+                                        <div className="modal-content">
+                                            <div className="modal-header">
+                                                <h1 className="modal-title fs-5" id="exampleModalLabel">Enter your
+                                                    email</h1>
+                                                <button type="button" className="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                            </div>
+                                            <div className="modal-body">
+                                                <input type="email" className="form-control" placeholder="Email"
+                                                       aria-label="Email"
+                                                       value={email}
+                                                       onChange={e =>
+                                                           setEmail(e.target.value)}/>
+                                            </div>
+                                            <div className="modal-footer">
+                                                <button type="button" className="btn btn-secondary"
+                                                        data-bs-dismiss="modal">Close
+                                                </button>
+                                                <button type="button" className="btn btn-primary"
+                                                onClick={handleResetPassword}>Reset password</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <form className="mt-4 d-flex flex-column h-75">
                                     <div className="mb-3">
                                         <div className="input-group flex-nowrap">
